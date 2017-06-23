@@ -1,0 +1,49 @@
+﻿body {
+    font-family: "Meiryo UI";
+    font-size: 12pt;
+}
+
+p.res_lv1 { 
+    color: #000000; 
+}
+p.res_lv2 { 
+    color: #000000;
+    font-weight: bold;
+}
+p.res_lv3 { 
+    color: #0000ff; 
+    font-weight: bold;
+}
+p.res_lv4 { 
+    color: #ff0000; 
+    font-weight: bold;
+}
+p.res_lv5 { 
+    color: #dba900; 
+    font-weight: bold;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
