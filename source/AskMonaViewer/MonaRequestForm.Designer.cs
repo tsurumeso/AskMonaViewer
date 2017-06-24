@@ -43,7 +43,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -195,20 +194,11 @@
             this.textBox4.Size = new System.Drawing.Size(100, 23);
             this.textBox4.TabIndex = 15;
             // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(71, 99);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(100, 23);
-            this.textBox5.TabIndex = 16;
-            // 
             // MonaRequestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 250);
-            this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label7);
@@ -252,6 +242,5 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
     }
 }
