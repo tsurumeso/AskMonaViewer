@@ -18,3 +18,4 @@ AskMonaViewer は [AskMona](http://askmona.org/) の Windows 用非公式クラ�
 - レスの投稿
 - レスを選択して MONA を送る
 - 画像 (imgur) および動画 (youtube) の表示
+- Zaif の MONA/JPY レートを表示
