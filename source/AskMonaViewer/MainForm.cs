@@ -12,7 +12,7 @@ namespace AskMonaViewer
     {
         private Account mAccount = null;
         private AskMonaApi mApi;
-        private ZaifApi mZaifApi = new ZaifApi();
+        private ZaifApi mZaifApi;
         private int mCategoryId = 0;
         private bool mHasDocumentLoaded = true;
         private TopicComparer mListViewItemSorter;
@@ -36,8 +36,7 @@ namespace AskMonaViewer
                 TopicComparer.ComparerMode.DateTime
             };
             mTopicList = new TopicList();
-            //var rate = mZaifApi.FetchRate("mona_jpy").Result;
-            //toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString();
+            mZaifApi = new ZaifApi();
         }
 
         public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
@@ -346,7 +345,7 @@ namespace AskMonaViewer
             mAccount = new Account(addr, pass);
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
             var loginForm = new LoginForm(this);
             try
@@ -365,6 +364,9 @@ namespace AskMonaViewer
                     mAccount = new Account();
             }
             mApi = new AskMonaApi(mAccount);
+            var rate = await mZaifApi.FetchRate("mona_jpy");
+            if (rate != null)
+                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString();
             RefreshTopicList(0);
         }
 
