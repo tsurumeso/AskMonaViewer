@@ -15,6 +15,7 @@ AskMonaViewer は [AskMona](http://askmona.org/) の Windows 用非公式クラ�
 - ツリーからカテゴリを選択してトピックを表示
 - 勢いや MONA 数によるトピックの並べ替え
 - トピックの検索
+- トピックの新規作成
 - レスの投稿
 - レスを選択して MONA を送る
 - 画像 (imgur) および動画 (youtube) の表示
