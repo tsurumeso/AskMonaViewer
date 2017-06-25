@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace AskMonaViewer
 {
@@ -20,6 +21,7 @@ namespace AskMonaViewer
         private TopicList mTopicList;
         private DateTime mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
         private string mHtmlHeader;
+        private List<ResponseCache> mResponseCacheList;
 
         public MainForm()
         {
@@ -38,6 +40,7 @@ namespace AskMonaViewer
             };
             mTopicList = new TopicList();
             mZaifApi = new ZaifApi();
+            mResponseCacheList = new List<ResponseCache>();
             var css = new StreamReader("css/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
             mHtmlHeader = String.Format("<html lang=\"ja\">\n<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
@@ -160,21 +163,9 @@ namespace AskMonaViewer
             listView1.EndUpdate();
         }
 
-        private async void UpdateResponces(int topicId)
+        private async Task<string> BuildHtml(ResponseList responseList)
         {
-            toolStripStatusLabel1.Text = "通信中";
-            toolStripComboBox1.Text = "https://askmona.org/" + topicId;
-            var responseList = await mApi.FetchResponseListAsync(topicId, topic_detail:1);
-            mTopic = responseList.Topic;
-            tabControl1.TabPages[0].Text = mTopic.Title;
-
-            if (responseList == null)
-            {
-                toolStripStatusLabel1.Text = "受信失敗";
-                return;
-            }
-
-            StringBuilder html = new StringBuilder(mHtmlHeader);
+            StringBuilder html = new StringBuilder();
             await Task.Run(() =>
             {
                 foreach (var response in responseList.Responses)
@@ -215,7 +206,52 @@ namespace AskMonaViewer
                 }
             });
             html.Append("</body>\n</html>");
-            webBrowser1.DocumentText = html.ToString();
+            return html.ToString();
+        }
+
+        private async void UpdateResponces(int topicId)
+        {
+            toolStripStatusLabel1.Text = "通信中";
+            toolStripComboBox1.Text = "https://askmona.org/" + topicId;
+
+            var html = "";
+            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
+            if (idx == -1)
+            {
+                var responseList = await mApi.FetchResponseListAsync(topicId, topic_detail: 1);
+                if (responseList == null)
+                {
+                    toolStripStatusLabel1.Text = "受信失敗";
+                    return;
+                }
+                mTopic = responseList.Topic;
+                html = await BuildHtml(responseList);
+                mResponseCacheList.Add(new ResponseCache(mTopic, html.ToString()));
+            }
+            else
+            {
+                var responseList = await mApi.FetchResponseListAsync(topicId, topic_detail: 1, prev: mResponseCacheList[idx].Topic.Modified);
+                if (responseList == null)
+                {
+                    toolStripStatusLabel1.Text = "受信失敗";
+                    return;
+                }
+                if (responseList.Status == 2)
+                {
+                    var responseCache = mResponseCacheList[idx];
+                    mTopic = responseCache.Topic;
+                    html = responseCache.Html;
+                }
+                else
+                {
+                    mResponseCacheList.RemoveAt(idx);
+                    mTopic = responseList.Topic;
+                    html = await BuildHtml(responseList);
+                    mResponseCacheList.Add(new ResponseCache(mTopic, html.ToString()));
+                }
+            }
+            tabControl1.TabPages[0].Text = mTopic.Title;
+            webBrowser1.DocumentText = mHtmlHeader + html;
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -373,6 +409,15 @@ namespace AskMonaViewer
                 if (mAccount == null)
                     mAccount = new Account();
             }
+            try
+            {
+                var xs = new XmlSerializer(typeof(List<ResponseCache>));
+                using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
+                {
+                    mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
+                }
+            }
+            catch { }
             mApi = new AskMonaApi(mAccount);
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
@@ -385,6 +430,9 @@ namespace AskMonaViewer
             var xs = new XmlSerializer(typeof(Account));
             using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mAccount);
+            xs = new XmlSerializer(typeof(List<ResponseCache>));
+            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mResponseCacheList);
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)

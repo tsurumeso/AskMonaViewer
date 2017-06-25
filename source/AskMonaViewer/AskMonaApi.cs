@@ -228,10 +228,12 @@ namespace AskMonaViewer
             return (TopicList)serializer.ReadObject(jsonStream);
         }
 
-        public async Task<ResponseList> FetchResponseListAsync(int t_id, int from = 1, int to = 1000, int topic_detail = 0)
+        public async Task<ResponseList> FetchResponseListAsync(int t_id, int from = 1, int to = 1000, int topic_detail = 0, long prev = 0)
         {
             var serializer = new DataContractJsonSerializer(typeof(ResponseList));
-            var api = String.Format(mApiBaseUrl + "responses/list?t_id={0}&from={1}&to={2}&topic_detail={3}", t_id, from, to, topic_detail);
+            var api = String.Format(mApiBaseUrl + 
+                "responses/list?t_id={0}&from={1}&to={2}&topic_detail={3}&if_modified_since={4}", 
+                t_id, from, to, topic_detail, prev);
 
             var jsonStream = await FetchHtmlStreamAsync(api);
             if (jsonStream == null)
