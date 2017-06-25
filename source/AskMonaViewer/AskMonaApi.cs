@@ -86,7 +86,7 @@ namespace AskMonaViewer
             return (SecretKey)serializer.ReadObject(jsonStream);
         }
 
-        public async Task<PostResult> PostResponseAsync(int t_id, string text, int sage)
+        public async Task<ApiResult> PostResponseAsync(int t_id, string text, int sage)
         {
             var nonce = "";
             var time = "";
@@ -100,7 +100,7 @@ namespace AskMonaViewer
                     return null;
             }
 
-            var serializer = new DataContractJsonSerializer(typeof(PostResult));
+            var serializer = new DataContractJsonSerializer(typeof(ApiResult));
             var api = String.Format(mApiBaseUrl + 
                 "responses/post?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&t_id={5}&text={6}&sage={7}",
                 mApplicationId, mAccount.UserId, nonce, time, authKey, t_id, text, sage);
@@ -109,7 +109,7 @@ namespace AskMonaViewer
             if (jsonStream == null)
                 return null;
 
-            return (PostResult)serializer.ReadObject(jsonStream);
+            return (ApiResult)serializer.ReadObject(jsonStream);
         }
 
         public async Task<Balance> FetchBlanceAsync(int detail = 0)
@@ -190,6 +190,32 @@ namespace AskMonaViewer
             return (SendResult)serializer.ReadObject(jsonStream);
         }
 
+        public async Task<ApiResult> CreateTopicAsync(string title, string text, int cat_id, string tags)
+        {
+            var nonce = "";
+            var time = "";
+            var authKey = "+";
+            while (authKey.Contains("+"))
+            {
+                nonce = GenerateNonce(32);
+                time = ((long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds).ToString();
+                authKey = await GenerateAuthorizationKey(nonce, time);
+                if (authKey == null)
+                    return null;
+            }
+
+            var serializer = new DataContractJsonSerializer(typeof(ApiResult));
+            var api = String.Format(mApiBaseUrl +
+                "topics/new?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&title={5}&text={6}&cat_id={7}&tags={8}",
+                mApplicationId, mAccount.UserId, nonce, time, authKey, title, text, cat_id, tags);
+
+            var jsonStream = await FetchHtmlStreamAsync(api);
+            if (jsonStream == null)
+                return null;
+
+            return (ApiResult)serializer.ReadObject(jsonStream);
+        }
+
         public async Task<TopicList> FetchTopicListAsync(int cat_id = 0, int limit = 100)
         {
             var serializer = new DataContractJsonSerializer(typeof(TopicList));
@@ -229,7 +255,7 @@ namespace AskMonaViewer
     }
 
     [DataContract]
-    public class PostResult
+    public class ApiResult
     {
         [DataMember(Name = "status")]
         public int Status { get; set; }

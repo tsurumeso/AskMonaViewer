@@ -347,7 +347,6 @@ namespace AskMonaViewer
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            var loginForm = new LoginForm(this);
             try
             {
                 var xs = new XmlSerializer(typeof(Account));
@@ -358,6 +357,7 @@ namespace AskMonaViewer
             }
             catch
             {
+                var loginForm = new LoginForm(this);
                 loginForm.StartPosition = FormStartPosition.CenterScreen;
                 loginForm.ShowDialog();
                 if (mAccount == null)
@@ -366,7 +366,7 @@ namespace AskMonaViewer
             mApi = new AskMonaApi(mAccount);
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
-                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString();
+                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
             RefreshTopicList(0);
         }
 
@@ -375,6 +375,13 @@ namespace AskMonaViewer
             var xs = new XmlSerializer(typeof(Account));
             using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mAccount);
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            var topicCreateForm = new TopicCreateForm(mApi);
+            topicCreateForm.StartPosition = FormStartPosition.CenterScreen;
+            topicCreateForm.ShowDialog();
         }
     }
 }

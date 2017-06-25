@@ -84,6 +84,12 @@
       <DependentUpon>ResponseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TopicComparer.cs" />
+    <Compile Include="TopicCreateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TopicCreateForm.Designer.cs">
+      <DependentUpon>TopicCreateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ZaifApi.cs" />
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -106,6 +112,9 @@
     </Compile>
     <EmbeddedResource Include="ResponseForm.resx">
       <DependentUpon>ResponseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicCreateForm.resx">
+      <DependentUpon>TopicCreateForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
