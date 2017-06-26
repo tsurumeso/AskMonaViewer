@@ -386,6 +386,8 @@ namespace AskMonaViewer
 
         public int Increased { get; set; }
 
+        public int CachedCount { get; set; }
+
         [DataMember(Name = "receive")]
         public string ReceivedMona { get; set; }
 

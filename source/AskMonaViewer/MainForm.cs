@@ -33,9 +33,11 @@ namespace AskMonaViewer
                 TopicComparer.ComparerMode.String,
                 TopicComparer.ComparerMode.String,
                 TopicComparer.ComparerMode.Double,
+                TopicComparer.ComparerMode.Integer,
+                TopicComparer.ComparerMode.Integer,
+                TopicComparer.ComparerMode.Integer,
+                TopicComparer.ComparerMode.Integer,
                 TopicComparer.ComparerMode.Double,
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.Integer,
                 TopicComparer.ComparerMode.DateTime
             };
             mTopicList = new TopicList();
@@ -92,22 +94,30 @@ namespace AskMonaViewer
             {
                 foreach (var topic in topicList.Topics)
                 {
-                    var sameTopic = mTopicList.Topics.Find(x => x.Id == topic.Id);
-                    if (sameTopic == null)
+                    var oldTopic = mTopicList.Topics.Find(x => x.Id == topic.Id);
+                    if (oldTopic == null)
                         topic.Increased = 0;
                     else
-                        topic.Increased = topic.Count - sameTopic.Count;
+                        topic.Increased = topic.Count - oldTopic.Count;
 
+                    var cachedTopic = mResponseCacheList.Find(x => x.Topic.Id == topic.Id);
+                    topic.CachedCount = 0;
+                    if (cachedTopic != null)
+                        topic.CachedCount = cachedTopic.Topic.Count;
+
+                    int newArrivals = topic.CachedCount == 0 ? 0 : topic.Count - topic.CachedCount;
                     var lvi = new ListViewItem(
                         new string[] {
-                        topic.Rank.ToString(),
-                        topic.Category,
-                        topic.Title,
-                        WatanabeToMona(topic.ReceivedMona),
-                        ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
-                        topic.Increased.ToString(),
-                        topic.Count.ToString(),
-                        UnixTimeStampToDateTime(topic.Updated).ToString()
+                            topic.Rank.ToString(),
+                            topic.Category,
+                            topic.Title,
+                            WatanabeToMona(topic.ReceivedMona),
+                            topic.Count.ToString(),
+                            topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
+                            newArrivals == 0 ? "" : newArrivals.ToString(),
+                            topic.Increased == 0 ? "" : topic.Increased.ToString(),
+                            ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
+                            UnixTimeStampToDateTime(topic.Updated).ToString()
                         }
                     );
                     lvi.Tag = topic;
@@ -141,16 +151,19 @@ namespace AskMonaViewer
                 {
                     if (topic.Title.ToLower().Contains(key.ToLower()))
                     {
+                        int newArrivals = topic.CachedCount == 0 ? 0 : topic.Count - topic.CachedCount;
                         var lvi = new ListViewItem(
                             new string[] {
-                            topic.Rank.ToString(),
-                            topic.Category,
-                            topic.Title,
-                            WatanabeToMona(topic.ReceivedMona),
-                            ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
-                            topic.Increased.ToString(),
-                            topic.Count.ToString(),
-                            UnixTimeStampToDateTime(topic.Updated).ToString()
+                                topic.Rank.ToString(),
+                                topic.Category,
+                                topic.Title,
+                                WatanabeToMona(topic.ReceivedMona),
+                                topic.Count.ToString(),
+                                topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
+                                newArrivals == 0 ? "" : newArrivals.ToString(),
+                                topic.Increased == 0 ? "" : topic.Increased.ToString(),
+                                ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
+                                UnixTimeStampToDateTime(topic.Updated).ToString()
                             }
                         );
                         lvi.Tag = topic;
@@ -208,7 +221,7 @@ namespace AskMonaViewer
             return html.ToString();
         }
 
-        private async void UpdateResponces(int topicId)
+        private async Task<bool> UpdateResponces(int topicId)
         {
             toolStripStatusLabel1.Text = "通信中";
             toolStripComboBox1.Text = "https://askmona.org/" + topicId;
@@ -221,7 +234,7 @@ namespace AskMonaViewer
                 if (responseList == null)
                 {
                     toolStripStatusLabel1.Text = "受信失敗";
-                    return;
+                    return false;
                 }
                 mTopic = responseList.Topic;
                 html = await BuildHtml(responseList);
@@ -234,7 +247,7 @@ namespace AskMonaViewer
                 if (responseList == null)
                 {
                     toolStripStatusLabel1.Text = "受信失敗";
-                    return;
+                    return false;
                 }
                 if (responseList.Status == 2)
                 {
@@ -252,18 +265,21 @@ namespace AskMonaViewer
             }
             tabControl1.TabPages[0].Text = mTopic.Title;
             webBrowser1.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+            return true;
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private async void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count == 0)
                 return;
 
             var topic = (Topic)listView1.SelectedItems[0].Tag;
-            UpdateResponces(topic.Id);
+            await UpdateResponces(topic.Id);
+            listView1.SelectedItems[0].SubItems[5].Text = mTopic.Count.ToString();
+            listView1.SelectedItems[0].SubItems[6].Text = "";
         }
 
-        void Document_Click(object sender, HtmlElementEventArgs e)
+        async void Document_Click(object sender, HtmlElementEventArgs e)
         {
             try
             {
@@ -291,7 +307,7 @@ namespace AskMonaViewer
                         monaRequestForm.ShowDialog();
                     }
                     else if (mAskMona.Success)
-                        UpdateResponces(int.Parse(mAskMona.Groups["Id"].Value));
+                        await UpdateResponces(int.Parse(mAskMona.Groups["Id"].Value));
                     else if (link == "about:blank#id")
                     {
                     }

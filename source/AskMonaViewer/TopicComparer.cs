@@ -105,12 +105,16 @@ namespace AskMonaViewer
                         itemy.SubItems[_column].Text);
                     break;
                 case ComparerMode.Integer:
-                    result = int.Parse(itemx.SubItems[_column].Text).CompareTo(
-                        int.Parse(itemy.SubItems[_column].Text));
+                    int ia, ib;
+                    int.TryParse(itemx.SubItems[_column].Text, out ia);
+                    int.TryParse(itemy.SubItems[_column].Text, out ib);
+                    result = ia.CompareTo(ib);
                     break;
                 case ComparerMode.Double:
-                    result = double.Parse(itemx.SubItems[_column].Text).CompareTo(
-                        double.Parse(itemy.SubItems[_column].Text));
+                    double da, db;
+                    double.TryParse(itemx.SubItems[_column].Text, out da);
+                    double.TryParse(itemy.SubItems[_column].Text, out db);
+                    result = da.CompareTo(db);
                     break;
                 case ComparerMode.DateTime:
                     result = DateTime.Compare(
