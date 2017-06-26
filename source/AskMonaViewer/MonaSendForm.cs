@@ -3,13 +3,13 @@ using System.Windows.Forms;
 
 namespace AskMonaViewer
 {
-    public partial class MonaRequestForm : Form
+    public partial class MonaSendForm : Form
     {
         AskMonaApi mApi;
         int mTopicId;
         int mResponseId;
 
-        public MonaRequestForm(AskMonaApi api, int t_id, int r_id)
+        public MonaSendForm(AskMonaApi api, int t_id, int r_id)
         {
             InitializeComponent();
             mApi = api;

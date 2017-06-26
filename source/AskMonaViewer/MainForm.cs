@@ -286,7 +286,7 @@ namespace AskMonaViewer
                     var mAskMona = reAskMona.Match(link);
                     if (mSend.Success)
                     {
-                        var monaRequestForm = new MonaRequestForm(mApi, mTopic.Id, int.Parse(mSend.Groups["Id"].Value));
+                        var monaRequestForm = new MonaSendForm(mApi, mTopic.Id, int.Parse(mSend.Groups["Id"].Value));
                         monaRequestForm.StartPosition = FormStartPosition.CenterScreen;
                         monaRequestForm.ShowDialog();
                     }

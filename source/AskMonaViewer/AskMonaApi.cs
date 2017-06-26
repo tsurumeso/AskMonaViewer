@@ -51,7 +51,7 @@ namespace AskMonaViewer
             return nonceString.ToString();
         }
 
-        private async Task<string> GenerateAuthorizationKey(string nonce, string time)
+        private async Task<AuthorizationKey> GenerateAuthorizationKey()
         {
             if (String.IsNullOrEmpty(mAccount.SecretKey))
             {
@@ -63,10 +63,18 @@ namespace AskMonaViewer
                 mAccount.SecretKey = secretKey.Key;
             }
 
-            var byteValues = Encoding.UTF8.GetBytes(mApplicationSecretKey + nonce + time + mAccount.SecretKey);
-            var hash256Value = mSHA256Provider.ComputeHash(byteValues);
+            var nonce = "";
+            var time = "";
+            var authKey = "+";
+            while (authKey.Contains("+"))
+            {
+                nonce = GenerateNonce(32);
+                time = ((long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds).ToString();
+                var byteValues = Encoding.UTF8.GetBytes(mApplicationSecretKey + nonce + time + mAccount.SecretKey);
+                authKey = Convert.ToBase64String(mSHA256Provider.ComputeHash(byteValues));
+            }
 
-            return Convert.ToBase64String(hash256Value);
+            return new AuthorizationKey(authKey, nonce, time);
         }
 
         private async Task<SecretKey> FetchSecretKey()
@@ -88,22 +96,14 @@ namespace AskMonaViewer
 
         public async Task<ApiResult> PostResponseAsync(int t_id, string text, int sage)
         {
-            var nonce = "";
-            var time = "";
-            var authKey = "+";
-            while (authKey.Contains("+"))
-            {
-                nonce = GenerateNonce(32);
-                time = ((long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds).ToString();
-                authKey = await GenerateAuthorizationKey(nonce, time);
-                if (authKey == null)
-                    return null;
-            }
+            var authKey = await GenerateAuthorizationKey();
+            if (authKey == null)
+                return null;
 
             var serializer = new DataContractJsonSerializer(typeof(ApiResult));
             var api = String.Format(mApiBaseUrl + 
                 "responses/post?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&t_id={5}&text={6}&sage={7}",
-                mApplicationId, mAccount.UserId, nonce, time, authKey, t_id, text, sage);
+                mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, t_id, text, sage);
 
             var jsonStream = await FetchHtmlStreamAsync(api);
             if (jsonStream == null)
@@ -114,22 +114,14 @@ namespace AskMonaViewer
 
         public async Task<Balance> FetchBlanceAsync(int detail = 0)
         {
-            var nonce = "";
-            var time = "";
-            var authKey = "+";
-            while (authKey.Contains("+"))
-            {
-                nonce = GenerateNonce(32);
-                time = ((long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds).ToString();
-                authKey = await GenerateAuthorizationKey(nonce, time);
-                if (authKey == null)
-                    return null;
-            }
+            var authKey = await GenerateAuthorizationKey();
+            if (authKey == null)
+                return null;
 
             var serializer = new DataContractJsonSerializer(typeof(Balance));
             var api = String.Format(mApiBaseUrl + 
                 "account/balance?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&detail={5}",
-                mApplicationId, mAccount.UserId, nonce, time, authKey, detail);
+                mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, detail);
 
             var jsonStream = await FetchHtmlStreamAsync(api);
             if (jsonStream == null)
@@ -140,22 +132,14 @@ namespace AskMonaViewer
 
         public async Task<SendResult> SendMonaAsync(int to_u_id, ulong amount, int anonymous = 1, string msg_text = "", int sage = 0)
         {
-            var nonce = "";
-            var time = "";
-            var authKey = "+";
-            while (authKey.Contains("+"))
-            {
-                nonce = GenerateNonce(32);
-                time = ((long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds).ToString();
-                authKey = await GenerateAuthorizationKey(nonce, time);
-                if (authKey == null)
-                    return null;
-            }
+            var authKey = await GenerateAuthorizationKey();
+            if (authKey == null)
+                return null;
 
             var serializer = new DataContractJsonSerializer(typeof(SendResult));
             var api = String.Format(mApiBaseUrl +
                 "account/send?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&to_u_id={5}&amount={6}&anonymous={7}&msg_text={8}&sage={9}",
-                mApplicationId, mAccount.UserId, nonce, time, authKey, to_u_id, amount, anonymous, msg_text, sage);
+                mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, to_u_id, amount, anonymous, msg_text, sage);
 
             var jsonStream = await FetchHtmlStreamAsync(api);
             if (jsonStream == null)
@@ -166,22 +150,14 @@ namespace AskMonaViewer
 
         public async Task<SendResult> SendMonaAsync(int t_id, int r_id, ulong amount, int anonymous = 1, string msg_text = "", int sage = 0)
         {
-            var nonce = "";
-            var time = "";
-            var authKey = "+";
-            while (authKey.Contains("+"))
-            {
-                nonce = GenerateNonce(32);
-                time = ((long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds).ToString();
-                authKey = await GenerateAuthorizationKey(nonce, time);
-                if (authKey == null)
-                    return null;
-            }
+            var authKey = await GenerateAuthorizationKey();
+            if (authKey == null)
+                return null;
 
             var serializer = new DataContractJsonSerializer(typeof(SendResult));
             var api = String.Format(mApiBaseUrl +
                 "account/send?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&t_id={5}&r_id={6}&amount={7}&anonymous={8}&msg_text={9}&sage={10}",
-                mApplicationId, mAccount.UserId, nonce, time, authKey, t_id, r_id, amount, anonymous, msg_text, sage);
+                mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, t_id, r_id, amount, anonymous, msg_text, sage);
 
             var jsonStream = await FetchHtmlStreamAsync(api);
             if (jsonStream == null)
@@ -192,22 +168,14 @@ namespace AskMonaViewer
 
         public async Task<ApiResult> CreateTopicAsync(string title, string text, int cat_id, string tags)
         {
-            var nonce = "";
-            var time = "";
-            var authKey = "+";
-            while (authKey.Contains("+"))
-            {
-                nonce = GenerateNonce(32);
-                time = ((long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds).ToString();
-                authKey = await GenerateAuthorizationKey(nonce, time);
-                if (authKey == null)
-                    return null;
-            }
+            var authKey = await GenerateAuthorizationKey();
+            if (authKey == null)
+                return null;
 
             var serializer = new DataContractJsonSerializer(typeof(ApiResult));
             var api = String.Format(mApiBaseUrl +
                 "topics/new?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&title={5}&text={6}&cat_id={7}&tags={8}",
-                mApplicationId, mAccount.UserId, nonce, time, authKey, title, text, cat_id, tags);
+                mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, title, text, cat_id, tags);
 
             var jsonStream = await FetchHtmlStreamAsync(api);
             if (jsonStream == null)
@@ -253,6 +221,20 @@ namespace AskMonaViewer
 
             var responseList = (ResponseList)serializer.ReadObject(jsonStream);
             return responseList.Responses[0];
+        }
+    }
+
+    public class AuthorizationKey
+    {
+        public string Key;
+        public string Nonce;
+        public string Time;
+
+        public AuthorizationKey(string key, string nonce, string time)
+        {
+            Key = key;
+            Nonce = nonce;
+            Time = time;
         }
     }
 

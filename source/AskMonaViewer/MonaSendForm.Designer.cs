@@ -1,6 +1,6 @@
 ﻿namespace AskMonaViewer
 {
-    partial class MonaRequestForm
+    partial class MonaSendForm
     {
         /// <summary>
         /// Required designer variable.
