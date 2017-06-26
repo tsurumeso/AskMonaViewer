@@ -205,7 +205,6 @@ namespace AskMonaViewer
                         html.Append(String.Format("    <p class=\"res_lv5\" style=\"padding-left: 32px;\">{0}</p>\n", res));
                 }
             });
-            html.Append("</body>\n</html>");
             return html.ToString();
         }
 
@@ -230,7 +229,8 @@ namespace AskMonaViewer
             }
             else
             {
-                var responseList = await mApi.FetchResponseListAsync(topicId, topic_detail: 1, prev: mResponseCacheList[idx].Topic.Modified);
+                var cache = mResponseCacheList[idx];
+                var responseList = await mApi.FetchResponseListAsync(topicId, cache.Topic.Count + 1, 1000, 1, cache.Topic.Modified);
                 if (responseList == null)
                 {
                     toolStripStatusLabel1.Text = "受信失敗";
@@ -238,20 +238,20 @@ namespace AskMonaViewer
                 }
                 if (responseList.Status == 2)
                 {
-                    var responseCache = mResponseCacheList[idx];
+                    var responseCache = cache;
                     mTopic = responseCache.Topic;
                     html = responseCache.Html;
                 }
                 else
                 {
-                    mResponseCacheList.RemoveAt(idx);
                     mTopic = responseList.Topic;
-                    html = await BuildHtml(responseList);
+                    html = cache.Html + await BuildHtml(responseList);
+                    mResponseCacheList.RemoveAt(idx);
                     mResponseCacheList.Add(new ResponseCache(mTopic, html.ToString()));
                 }
             }
             tabControl1.TabPages[0].Text = mTopic.Title;
-            webBrowser1.DocumentText = mHtmlHeader + html;
+            webBrowser1.DocumentText = mHtmlHeader + html + "</body>\n</html>";
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
