@@ -30,7 +30,7 @@ namespace AskMonaViewer
             mAccount = account;
         }
 
-        private async Task<Stream> FetchHtmlStreamAsync(string url)
+        private async Task<Stream> FetchResponseStreamAsync(string url)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace AskMonaViewer
             var api = String.Format(mApiBaseUrl + 
                 "auth/secretkey?app_id={0}&app_secretkey={1}&u_address={2}&pass={3}",
                 mApplicationId, mApplicationSecretKey, mAccount.Address, mAccount.Password);
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
 
             if (jsonStream == null)
                 return null;
@@ -105,7 +105,7 @@ namespace AskMonaViewer
                 "responses/post?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&t_id={5}&text={6}&sage={7}",
                 mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, t_id, text, sage);
 
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 
@@ -123,7 +123,7 @@ namespace AskMonaViewer
                 "account/balance?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&detail={5}",
                 mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, detail);
 
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 
@@ -141,7 +141,7 @@ namespace AskMonaViewer
                 "account/send?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&to_u_id={5}&amount={6}&anonymous={7}&msg_text={8}&sage={9}",
                 mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, to_u_id, amount, anonymous, msg_text, sage);
 
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 
@@ -159,7 +159,7 @@ namespace AskMonaViewer
                 "account/send?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&t_id={5}&r_id={6}&amount={7}&anonymous={8}&msg_text={9}&sage={10}",
                 mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, t_id, r_id, amount, anonymous, msg_text, sage);
 
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 
@@ -177,7 +177,7 @@ namespace AskMonaViewer
                 "topics/new?app_id={0}&u_id={1}&nonce={2}&time={3}&auth_key={4}&title={5}&text={6}&cat_id={7}&tags={8}",
                 mApplicationId, mAccount.UserId, authKey.Nonce, authKey.Time, authKey.Key, title, text, cat_id, tags);
 
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 
@@ -189,7 +189,7 @@ namespace AskMonaViewer
             var serializer = new DataContractJsonSerializer(typeof(TopicList));
             var api = String.Format(mApiBaseUrl + "topics/list?cat_id={0}&limit={1}", cat_id, limit);
 
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 
@@ -198,29 +198,19 @@ namespace AskMonaViewer
 
         public async Task<ResponseList> FetchResponseListAsync(int t_id, int from = 1, int to = 1000, int topic_detail = 0, long prev = 0)
         {
+            if (from > 1000)
+                from = 1000;
+
             var serializer = new DataContractJsonSerializer(typeof(ResponseList));
             var api = String.Format(mApiBaseUrl + 
                 "responses/list?t_id={0}&from={1}&to={2}&topic_detail={3}&if_modified_since={4}", 
                 t_id, from, to, topic_detail, prev);
 
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 
             return (ResponseList)serializer.ReadObject(jsonStream);
-        }
-
-        public async Task<Response> FetchResponseAsync(int t_id, int r_id = 1)
-        {
-            var serializer = new DataContractJsonSerializer(typeof(ResponseList));
-            var api = String.Format(mApiBaseUrl + "responses/list?t_id={0}&from={1}", t_id, r_id);
-
-            var jsonStream = await FetchHtmlStreamAsync(api);
-            if (jsonStream == null)
-                return null;
-
-            var responseList = (ResponseList)serializer.ReadObject(jsonStream);
-            return responseList.Responses[0];
         }
     }
 

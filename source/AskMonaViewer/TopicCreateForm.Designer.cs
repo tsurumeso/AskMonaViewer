@@ -163,6 +163,7 @@
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "TopicCreateForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "トピックの新規作成";
             this.ResumeLayout(false);
             this.PerformLayout();

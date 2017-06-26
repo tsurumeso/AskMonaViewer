@@ -18,7 +18,7 @@ namespace AskMonaViewer
             mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
         }
 
-        private async Task<Stream> FetchHtmlStreamAsync(string url)
+        private async Task<Stream> FetchResponseStreamAsync(string url)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace AskMonaViewer
             var serializer = new DataContractJsonSerializer(typeof(Currency));
             var api = String.Format(mApiBaseUrl + "ticker/{0}", currency);
             
-            var jsonStream = await FetchHtmlStreamAsync(api);
+            var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 

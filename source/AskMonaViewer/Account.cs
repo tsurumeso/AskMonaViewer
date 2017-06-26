@@ -1,4 +1,7 @@
-﻿namespace AskMonaViewer
+﻿using System;
+using System.Text.RegularExpressions;
+
+namespace AskMonaViewer
 {
     public class Account
     {
@@ -21,6 +24,18 @@
             Password = pass;
             UserId = -1;
             SecretKey = "";
+        }
+
+        public Account FromAuthCode(string code)
+        {
+            code = code.Replace("\\", "");
+            var m = Regex.Match(code, @"""u_id"":(?<UserId>[0-9]+),""secretkey"":""(?<SecretKey>.+)""");
+            if (m.Success)
+            {
+                UserId = int.Parse(m.Groups["UserId"].Value);
+                SecretKey = m.Groups["SecretKey"].Value;
+            }
+            return this;
         }
     }
 }

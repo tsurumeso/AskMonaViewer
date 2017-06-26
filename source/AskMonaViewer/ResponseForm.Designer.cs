@@ -92,6 +92,7 @@
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "ResponseForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "レス投稿";
             this.ResumeLayout(false);
             this.PerformLayout();

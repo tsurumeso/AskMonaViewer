@@ -194,7 +194,7 @@
             this.textBox4.Size = new System.Drawing.Size(100, 23);
             this.textBox4.TabIndex = 15;
             // 
-            // MonaRequestForm
+            // MonaSendForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -216,7 +216,10 @@
             this.Controls.Add(this.textBox1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "MonaRequestForm";
+            this.MaximumSize = new System.Drawing.Size(300, 289);
+            this.MinimumSize = new System.Drawing.Size(300, 289);
+            this.Name = "MonaSendForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "送る";
             this.Load += new System.EventHandler(this.MonaRequestForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

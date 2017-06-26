@@ -39,30 +39,6 @@ namespace AskMonaViewer
                 }
             }
 
-            public SortOrder Order
-            {
-                set
-                {
-                    _order = value;
-                }
-                get
-                {
-                    return _order;
-                }
-            }
-
-            public ComparerMode Mode
-            {
-                set
-                {
-                    _mode = value;
-                }
-                get
-                {
-                    return _mode;
-                }
-            }
-
             public ComparerMode[] ColumnModes
             {
                 set
