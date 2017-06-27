@@ -51,7 +51,7 @@ namespace AskMonaViewer
                 "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n" +
                 "<style type=\"text/css\">\n{0}\n</style>" +
                 "\n</head>\n" +
-                "<body link=blue bgcolor=#E6E6E6>\n", css);
+                "<body>\n", css);
         }
 
         public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
@@ -179,8 +179,8 @@ namespace AskMonaViewer
             {
                 foreach (var response in responseList.Responses)
                 {
-                    html.Append(String.Format("    <a href=#id>{0}</a> 名前：<font color=green><b>{1}さん</b></font> " +
-                        "投稿日：{2} <font color=red>ID：</font>{3} [{4}] <b>+{5}MONA/{6}人</b> <a href=\"#send?r_id={7}\"><-送る</a>\n",
+                    html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user\" class=\"user\">{1}さん</a> " +
+                        "投稿日：{2} <font color=red>ID：</font>{3} [{4}] <b>+{5}MONA/{6}人</b> <a href=\"#send?r_id={7}\" class=\"send\">←送る</a>\n",
                         response.Id.ToString(), response.UserName + response.UserDan,
                         UnixTimeStampToDateTime(response.Created).ToString(), response.UserId, response.UserTimes,
                         WatanabeToMona(response.ReceivedMona), response.ReceivedCount, response.Id));
@@ -320,29 +320,28 @@ namespace AskMonaViewer
                         link = clickedElement.Parent.GetAttribute("href");
                 }
 
-                if (!String.IsNullOrEmpty(link))
+                if (String.IsNullOrEmpty(link))
+                    return;
+
+                var reSend = new Regex(@"about:blank#send\?r_id=(?<Id>[0-9]+)");
+                var reAskMona = new Regex(@"https?://askmona.org/(?<Id>[0-9]+)");
+                var mSend = reSend.Match(link);
+                var mAskMona = reAskMona.Match(link);
+                if (mSend.Success)
                 {
-                    var reSend = new Regex(@"about:blank#send\?r_id=(?<Id>[0-9]+)");
-                    var reAskMona = new Regex(@"https?://askmona.org/(?<Id>[0-9]+)");
-                    var mSend = reSend.Match(link);
-                    var mAskMona = reAskMona.Match(link);
-                    if (mSend.Success)
-                    {
-                        var monaRequestForm = new MonaSendForm(mApi, mTopic.Id, int.Parse(mSend.Groups["Id"].Value));
-                        monaRequestForm.ShowDialog();
-                    }
-                    else if (mAskMona.Success)
-                    {
-                        // COMException 回避
-                        var result = UpdateResponce(int.Parse(mAskMona.Groups["Id"].Value));
-                    }
-                    else if (link == "about:blank#id")
-                    {
-                    }
-                    else
-                        System.Diagnostics.Process.Start(link);
-                    e.ReturnValue = false;
+                    var monaRequestForm = new MonaSendForm(mApi, mTopic.Id, int.Parse(mSend.Groups["Id"].Value));
+                    monaRequestForm.ShowDialog();
                 }
+                else if (mAskMona.Success)
+                {
+                    // COMException 回避
+                    var result = UpdateResponce(int.Parse(mAskMona.Groups["Id"].Value));
+                }
+                else if (link == "about:blank#user") { }
+                else if (link == "about:blank#id") { }
+                else
+                    System.Diagnostics.Process.Start(link);
+                e.ReturnValue = false;
             }
             catch (NullReferenceException) { }
         }

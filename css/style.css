@@ -1,6 +1,7 @@
 ﻿body {
     font-family: "Meiryo UI";
     font-size: 12pt;
+    background-color: #E6E6E6;
 }
 
 p.res_lv1 { 
@@ -21,6 +22,29 @@ p.res_lv4 {
 p.res_lv5 { 
     color: #dba900; 
     font-weight: bold;
+}
+
+a {
+    color: blue;
+    text-decoration:underline;
+}
+
+a.user {
+    color: green;
+    text-decoration: none;
+    font-weight: bold;
+}
+a.user:hover{
+    text-decoration:underline
+}
+
+a.send {
+    color: blue;
+    text-decoration: none;
+    font-weight: bold;
+}
+a.send:hover{
+    text-decoration:underline
 }
 
 .tooltip {
