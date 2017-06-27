@@ -58,29 +58,29 @@ namespace AskMonaViewer
             return await CallAuthAsync<Balance>(mApiBaseUrl + "account/balance", prms);
         }
 
-        public async Task<SendResult> SendMonaAsync(int to_u_id, ulong amount, int anonymous = 1, string msg_text = "", int sage = 0)
+        public async Task<Balance> SendMonaAsync(int to_u_id, ulong amount, int anonymous = 1, string msg_text = "", int sage = 0)
         {
             var prms = new Dictionary<string, string>();
             prms.Add("to_u_id", to_u_id.ToString());
             prms.Add("amount", amount.ToString());
             prms.Add("anonymous", anonymous.ToString());
-            prms.Add("anonymous", msg_text);
+            prms.Add("msg_text", msg_text);
             prms.Add("sage", sage.ToString());
 
-            return await CallAuthAsync<SendResult>(mApiBaseUrl + "account/send", prms);
+            return await CallAuthAsync<Balance>(mApiBaseUrl + "account/send", prms);
         }
 
-        public async Task<SendResult> SendMonaAsync(int t_id, int r_id, ulong amount, int anonymous = 1, string msg_text = "", int sage = 0)
+        public async Task<Balance> SendMonaAsync(int t_id, int r_id, ulong amount, int anonymous = 1, string msg_text = "", int sage = 0)
         {
             var prms = new Dictionary<string, string>();
             prms.Add("t_id", t_id.ToString());
             prms.Add("r_id", r_id.ToString());
             prms.Add("amount", amount.ToString());
             prms.Add("anonymous", anonymous.ToString());
-            prms.Add("anonymous", msg_text);
+            prms.Add("msg_text", msg_text);
             prms.Add("sage", sage.ToString());
 
-            return await CallAuthAsync<SendResult>(mApiBaseUrl + "account/send", prms);
+            return await CallAuthAsync<Balance>(mApiBaseUrl + "account/send", prms);
         }
 
         public async Task<ApiResult> CreateTopicAsync(string title, string text, int cat_id, string tags)
@@ -143,19 +143,6 @@ namespace AskMonaViewer
 
         [DataMember(Name = "error")]
         public string Error { get; set; }
-    }
-
-    [DataContract]
-    public class SendResult
-    {
-        [DataMember(Name = "status")]
-        public int Status { get; set; }
-
-        [DataMember(Name = "error")]
-        public string Error { get; set; }
-
-        [DataMember(Name = "balance")]
-        public string Balance { get; set; }
     }
 
     [DataContract]

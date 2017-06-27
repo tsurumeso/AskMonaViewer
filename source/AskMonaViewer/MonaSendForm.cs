@@ -17,7 +17,6 @@ namespace AskMonaViewer
             mResponseId = r_id;
             textBox1.Text = t_id.ToString();
             textBox2.Text = r_id.ToString();
-            button1.Enabled = false;
         }
 
         private async void MonaRequestForm_Load(object sender, System.EventArgs e)
@@ -36,7 +35,7 @@ namespace AskMonaViewer
         {
             int sage = checkBox1.Checked ? 1 : 0;
             int anonymous = checkBox2.Checked ? 1 : 0;
-            var result = await mApi.SendMonaAsync(mTopicId, mResponseId, (ulong)(numericUpDown1.Value * 1000000000), anonymous, textBox3.Text, sage);
+            var result = await mApi.SendMonaAsync(mTopicId, mResponseId, (ulong)(numericUpDown1.Value * 100000000), anonymous, textBox3.Text, sage);
             if (result != null)
             {
                 if (result.Status == 0)
@@ -55,14 +54,16 @@ namespace AskMonaViewer
             this.Close();
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-            button1.Enabled = numericUpDown1.Value > 0;
-        }
-
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             textBox3.ReadOnly = checkBox2.Checked;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            double value;
+            double.TryParse(numericUpDown1.Text, out value);
+            button1.Enabled = value > 0;
         }
     }
 }
