@@ -35,7 +35,8 @@ namespace AskMonaViewer
         private async void button1_Click(object sender, System.EventArgs e)
         {
             int sage = checkBox1.Checked ? 1 : 0;
-            var result = await mApi.SendMonaAsync(mTopicId, mResponseId, (ulong)(numericUpDown1.Value * 1000000000), 1, textBox3.Text, sage);
+            int anonymous = checkBox2.Checked ? 1 : 0;
+            var result = await mApi.SendMonaAsync(mTopicId, mResponseId, (ulong)(numericUpDown1.Value * 1000000000), anonymous, textBox3.Text, sage);
             if (result != null)
             {
                 if (result.Status == 0)
@@ -57,6 +58,11 @@ namespace AskMonaViewer
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             button1.Enabled = numericUpDown1.Value > 0;
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            textBox3.ReadOnly = checkBox2.Checked;
         }
     }
 }
