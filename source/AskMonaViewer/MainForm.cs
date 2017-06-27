@@ -270,7 +270,7 @@ namespace AskMonaViewer
             else
             {
                 var cache = mResponseCacheList[idx];
-                var responseList = await mApi.FetchResponseListAsync(topicId, cache.Topic.Count + 1, 1000, 1, cache.Topic.Modified);
+                var responseList = await mApi.FetchResponseListAsync(topicId, 1, 1000, 1, cache.Topic.Modified);
                 if (responseList == null)
                 {
                     toolStripStatusLabel1.Text = "受信失敗";
@@ -284,7 +284,7 @@ namespace AskMonaViewer
                 else
                 {
                     mTopic = responseList.Topic;
-                    html = DecompressString(cache.Html) + await BuildHtml(responseList);
+                    html = await BuildHtml(responseList);
                     mResponseCacheList.RemoveAt(idx);
                     mResponseCacheList.Add(new ResponseCache(mTopic, CompressString(html.ToString())));
                 }
