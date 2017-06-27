@@ -29,11 +29,7 @@ namespace AskMonaViewer
                 return;
             }
 
-            var result = await mApi.CreateTopicAsync(
-                Uri.EscapeUriString(textBox1.Text), 
-                Uri.EscapeUriString(textBox2.Text), 
-                comboBox1.SelectedIndex, 
-                Uri.EscapeUriString(textBox3.Text));
+            var result = await mApi.CreateTopicAsync(textBox1.Text, textBox2.Text, comboBox1.SelectedIndex, textBox3.Text);
 
             if (result != null)
             {

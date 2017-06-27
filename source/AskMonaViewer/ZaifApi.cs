@@ -12,10 +12,9 @@ namespace AskMonaViewer
         private const string mApiBaseUrl = "https://api.zaif.jp/api/1/";
         private static HttpClient mHttpClient;
 
-        public ZaifApi()
+        public ZaifApi(HttpClient client)
         {
-            mHttpClient = new HttpClient();
-            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
+            mHttpClient = client;
         }
 
         private async Task<Stream> FetchResponseStreamAsync(string url)

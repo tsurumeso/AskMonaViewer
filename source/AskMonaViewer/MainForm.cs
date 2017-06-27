@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO.Compression;
+using System.Net.Http;
 
 namespace AskMonaViewer
 {
@@ -15,6 +16,7 @@ namespace AskMonaViewer
         private Account mAccount = null;
         private AskMonaApi mApi;
         private ZaifApi mZaifApi;
+        private HttpClient mHttpClient;
         private int mCategoryId = 0;
         private bool mHasDocumentLoaded = true;
         private TopicComparer mListViewItemSorter;
@@ -42,7 +44,6 @@ namespace AskMonaViewer
                 TopicComparer.ComparerMode.DateTime
             };
             mTopicList = new TopicList();
-            mZaifApi = new ZaifApi();
             mResponseCacheList = new List<ResponseCache>();
             var css = new StreamReader("css/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
             mHtmlHeader = String.Format("<html lang=\"ja\">\n<head>\n" +
@@ -462,7 +463,10 @@ namespace AskMonaViewer
                 using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
                     mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
             }
-            mApi = new AskMonaApi(mAccount);
+            mHttpClient = new HttpClient();
+            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
+            mZaifApi = new ZaifApi(mHttpClient);
+            mApi = new AskMonaApi(mHttpClient, mAccount);
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
                 toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");

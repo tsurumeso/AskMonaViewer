@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="AskMonaApi.cs" />
     <Compile Include="Account.cs" />
+    <Compile Include="AskMonaApiMethods.cs" />
     <Compile Include="ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
