@@ -117,22 +117,14 @@ namespace AskMonaViewer
 
             return await CallAsync<ResponseList>(mApiBaseUrl + "responses/list", prms);
         }
-    }
 
-    [DataContract]
-    public class SecretKey
-    {
-        [DataMember(Name = "status")]
-        public int Status { get; set; }
+        public async Task<UserProfile> FetchUserProfileAsync(int u_id)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("u_id", u_id.ToString());
 
-        [DataMember(Name = "error")]
-        public string Error { get; set; }
-
-        [DataMember(Name = "u_id")]
-        public int UserId { get; set; }
-
-        [DataMember(Name = "secretkey")]
-        public string Key { get; set; }
+            return await CallAsync<UserProfile>(mApiBaseUrl + "users/profile", prms);
+        }
     }
 
     [DataContract]
@@ -146,14 +138,18 @@ namespace AskMonaViewer
     }
 
     [DataContract]
-    public class Balance
+    public class SecretKey : ApiResult
     {
-        [DataMember(Name = "status")]
-        public int Status { get; set; }
+        [DataMember(Name = "u_id")]
+        public int UserId { get; set; }
 
-        [DataMember(Name = "error")]
-        public string Error { get; set; }
+        [DataMember(Name = "secretkey")]
+        public string Key { get; set; }
+    }
 
+    [DataContract]
+    public class Balance : ApiResult
+    {
         [DataMember(Name = "balance")]
         public string Value { get; set; }
 
@@ -187,14 +183,8 @@ namespace AskMonaViewer
     }
 
     [DataContract]
-    public class TopicList
+    public class TopicList : ApiResult
     {
-        [DataMember(Name = "status")]
-        public int Status { get; set; }
-
-        [DataMember(Name = "error")]
-        public string Error { get; set; }
-
         [DataMember(Name = "count")]
         public int Count { get; set; }
 
@@ -205,6 +195,19 @@ namespace AskMonaViewer
         {
             Topics = new List<Topic>();
         }
+    }
+
+    [DataContract]
+    public class UserProfile : ApiResult
+    {
+        [DataMember(Name = "u_name")]
+        public string UserName { get; set; }
+
+        [DataMember(Name = "u_dan")]
+        public string UserDan { get; set; }
+
+        [DataMember(Name = "profile")]
+        public string Text { get; set; }
     }
 
     [DataContract]
@@ -270,14 +273,8 @@ namespace AskMonaViewer
     }
 
     [DataContract]
-    public class ResponseList
+    public class ResponseList : ApiResult
     {
-        [DataMember(Name = "status")]
-        public int Status { get; set; }
-
-        [DataMember(Name = "error")]
-        public string Error { get; set; }
-
         [DataMember(Name = "updated")]
         public int Updated { get; set; }
 

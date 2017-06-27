@@ -58,6 +58,12 @@
     <Compile Include="ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ProfileViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProfileViewForm.Designer.cs">
+      <DependentUpon>ProfileViewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SignUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +99,9 @@
       <DependentUpon>TopicCreateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ZaifApi.cs" />
+    <EmbeddedResource Include="ProfileViewForm.resx">
+      <DependentUpon>ProfileViewForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SignUpForm.resx">
       <DependentUpon>SignUpForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -179,9 +179,9 @@ namespace AskMonaViewer
             {
                 foreach (var response in responseList.Responses)
                 {
-                    html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user\" class=\"user\">{1}さん</a> " +
-                        "投稿日：{2} <font color=red>ID：</font>{3} [{4}] <b>+{5}MONA/{6}人</b> <a href=\"#send?r_id={7}\" class=\"send\">←送る</a>\n",
-                        response.Id.ToString(), response.UserName + response.UserDan,
+                    html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}さん</a> " +
+                        "投稿日：{3} <font color=red>ID：</font>{4} [{5}] <b>+{6}MONA/{7}人</b> <a href=\"#send?r_id={8}\" class=\"send\">←送る</a>\n",
+                        response.Id, response.UserId, response.UserName + response.UserDan,
                         UnixTimeStampToDateTime(response.Created).ToString(), response.UserId, response.UserTimes,
                         WatanabeToMona(response.ReceivedMona), response.ReceivedCount, response.Id));
 
@@ -323,10 +323,9 @@ namespace AskMonaViewer
                 if (String.IsNullOrEmpty(link))
                     return;
 
-                var reSend = new Regex(@"about:blank#send\?r_id=(?<Id>[0-9]+)");
-                var reAskMona = new Regex(@"https?://askmona.org/(?<Id>[0-9]+)");
-                var mSend = reSend.Match(link);
-                var mAskMona = reAskMona.Match(link);
+                var mSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
+                var mUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)");
+                var mAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
                 if (mSend.Success)
                 {
                     var monaRequestForm = new MonaSendForm(mApi, mTopic.Id, int.Parse(mSend.Groups["Id"].Value));
@@ -337,7 +336,11 @@ namespace AskMonaViewer
                     // COMException 回避
                     var result = UpdateResponce(int.Parse(mAskMona.Groups["Id"].Value));
                 }
-                else if (link == "about:blank#user") { }
+                else if (mUser.Success)
+                {
+                    var profileViewForm = new ProfileViewForm(mApi, int.Parse(mUser.Groups["Id"].Value));
+                    profileViewForm.ShowDialog();
+                }
                 else if (link == "about:blank#id") { }
                 else
                     System.Diagnostics.Process.Start(link);
