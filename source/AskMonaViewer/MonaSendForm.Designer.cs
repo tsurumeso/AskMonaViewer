@@ -108,7 +108,7 @@
             // 
             this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(70, 124);
+            this.textBox3.Location = new System.Drawing.Point(70, 95);
             this.textBox3.MaxLength = 255;
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
@@ -118,7 +118,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 127);
+            this.label3.Location = new System.Drawing.Point(12, 98);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 15);
             this.label3.TabIndex = 8;
@@ -175,7 +175,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(177, 73);
+            this.label6.Location = new System.Drawing.Point(176, 127);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(43, 15);
             this.label6.TabIndex = 14;
@@ -184,7 +184,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 73);
+            this.label7.Location = new System.Drawing.Point(12, 127);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(31, 15);
             this.label7.TabIndex = 13;
@@ -192,7 +192,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(71, 70);
+            this.textBox4.Location = new System.Drawing.Point(70, 124);
             this.textBox4.Name = "textBox4";
             this.textBox4.ReadOnly = true;
             this.textBox4.Size = new System.Drawing.Size(100, 23);
@@ -203,7 +203,7 @@
             this.checkBox2.AutoSize = true;
             this.checkBox2.Checked = true;
             this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(15, 99);
+            this.checkBox2.Location = new System.Drawing.Point(15, 70);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(81, 19);
             this.checkBox2.TabIndex = 16;
@@ -234,7 +234,6 @@
             this.Controls.Add(this.textBox1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(320, 285);
             this.MinimumSize = new System.Drawing.Size(320, 285);
             this.Name = "MonaSendForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
