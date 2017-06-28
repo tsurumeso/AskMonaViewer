@@ -83,6 +83,21 @@ namespace AskMonaViewer
             return await CallAuthAsync<Balance>(mApiBaseUrl + "account/send", prms);
         }
 
+        public async Task<Balance> WithdrawMonaAsync(ulong amount)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("amount", amount.ToString());
+
+            return await CallAuthAsync<Balance>(mApiBaseUrl + "account/withdraw", prms);
+        }
+
+        public async Task<DepositAddress> FetchDepositAddressAsync()
+        {
+            var prms = new Dictionary<string, string>();
+
+            return await CallAuthAsync<DepositAddress>(mApiBaseUrl + "account/deposit", prms);
+        }
+
         public async Task<ApiResult> CreateTopicAsync(string title, string text, int cat_id, string tags)
         {
             var prms = new Dictionary<string, string>();
@@ -180,6 +195,13 @@ namespace AskMonaViewer
 
         [DataMember(Name = "balance")]
         public string Balance { get; set; }
+    }
+
+    [DataContract]
+    public class DepositAddress : ApiResult
+    {
+        [DataMember(Name = "d_address")]
+        public string Address { get; set; }
     }
 
     [DataContract]

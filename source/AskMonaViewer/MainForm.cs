@@ -491,5 +491,17 @@ namespace AskMonaViewer
             var topicCreateForm = new TopicCreateForm(mApi);
             topicCreateForm.ShowDialog();
         }
+
+        private void toolStripButton8_Click(object sender, EventArgs e)
+        {
+            var monaWithdrawForm = new MonaWithdrawForm(mApi);
+            monaWithdrawForm.ShowDialog();
+        }
+
+        private async void toolStripButton7_Click(object sender, EventArgs e)
+        {
+            var deposit = await mApi.FetchDepositAddressAsync();
+            Clipboard.SetText(deposit.Address);
+        }
     }
 }
