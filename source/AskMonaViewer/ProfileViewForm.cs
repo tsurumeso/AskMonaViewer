@@ -59,9 +59,10 @@ namespace AskMonaViewer
 
         private void timer1_Tick(object sender, System.EventArgs e)
         {
-            double value;
+            double value, balance;
             double.TryParse(numericUpDown1.Text, out value);
-            button1.Enabled = value > 0;
+            double.TryParse(textBox4.Text, out balance);
+            button1.Enabled = value > 0 && balance > value;
         }
 
         private void checkBox2_CheckedChanged(object sender, System.EventArgs e)
