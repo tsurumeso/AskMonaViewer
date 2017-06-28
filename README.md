@@ -16,7 +16,9 @@ AskMonaViewer は [AskMona](http://askmona.org/) の Windows 用非公式クラ�
 - 勢いや MONA 数によるトピックの並べ替え
 - トピックの検索
 - トピックの新規作成
+- プロフィールの取得
+- 入金アドレスの取得と出金依頼の送信
 - レスの投稿
-- レスを選択して MONA を送る
+- レスに MONA を送る
 - 画像 (imgur) および動画 (youtube) の表示
 - Zaif の MONA/JPY レートを表示
