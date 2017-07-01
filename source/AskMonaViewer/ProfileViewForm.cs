@@ -62,7 +62,7 @@ namespace AskMonaViewer
             double value, balance;
             double.TryParse(numericUpDown1.Text, out value);
             double.TryParse(textBox4.Text, out balance);
-            button1.Enabled = value > 0 && balance > value;
+            button1.Enabled = value > 0 && balance >= value;
         }
 
         private void checkBox2_CheckedChanged(object sender, System.EventArgs e)
