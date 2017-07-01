@@ -23,7 +23,7 @@ namespace AskMonaViewer
         private Topic mTopic;
         private TopicList mTopicList;
         private DateTime mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-        private string mHtmlHeader;
+        private string mHtmlHeader = "";
         private List<ResponseCache> mResponseCacheList;
 
         public MainForm()
@@ -45,13 +45,6 @@ namespace AskMonaViewer
             };
             mTopicList = new TopicList();
             mResponseCacheList = new List<ResponseCache>();
-            var css = new StreamReader("css/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-            mHtmlHeader = String.Format("<html lang=\"ja\">\n<head>\n" +
-                "<meta charset=\"UTF-8\">\n" +
-                "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n" +
-                "<style type=\"text/css\">\n{0}\n</style>" +
-                "\n</head>\n" +
-                "<body>\n", css);
         }
 
         public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
@@ -464,6 +457,16 @@ namespace AskMonaViewer
                 var xs = new XmlSerializer(typeof(List<ResponseCache>));
                 using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
                     mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
+            }
+            if (File.Exists("css/style.css"))
+            {
+                var css = new StreamReader("css/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
+                mHtmlHeader = String.Format("<html lang=\"ja\">\n<head>\n" +
+                    "<meta charset=\"UTF-8\">\n" +
+                    "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n" +
+                    "<style type=\"text/css\">\n{0}\n</style>" +
+                    "\n</head>\n" +
+                    "<body>\n", css);
             }
             mHttpClient = new HttpClient();
             mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
