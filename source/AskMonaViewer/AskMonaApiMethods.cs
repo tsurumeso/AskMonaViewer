@@ -60,9 +60,10 @@ namespace AskMonaViewer
 
         internal async Task<AuthorizationKey> GenerateAuthorizationKey()
         {
-            if (String.IsNullOrEmpty(mAccount.SecretKey))
+            if (String.IsNullOrEmpty(mAccount.SecretKey) && 
+                !String.IsNullOrEmpty(mAccount.Address) && !String.IsNullOrEmpty(mAccount.Password))
             {
-                var secretKey = await FetchSecretKey();
+                var secretKey = await FetchSecretKey(mAccount.Address, mAccount.Password);
                 if (secretKey == null)
                     return null;
 

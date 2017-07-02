@@ -26,16 +26,13 @@ namespace AskMonaViewer
             mAccount = account;
         }
 
-        internal async Task<SecretKey> FetchSecretKey()
+        internal async Task<SecretKey> FetchSecretKey(string addr, string pass)
         {
-            if (String.IsNullOrEmpty(mAccount.Address) || String.IsNullOrEmpty(mAccount.Password))
-                return null;
-
             var prms = new Dictionary<string, string>();
             prms.Add("app_id", mApplicationId);
             prms.Add("app_secretkey", mApplicationSecretKey);
-            prms.Add("u_address", mAccount.Address);
-            prms.Add("pass", mAccount.Password);
+            prms.Add("u_address", addr);
+            prms.Add("pass", pass);
 
             return await CallAsync<SecretKey>(mApiBaseUrl + "auth/secretkey", prms);
         }
@@ -120,9 +117,6 @@ namespace AskMonaViewer
 
         public async Task<ResponseList> FetchResponseListAsync(int t_id, int from = 1, int to = 1000, int topic_detail = 0, long prev = 0)
         {
-            if (from > 1000)
-                from = 1000;
-
             var prms = new Dictionary<string, string>();
             prms.Add("t_id", t_id.ToString());
             prms.Add("from", from.ToString());

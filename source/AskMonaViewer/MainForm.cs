@@ -22,7 +22,7 @@ namespace AskMonaViewer
         private TopicComparer mListViewItemSorter;
         private Topic mTopic;
         private TopicList mTopicList;
-        private DateTime mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+        private DateTime mUnixEpoch;
         private string mHtmlHeader = "";
         private List<ResponseCache> mResponseCacheList;
 
@@ -45,6 +45,7 @@ namespace AskMonaViewer
             };
             mTopicList = new TopicList();
             mResponseCacheList = new List<ResponseCache>();
+            mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
         }
 
         public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
