@@ -444,13 +444,13 @@ namespace AskMonaViewer
                     mAccount = xs.Deserialize(sr) as Account;
                 if (String.IsNullOrEmpty(mAccount.SecretKey))
                 {
-                    var signUpForm = new SignUpForm(this);
+                    var signUpForm = new SignUpForm(this, mAccount);
                     signUpForm.ShowDialog();
                 }
             }
             else
             {
-                var signUpForm = new SignUpForm(this);
+                var signUpForm = new SignUpForm(this, mAccount);
                 signUpForm.ShowDialog();
             }
             if (File.Exists("ResponseCache.xml"))

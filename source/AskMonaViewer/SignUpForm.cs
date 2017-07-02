@@ -8,10 +8,12 @@ namespace AskMonaViewer
     {
         MainForm mParentForm;
 
-        public SignUpForm(MainForm parent)
+        public SignUpForm(MainForm parent, Account account)
         {
             InitializeComponent();
             mParentForm = parent;
+            textBox1.Text = account.Address;
+            textBox2.Text = account.Password;
         }
 
         private void button1_Click(object sender, System.EventArgs e)
