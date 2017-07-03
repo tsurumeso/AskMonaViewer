@@ -52,9 +52,25 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.listView1 = new AskMonaViewer.ListViewEx();
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Copy_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Search_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.SelectAll_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -74,22 +90,6 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.Copy_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SelectAll_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.Search_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listView1 = new AskMonaViewer.ListViewEx();
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -98,12 +98,12 @@
             this.splitContainer1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -207,6 +207,88 @@
             this.comboBox1.TabIndex = 1;
             this.comboBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox1_KeyPress);
             // 
+            // listView1
+            // 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader4,
+            this.columnHeader7,
+            this.columnHeader1,
+            this.columnHeader6,
+            this.columnHeader3,
+            this.columnHeader10,
+            this.columnHeader11,
+            this.columnHeader9,
+            this.columnHeader2,
+            this.columnHeader5});
+            this.listView1.FullRowSelect = true;
+            this.listView1.GridLines = true;
+            this.listView1.Location = new System.Drawing.Point(0, 29);
+            this.listView1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(613, 258);
+            this.listView1.TabIndex = 0;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "番号";
+            this.columnHeader4.Width = 50;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "カテゴリ";
+            this.columnHeader7.Width = 80;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "タイトル";
+            this.columnHeader1.Width = 240;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "MONA";
+            this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "レス";
+            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeader3.Width = 50;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Text = "取得";
+            this.columnHeader10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeader10.Width = 50;
+            // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Text = "新着";
+            this.columnHeader11.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeader11.Width = 50;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "増レス";
+            this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeader9.Width = 50;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "勢い";
+            this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "更新日時";
+            this.columnHeader5.Width = 140;
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -242,6 +324,44 @@
             this.webBrowser1.Size = new System.Drawing.Size(597, 154);
             this.webBrowser1.TabIndex = 0;
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Copy_ToolStripMenuItem,
+            this.Search_ToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.SelectAll_ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 98);
+            // 
+            // Copy_ToolStripMenuItem
+            // 
+            this.Copy_ToolStripMenuItem.Enabled = false;
+            this.Copy_ToolStripMenuItem.Name = "Copy_ToolStripMenuItem";
+            this.Copy_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.Copy_ToolStripMenuItem.Text = "コピー(&C)";
+            this.Copy_ToolStripMenuItem.Click += new System.EventHandler(this.Copy_ToolStripMenuItem_Click);
+            // 
+            // Search_ToolStripMenuItem
+            // 
+            this.Search_ToolStripMenuItem.Enabled = false;
+            this.Search_ToolStripMenuItem.Name = "Search_ToolStripMenuItem";
+            this.Search_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.Search_ToolStripMenuItem.Text = "選択範囲を Web で検索(&S)";
+            this.Search_ToolStripMenuItem.Click += new System.EventHandler(this.Search_ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(206, 6);
+            // 
+            // SelectAll_ToolStripMenuItem
+            // 
+            this.SelectAll_ToolStripMenuItem.Name = "SelectAll_ToolStripMenuItem";
+            this.SelectAll_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.SelectAll_ToolStripMenuItem.Text = "すべて選択(&A)";
+            this.SelectAll_ToolStripMenuItem.Click += new System.EventHandler(this.SelectAll_ToolStripMenuItem_Click);
             // 
             // splitContainer2
             // 
@@ -447,124 +567,6 @@
             this.timer1.Interval = 10000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Copy_ToolStripMenuItem,
-            this.Search_ToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.SelectAll_ToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 98);
-            // 
-            // Copy_ToolStripMenuItem
-            // 
-            this.Copy_ToolStripMenuItem.Name = "Copy_ToolStripMenuItem";
-            this.Copy_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.Copy_ToolStripMenuItem.Text = "コピー(&C)";
-            this.Copy_ToolStripMenuItem.Click += new System.EventHandler(this.Copy_ToolStripMenuItem_Click);
-            // 
-            // SelectAll_ToolStripMenuItem
-            // 
-            this.SelectAll_ToolStripMenuItem.Name = "SelectAll_ToolStripMenuItem";
-            this.SelectAll_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.SelectAll_ToolStripMenuItem.Text = "すべて選択(&A)";
-            this.SelectAll_ToolStripMenuItem.Click += new System.EventHandler(this.SelectAll_ToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(206, 6);
-            // 
-            // Search_ToolStripMenuItem
-            // 
-            this.Search_ToolStripMenuItem.Name = "Search_ToolStripMenuItem";
-            this.Search_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.Search_ToolStripMenuItem.Text = "選択範囲を Web で検索(&S)";
-            this.Search_ToolStripMenuItem.Click += new System.EventHandler(this.Search_ToolStripMenuItem_Click);
-            // 
-            // listView1
-            // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader4,
-            this.columnHeader7,
-            this.columnHeader1,
-            this.columnHeader6,
-            this.columnHeader3,
-            this.columnHeader10,
-            this.columnHeader11,
-            this.columnHeader9,
-            this.columnHeader2,
-            this.columnHeader5});
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(0, 29);
-            this.listView1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(613, 258);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "番号";
-            this.columnHeader4.Width = 50;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "カテゴリ";
-            this.columnHeader7.Width = 80;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "タイトル";
-            this.columnHeader1.Width = 240;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "MONA";
-            this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "レス";
-            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeader3.Width = 50;
-            // 
-            // columnHeader10
-            // 
-            this.columnHeader10.Text = "取得";
-            this.columnHeader10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeader10.Width = 50;
-            // 
-            // columnHeader11
-            // 
-            this.columnHeader11.Text = "新着";
-            this.columnHeader11.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeader11.Width = 50;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "増レス";
-            this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeader9.Width = 50;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "勢い";
-            this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "更新日時";
-            this.columnHeader5.Width = 140;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -591,13 +593,13 @@
             this.splitContainer1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

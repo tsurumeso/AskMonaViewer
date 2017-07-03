@@ -372,12 +372,23 @@ namespace AskMonaViewer
             if (mHasDocumentLoaded)
             {
                 this.webBrowser1.Document.Click -= new HtmlElementEventHandler(Document_Click);
+                this.webBrowser1.Document.ContextMenuShowing -= new HtmlElementEventHandler(Document_ContextMenuShowing);
                 mHasDocumentLoaded = false;
             }
             this.webBrowser1.Document.Click += new HtmlElementEventHandler(Document_Click);
+            this.webBrowser1.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
             this.webBrowser1.Document.Body.ScrollIntoView(false);
             mHasDocumentLoaded = true;
             toolStripStatusLabel1.Text = "受信完了";
+        }
+
+        private void Document_ContextMenuShowing(object sender, HtmlElementEventArgs e)
+        {
+            var doc = (mshtml.IHTMLDocument2)this.webBrowser1.Document.DomDocument;
+            var range = (mshtml.IHTMLTxtRange)doc.selection.createRange();
+            var enabled = !String.IsNullOrEmpty(range.text);
+            Copy_ToolStripMenuItem.Enabled = enabled;
+            Search_ToolStripMenuItem.Enabled = enabled;
         }
 
         private void listView1_ColumnClick(object sender, ColumnClickEventArgs e)
