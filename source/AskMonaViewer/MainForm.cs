@@ -521,5 +521,15 @@ namespace AskMonaViewer
             var deposit = await mApi.FetchDepositAddressAsync();
             Clipboard.SetText(deposit.Address);
         }
+
+        private void Copy_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Document.ExecCommand("Copy", false, null);
+        }
+
+        private void SelectAll_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Document.ExecCommand("SelectAll", false, null);
+        }
     }
 }
