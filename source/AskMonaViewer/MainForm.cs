@@ -113,7 +113,7 @@ namespace AskMonaViewer
                         topic.Rank.ToString(),
                         topic.Category,
                         topic.Title,
-                        (Double.Parse(topic.ReceivedMona) / 100000000).ToString("F1"),
+                        (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
                         topic.Count.ToString(),
                         topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
                         newArrivals == 0 ? "" : newArrivals.ToString(),
@@ -156,7 +156,7 @@ namespace AskMonaViewer
                             topic.Rank.ToString(),
                             topic.Category,
                             topic.Title,
-                            (Double.Parse(topic.ReceivedMona) / 100000000).ToString("F1"),
+                            (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
                             topic.Count.ToString(),
                             topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
                             newArrivals == 0 ? "" : newArrivals.ToString(),
@@ -181,12 +181,12 @@ namespace AskMonaViewer
             {
                 foreach (var response in responseList.Responses)
                 {
-                    double receivedMona = Double.Parse(response.ReceivedMona) / 100000000;
+                    double receive = Double.Parse(response.Receive) / 100000000;
                     html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}さん</a> " +
                         "投稿日：{3} <font color=red>ID：</font>{4} [{5}] <b>+{6}MONA/{7}人</b> <a href=\"#send?r_id={8}\" class=\"send\">←送る</a>\n",
                         response.Id, response.UserId, response.UserName + response.UserDan,
                         UnixTimeStampToDateTime(response.Created).ToString(), response.UserId, response.UserTimes,
-                        receivedMona.ToString(Digits(receivedMona)), response.ReceivedCount, response.Id));
+                        receive.ToString(Digits(receive)), response.ReceivedCount, response.Id));
 
                     var res = Regex.Replace(response.Text,
                         @"<script.*>.*</script>",
@@ -205,13 +205,13 @@ namespace AskMonaViewer
                         "<a class=\"tooltip\" href=\"#anchor\">$&<span class=\"tooltiptext\">anchor</span></a>");
                     res = res.Replace("\n", "<br>");
 
-                    if (response.ReceivedLevel == 0)
+                    if (response.Level < 2)
                         html.Append(String.Format("    <p class=\"res_lv1\" style=\"padding-left: 32px;\">{0}</p>\n", res));
-                    else if (response.ReceivedLevel < 4)
+                    else if (response.Level < 4)
                         html.Append(String.Format("    <p class=\"res_lv2\" style=\"padding-left: 32px;\">{0}</p>\n", res));
-                    else if (response.ReceivedLevel < 5)
+                    else if (response.Level < 5)
                         html.Append(String.Format("    <p class=\"res_lv3\" style=\"padding-left: 32px;\">{0}</p>\n", res));
-                    else if (response.ReceivedLevel < 7)
+                    else if (response.Level < 7)
                         html.Append(String.Format("    <p class=\"res_lv4\" style=\"padding-left: 32px;\">{0}</p>\n", res));
                     else
                         html.Append(String.Format("    <p class=\"res_lv5\" style=\"padding-left: 32px;\">{0}</p>\n", res));

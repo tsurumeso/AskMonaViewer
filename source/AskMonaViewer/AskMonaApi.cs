@@ -276,7 +276,7 @@ namespace AskMonaViewer
         public int CachedCount { get; set; }
 
         [DataMember(Name = "receive")]
-        public string ReceivedMona { get; set; }
+        public string Receive { get; set; }
 
         [DataMember(Name = "favorites")]
         public int Favorites { get; set; }
@@ -334,10 +334,10 @@ namespace AskMonaViewer
         public string UserTimes { get; set; }
 
         [DataMember(Name = "receive")]
-        public string ReceivedMona { get; set; }
+        public string Receive { get; set; }
 
         [DataMember(Name = "res_lv")]
-        public int ReceivedLevel { get; set; }
+        public int Level { get; set; }
 
         [DataMember(Name = "rec_count")]
         public int ReceivedCount { get; set; }
