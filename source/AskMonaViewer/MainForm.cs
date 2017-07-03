@@ -56,22 +56,15 @@ namespace AskMonaViewer
             return mUnixEpoch.AddSeconds(unixTimeStamp).ToLocalTime();
         }
 
-        private static int Digits(double value)
+        private static string Digits(double value)
         {
             string valueString = value.ToString().TrimEnd('0');
 
             int index = valueString.IndexOf('.');
             if (index == -1)
-                return 0;
+                return "F0";
 
-            return valueString.Substring(index + 1).Length;
-        }
-
-        private static string WatanabeToMona(string wat, string digits = null)
-        {
-            double mona = Double.Parse(wat) / 100000000;
-            digits = String.IsNullOrEmpty(digits) ? String.Format("F{0}", Digits(mona)) : digits;
-            return mona.ToString(digits);
+            return String.Format("F{0}", valueString.Substring(index + 1).Length);
         }
 
         private void RefreshColumnColors()
@@ -120,7 +113,7 @@ namespace AskMonaViewer
                         topic.Rank.ToString(),
                         topic.Category,
                         topic.Title,
-                        WatanabeToMona(topic.ReceivedMona, "F1"),
+                        (Double.Parse(topic.ReceivedMona) / 100000000).ToString("F1"),
                         topic.Count.ToString(),
                         topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
                         newArrivals == 0 ? "" : newArrivals.ToString(),
@@ -163,7 +156,7 @@ namespace AskMonaViewer
                             topic.Rank.ToString(),
                             topic.Category,
                             topic.Title,
-                            WatanabeToMona(topic.ReceivedMona, "F1"),
+                            (Double.Parse(topic.ReceivedMona) / 100000000).ToString("F1"),
                             topic.Count.ToString(),
                             topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
                             newArrivals == 0 ? "" : newArrivals.ToString(),
@@ -188,11 +181,12 @@ namespace AskMonaViewer
             {
                 foreach (var response in responseList.Responses)
                 {
+                    double receivedMona = Double.Parse(response.ReceivedMona) / 100000000;
                     html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}さん</a> " +
                         "投稿日：{3} <font color=red>ID：</font>{4} [{5}] <b>+{6}MONA/{7}人</b> <a href=\"#send?r_id={8}\" class=\"send\">←送る</a>\n",
                         response.Id, response.UserId, response.UserName + response.UserDan,
                         UnixTimeStampToDateTime(response.Created).ToString(), response.UserId, response.UserTimes,
-                        WatanabeToMona(response.ReceivedMona), response.ReceivedCount, response.Id));
+                        receivedMona.ToString(Digits(receivedMona)), response.ReceivedCount, response.Id));
 
                     var res = Regex.Replace(response.Text,
                         @"<script.*>.*</script>",
