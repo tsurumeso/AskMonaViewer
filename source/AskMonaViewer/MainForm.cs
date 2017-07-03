@@ -54,9 +54,22 @@ namespace AskMonaViewer
             return mUnixEpoch.AddSeconds(unixTimeStamp).ToLocalTime();
         }
 
-        private string WatanabeToMona(string wat)
+        private static int Digits(double value)
         {
-            return (Double.Parse(wat) / 100000000).ToString("F1");
+            string valueString = value.ToString().TrimEnd('0');
+
+            int index = valueString.IndexOf('.');
+            if (index == -1)
+                return 0;
+
+            return valueString.Substring(index + 1).Length;
+        }
+
+        private static string WatanabeToMona(string wat, string digits = null)
+        {
+            double mona = Double.Parse(wat) / 100000000;
+            digits = String.IsNullOrEmpty(digits) ? String.Format("F{0}", Digits(mona)) : digits;
+            return mona.ToString(digits);
         }
 
         private void RefreshColumnColors()
@@ -105,7 +118,7 @@ namespace AskMonaViewer
                         topic.Rank.ToString(),
                         topic.Category,
                         topic.Title,
-                        WatanabeToMona(topic.ReceivedMona),
+                        WatanabeToMona(topic.ReceivedMona, "F1"),
                         topic.Count.ToString(),
                         topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
                         newArrivals == 0 ? "" : newArrivals.ToString(),
@@ -148,7 +161,7 @@ namespace AskMonaViewer
                             topic.Rank.ToString(),
                             topic.Category,
                             topic.Title,
-                            WatanabeToMona(topic.ReceivedMona),
+                            WatanabeToMona(topic.ReceivedMona, "F1"),
                             topic.Count.ToString(),
                             topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
                             newArrivals == 0 ? "" : newArrivals.ToString(),
