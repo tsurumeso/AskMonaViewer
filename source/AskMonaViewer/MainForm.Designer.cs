@@ -30,18 +30,18 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem("その他", 0);
-            System.Windows.Forms.ListViewItem listViewItem14 = new System.Windows.Forms.ListViewItem("ばらまき", 0);
-            System.Windows.Forms.ListViewItem listViewItem15 = new System.Windows.Forms.ListViewItem("初心者", 0);
-            System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem("ニュース", 0);
-            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem("議論・討論", 0);
-            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem("趣味・生活", 0);
-            System.Windows.Forms.ListViewItem listViewItem19 = new System.Windows.Forms.ListViewItem("創作・文化", 0);
-            System.Windows.Forms.ListViewItem listViewItem20 = new System.Windows.Forms.ListViewItem("ネタ・雑談", 0);
-            System.Windows.Forms.ListViewItem listViewItem21 = new System.Windows.Forms.ListViewItem("経済・社会", 0);
-            System.Windows.Forms.ListViewItem listViewItem22 = new System.Windows.Forms.ListViewItem("科学・IT", 0);
-            System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem("採掘", 0);
-            System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem("R18", 0);
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("その他", 0);
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("ばらまき", 0);
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("初心者", 0);
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("ニュース", 0);
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("議論・討論", 0);
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("趣味・生活", 0);
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("創作・文化", 0);
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("ネタ・雑談", 0);
+            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem("経済・社会", 0);
+            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("科学・IT", 0);
+            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem("採掘", 0);
+            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem("R18", 0);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,6 +78,7 @@
             this.Copy_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SelectAll_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.Search_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new AskMonaViewer.ListViewEx();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -267,31 +268,31 @@
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader8});
             this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            listViewItem13.Tag = "0";
-            listViewItem14.Tag = "1";
-            listViewItem15.Tag = "2";
-            listViewItem16.Tag = "3";
-            listViewItem17.Tag = "4";
-            listViewItem18.Tag = "5";
-            listViewItem19.Tag = "6";
-            listViewItem20.Tag = "7";
-            listViewItem21.Tag = "8";
-            listViewItem22.Tag = "9";
-            listViewItem23.Tag = "10";
-            listViewItem24.Tag = "11";
+            listViewItem1.Tag = "0";
+            listViewItem2.Tag = "1";
+            listViewItem3.Tag = "2";
+            listViewItem4.Tag = "3";
+            listViewItem5.Tag = "4";
+            listViewItem6.Tag = "5";
+            listViewItem7.Tag = "6";
+            listViewItem8.Tag = "7";
+            listViewItem9.Tag = "8";
+            listViewItem10.Tag = "9";
+            listViewItem11.Tag = "10";
+            listViewItem12.Tag = "11";
             this.listView2.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem13,
-            listViewItem14,
-            listViewItem15,
-            listViewItem16,
-            listViewItem17,
-            listViewItem18,
-            listViewItem19,
-            listViewItem20,
-            listViewItem21,
-            listViewItem22,
-            listViewItem23,
-            listViewItem24});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4,
+            listViewItem5,
+            listViewItem6,
+            listViewItem7,
+            listViewItem8,
+            listViewItem9,
+            listViewItem10,
+            listViewItem11,
+            listViewItem12});
             this.listView2.Location = new System.Drawing.Point(0, 0);
             this.listView2.Margin = new System.Windows.Forms.Padding(0);
             this.listView2.Name = "listView2";
@@ -450,29 +451,37 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Copy_ToolStripMenuItem,
+            this.Search_ToolStripMenuItem,
             this.toolStripSeparator5,
             this.SelectAll_ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 76);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 98);
             // 
             // Copy_ToolStripMenuItem
             // 
             this.Copy_ToolStripMenuItem.Name = "Copy_ToolStripMenuItem";
-            this.Copy_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.Copy_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.Copy_ToolStripMenuItem.Text = "コピー(&C)";
             this.Copy_ToolStripMenuItem.Click += new System.EventHandler(this.Copy_ToolStripMenuItem_Click);
             // 
             // SelectAll_ToolStripMenuItem
             // 
             this.SelectAll_ToolStripMenuItem.Name = "SelectAll_ToolStripMenuItem";
-            this.SelectAll_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.SelectAll_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.SelectAll_ToolStripMenuItem.Text = "すべて選択(&A)";
             this.SelectAll_ToolStripMenuItem.Click += new System.EventHandler(this.SelectAll_ToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(206, 6);
+            // 
+            // Search_ToolStripMenuItem
+            // 
+            this.Search_ToolStripMenuItem.Name = "Search_ToolStripMenuItem";
+            this.Search_ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.Search_ToolStripMenuItem.Text = "選択範囲を Web で検索(&S)";
+            this.Search_ToolStripMenuItem.Click += new System.EventHandler(this.Search_ToolStripMenuItem_Click);
             // 
             // listView1
             // 
@@ -643,6 +652,7 @@
         private System.Windows.Forms.ToolStripMenuItem Copy_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem SelectAll_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem Search_ToolStripMenuItem;
     }
 }
 

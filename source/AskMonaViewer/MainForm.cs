@@ -8,6 +8,8 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Http;
+using System.Net;
+using System.Diagnostics;
 
 namespace AskMonaViewer
 {
@@ -530,6 +532,14 @@ namespace AskMonaViewer
         private void SelectAll_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             webBrowser1.Document.ExecCommand("SelectAll", false, null);
+        }
+
+        private void Search_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var doc = (mshtml.IHTMLDocument2)this.webBrowser1.Document.DomDocument;
+            var range = (mshtml.IHTMLTxtRange)doc.selection.createRange();
+            var url = "https://www.google.co.jp/#q=" + WebUtility.UrlEncode(range.text);
+            Process.Start(url);
         }
     }
 }
