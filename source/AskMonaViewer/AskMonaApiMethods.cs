@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,25 +10,20 @@ namespace AskMonaViewer
     {
         internal async Task<T> CallAsync<T>(string url, Dictionary<string, string> prms)
         {
-            var ub = new UriBuilder(url);
             var sb = new StringBuilder();
-            bool isInitial = true;
             foreach (var prm in prms)
-            {
-                if (!isInitial)
-                    sb.Append("&");
-                else
-                    isInitial = false;
-                sb.Append(String.Format("{0}={1}", prm.Key, WebUtility.UrlEncode(prm.Value)));
-            }
-            ub.Query = sb.ToString();
+                sb.Append(String.Format("{0}={1}&", prm.Key, System.Net.WebUtility.UrlEncode(prm.Value)));
+
             try
             {
+                var ub = new UriBuilder(url);
+                ub.Query = sb.ToString().TrimEnd('&');
                 var serializer = new DataContractJsonSerializer(typeof(T));
                 var stream = await mHttpClient.GetStreamAsync(ub.Uri);
                 return (T)serializer.ReadObject(stream);
             }
             catch { }
+
             return default(T);
         }
 

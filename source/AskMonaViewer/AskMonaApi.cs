@@ -115,6 +115,31 @@ namespace AskMonaViewer
             return await CallAsync<TopicList>(mApiBaseUrl + "topics/list", prms);
         }
 
+        public async Task<TopicList> FetchFavoriteTopicListAsync(int limit = 200, int offset = 0)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("limit", limit.ToString());
+            prms.Add("offset", offset.ToString());
+
+            return await CallAuthAsync<TopicList>(mApiBaseUrl + "favorites/list", prms);
+        }
+
+        public async Task<ApiResult> AddFavoriteTopicAsync(int t_id)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("t_id", t_id.ToString());
+
+            return await CallAuthAsync<ApiResult>(mApiBaseUrl + "favorites/add", prms);
+        }
+
+        public async Task<ApiResult> DeleteFavoriteTopicAsync(int t_id)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("t_id", t_id.ToString());
+
+            return await CallAuthAsync<ApiResult>(mApiBaseUrl + "favorites/delete", prms);
+        }
+
         public async Task<ResponseList> FetchResponseListAsync(int t_id, int from = 1, int to = 1000, int topic_detail = 0, long prev = 0)
         {
             var prms = new Dictionary<string, string>();

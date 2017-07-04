@@ -8,8 +8,6 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Http;
-using System.Net;
-using System.Diagnostics;
 
 namespace AskMonaViewer
 {
@@ -83,7 +81,11 @@ namespace AskMonaViewer
         private async void UpdateTopicList(int cat_id)
         {
             toolStripStatusLabel1.Text = "通信中";
-            var topicList = await mApi.FetchTopicListAsync(cat_id, 250);
+            TopicList topicList;
+            if (cat_id == -1)
+                topicList = await mApi.FetchFavoriteTopicListAsync();
+            else
+                topicList = await mApi.FetchTopicListAsync(cat_id, 250);
 
             if (topicList == null)
             {
@@ -357,6 +359,10 @@ namespace AskMonaViewer
             if (listView2.SelectedItems.Count > 0)
             {
                 mCategoryId = int.Parse(listView2.SelectedItems[0].Tag.ToString());
+                if (mCategoryId == -1)
+                    toolStripButton9.Text = "お気に入り登録解除";
+                else
+                    toolStripButton9.Text = "お気に入り登録";
                 UpdateTopicList(mCategoryId);
             }
         }
@@ -543,8 +549,19 @@ namespace AskMonaViewer
         {
             var doc = (mshtml.IHTMLDocument2)this.webBrowser1.Document.DomDocument;
             var range = (mshtml.IHTMLTxtRange)doc.selection.createRange();
-            var url = "https://www.google.co.jp/#q=" + WebUtility.UrlEncode(range.text);
-            Process.Start(url);
+            var url = "https://www.google.co.jp/#q=" + System.Net.WebUtility.UrlEncode(range.text);
+            System.Diagnostics.Process.Start(url);
+        }
+
+        private async void toolStripButton9_Click(object sender, EventArgs e)
+        {
+            if (mCategoryId == -1)
+            {
+                await mApi.DeleteFavoriteTopicAsync(mTopic.Id);
+                UpdateTopicList(mCategoryId);
+            }
+            else
+                await mApi.AddFavoriteTopicAsync(mTopic.Id);
         }
     }
 }
