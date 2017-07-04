@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Text;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using System.Collections.Generic;
@@ -21,7 +22,8 @@ namespace AskMonaViewer
         private bool mHasDocumentLoaded = true;
         private TopicComparer mListViewItemSorter;
         private Topic mTopic;
-        private TopicList mTopicList;
+        private List<Topic> mTopicList;
+        private List<Topic> mFavoriteTopicList;
         private DateTime mUnixEpoch;
         private string mHtmlHeader = "";
         private List<ResponseCache> mResponseCacheList;
@@ -43,7 +45,7 @@ namespace AskMonaViewer
                 TopicComparer.ComparerMode.Double,
                 TopicComparer.ComparerMode.DateTime
             };
-            mTopicList = new TopicList();
+            mTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
             mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
         }
@@ -98,7 +100,7 @@ namespace AskMonaViewer
             var time = (long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds;
             foreach (var topic in topicList.Topics)
             {
-                var oldTopic = mTopicList.Topics.Find(x => x.Id == topic.Id);
+                var oldTopic = mTopicList.Find(x => x.Id == topic.Id);
                 if (oldTopic == null)
                     topic.Increased = 0;
                 else
@@ -127,7 +129,7 @@ namespace AskMonaViewer
                 lvi.Tag = topic;
                 listView1.Items.Add(lvi);
             }
-            mTopicList = topicList;
+            mTopicList = topicList.Topics;
             listView1.ListViewItemSorter = mListViewItemSorter;
             RefreshColumnColors();
             listView1.EndUpdate();
@@ -136,7 +138,7 @@ namespace AskMonaViewer
 
         private void FilterTopics(string key)
         {
-            if (mTopicList.Topics.Count == 0)
+            if (mTopicList.Count == 0)
                 return;
 
             if (String.IsNullOrEmpty(key))
@@ -148,7 +150,7 @@ namespace AskMonaViewer
             listView1.Items.Clear();
             listView1.BeginUpdate();
             var time = (long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds;
-            foreach (var topic in mTopicList.Topics)
+            foreach (var topic in mTopicList)
             {
                 if (topic.Title.ToLower().Contains(key.ToLower()))
                 {
@@ -253,6 +255,20 @@ namespace AskMonaViewer
             }
         }
 
+        private void UpdateFavoriteToolStrip()
+        {
+            if (mFavoriteTopicList.Any(x => x.Id == mTopic.Id))
+            {
+                toolStripButton9.Image = imageList1.Images[1];
+                toolStripButton9.Text = "お気に入り登録解除";
+            }
+            else
+            {
+                toolStripButton9.Image = imageList1.Images[2];
+                toolStripButton9.Text = "お気に入り登録";
+            }
+        }
+
         private async Task<bool> UpdateResponce(int topicId)
         {
             toolStripStatusLabel1.Text = "通信中";
@@ -294,8 +310,10 @@ namespace AskMonaViewer
                     mResponseCacheList.Add(new ResponseCache(mTopic, CompressString(html.ToString())));
                 }
             }
+
             tabControl1.TabPages[0].Text = mTopic.Title;
             webBrowser1.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+            UpdateFavoriteToolStrip();
             return true;
         }
 
@@ -359,10 +377,6 @@ namespace AskMonaViewer
             if (listView2.SelectedItems.Count > 0)
             {
                 mCategoryId = int.Parse(listView2.SelectedItems[0].Tag.ToString());
-                if (mCategoryId == -1)
-                    toolStripButton9.Text = "お気に入り登録解除";
-                else
-                    toolStripButton9.Text = "お気に入り登録";
                 UpdateTopicList(mCategoryId);
             }
         }
@@ -499,6 +513,7 @@ namespace AskMonaViewer
             mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
             mZaifApi = new ZaifApi(mHttpClient);
             mApi = new AskMonaApi(mHttpClient, mAccount);
+            mFavoriteTopicList = (await mApi.FetchFavoriteTopicListAsync()).Topics;
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
                 toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
@@ -555,13 +570,19 @@ namespace AskMonaViewer
 
         private async void toolStripButton9_Click(object sender, EventArgs e)
         {
-            if (mCategoryId == -1)
+            int idx = mFavoriteTopicList.FindIndex(x => x.Id == mTopic.Id);
+            if (idx == -1)
             {
-                await mApi.DeleteFavoriteTopicAsync(mTopic.Id);
-                UpdateTopicList(mCategoryId);
+                await mApi.AddFavoriteTopicAsync(mTopic.Id);
+                mFavoriteTopicList.Add(mTopic);
             }
             else
-                await mApi.AddFavoriteTopicAsync(mTopic.Id);
+            {
+                await mApi.DeleteFavoriteTopicAsync(mTopic.Id);
+                mFavoriteTopicList.RemoveAt(idx);
+            }
+            UpdateTopicList(mCategoryId);
+            UpdateFavoriteToolStrip();
         }
     }
 }
