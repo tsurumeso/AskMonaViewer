@@ -87,7 +87,7 @@ namespace AskMonaViewer
             if (cat_id == -1)
                 topicList = await mApi.FetchFavoriteTopicListAsync();
             else
-                topicList = await mApi.FetchTopicListAsync(cat_id, 250);
+                topicList = await mApi.FetchTopicListAsync(cat_id);
 
             if (topicList == null)
             {
