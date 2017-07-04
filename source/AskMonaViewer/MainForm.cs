@@ -80,7 +80,7 @@ namespace AskMonaViewer
             }
         }
 
-        private async void UpdateTopicList(int cat_id)
+        private async Task<bool> UpdateTopicList(int cat_id)
         {
             toolStripStatusLabel1.Text = "通信中";
             TopicList topicList;
@@ -92,7 +92,7 @@ namespace AskMonaViewer
             if (topicList == null)
             {
                 toolStripStatusLabel1.Text = "受信失敗";
-                return;
+                return false;
             }
 
             listView1.Items.Clear();
@@ -134,17 +134,18 @@ namespace AskMonaViewer
             RefreshColumnColors();
             listView1.EndUpdate();
             toolStripStatusLabel1.Text = "受信完了";
+            return true;
         }
 
-        private void FilterTopics(string key)
+        private async Task<bool> FilterTopics(string key)
         {
             if (mTopicList.Count == 0)
-                return;
+                return false;
 
             if (String.IsNullOrEmpty(key))
             {
-                UpdateTopicList(mCategoryId);
-                return;
+                await UpdateTopicList(mCategoryId);
+                return false;
             }
 
             listView1.Items.Clear();
@@ -176,6 +177,7 @@ namespace AskMonaViewer
             listView1.ListViewItemSorter = mListViewItemSorter;
             RefreshColumnColors();
             listView1.EndUpdate();
+            return true;
         }
 
         private async Task<string> BuildHtml(ResponseList responseList)
@@ -372,12 +374,12 @@ namespace AskMonaViewer
             catch (NullReferenceException) { }
         }
 
-        private void listView2_SelectedIndexChanged(object sender, EventArgs e)
+        private async void listView2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listView2.SelectedItems.Count > 0)
             {
                 mCategoryId = int.Parse(listView2.SelectedItems[0].Tag.ToString());
-                UpdateTopicList(mCategoryId);
+                await UpdateTopicList(mCategoryId);
             }
         }
 
@@ -412,19 +414,19 @@ namespace AskMonaViewer
             RefreshColumnColors();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            FilterTopics(comboBox1.Text);
+            await FilterTopics(comboBox1.Text);
         }
 
-        private void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
+        private async void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            FilterTopics(comboBox1.Text);
+            await FilterTopics(comboBox1.Text);
         }
 
-        private void toolStripButton3_Click(object sender, EventArgs e)
+        private async void toolStripButton3_Click(object sender, EventArgs e)
         {
-            UpdateTopicList(mCategoryId);
+            await UpdateTopicList(mCategoryId);
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -517,7 +519,7 @@ namespace AskMonaViewer
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
                 toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
-            UpdateTopicList(0);
+            await UpdateTopicList(0);
             timer1.Enabled = true;
         }
 
@@ -581,7 +583,7 @@ namespace AskMonaViewer
                 await mApi.DeleteFavoriteTopicAsync(mTopic.Id);
                 mFavoriteTopicList.RemoveAt(idx);
             }
-            UpdateTopicList(mCategoryId);
+            await UpdateTopicList(mCategoryId);
             UpdateFavoriteToolStrip();
         }
     }
