@@ -14,7 +14,7 @@ namespace AskMonaViewer
 {
     public partial class MainForm : Form
     {
-        private Account mAccount = null;
+        private Account mAccount;
         private AskMonaApi mApi;
         private ZaifApi mZaifApi;
         private HttpClient mHttpClient;
@@ -46,8 +46,10 @@ namespace AskMonaViewer
                 TopicComparer.ComparerMode.DateTime
             };
             mTopicList = new List<Topic>();
+            mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
             mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            mAccount = new Account();
         }
 
         public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
@@ -515,7 +517,9 @@ namespace AskMonaViewer
             mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
             mZaifApi = new ZaifApi(mHttpClient);
             mApi = new AskMonaApi(mHttpClient, mAccount);
-            mFavoriteTopicList = (await mApi.FetchFavoriteTopicListAsync()).Topics;
+            var topicList = await mApi.FetchFavoriteTopicListAsync();
+            if (topicList != null)
+                mFavoriteTopicList = topicList.Topics;
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
                 toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
