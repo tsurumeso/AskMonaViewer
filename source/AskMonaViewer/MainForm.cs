@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Http;
+using System.Security;
 
 namespace AskMonaViewer
 {
@@ -192,13 +193,11 @@ namespace AskMonaViewer
                     double receive = Double.Parse(response.Receive) / 100000000;
                     html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}さん</a> " +
                         "投稿日：{3} <font color=red>ID：</font>{4} [{5}] <b>+{6}MONA/{7}人</b> <a href=\"#send?r_id={8}\" class=\"send\">←送る</a>\n",
-                        response.Id, response.UserId, response.UserName + response.UserDan,
+                        response.Id, response.UserId, SecurityElement.Escape(response.UserName + response.UserDan),
                         UnixTimeStampToDateTime(response.Created).ToString(), response.UserId, response.UserTimes,
                         receive.ToString(Digits(receive)), response.ReceivedCount, response.Id));
 
-                    var res = Regex.Replace(response.Text,
-                        @"<script.*>.*</script>",
-                        "");
+                    var res = SecurityElement.Escape(response.Text);
                     res = Regex.Replace(res,
                         @"h?ttps?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+",
                         "<a href=\"$&\">$&</a>");

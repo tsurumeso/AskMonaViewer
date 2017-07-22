@@ -33,7 +33,7 @@ namespace AskMonaViewer
             if (authKey == null)
                 return default(T);
 
-            prms.Add("app_id", mApplicationId.ToString());
+            prms.Add("app_id", mApplicationId);
             prms.Add("u_id", mAccount.UserId.ToString());
             prms.Add("nonce", authKey.Nonce);
             prms.Add("time", authKey.Time);
