@@ -320,6 +320,33 @@ namespace AskMonaViewer
             return true;
         }
 
+        private async Task<bool> ReloadResponce(int topicId)
+        {
+            toolStripStatusLabel1.Text = "通信中";
+            toolStripComboBox1.Text = "https://askmona.org/" + topicId;
+
+            var html = "";
+            var responseList = await mApi.FetchResponseListAsync(topicId, 1, 1000, 1);
+            if (responseList == null)
+            {
+                toolStripStatusLabel1.Text = "受信失敗";
+                return false;
+            }
+
+            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
+            if (idx != -1)
+                mResponseCacheList.RemoveAt(idx);
+
+            mTopic = responseList.Topic;
+            html = await BuildHtml(responseList);
+            mResponseCacheList.Add(new ResponseCache(mTopic, CompressString(html.ToString())));
+
+            tabControl1.TabPages[0].Text = mTopic.Title;
+            webBrowser1.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+            UpdateFavoriteToolStrip();
+            return true;
+        }
+
         private async void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count == 0)
@@ -588,6 +615,11 @@ namespace AskMonaViewer
             }
             await UpdateTopicList(mCategoryId);
             UpdateFavoriteToolStrip();
+        }
+
+        private async void toolStripButton10_Click(object sender, EventArgs e)
+        {
+            await ReloadResponce(mTopic.Id);
         }
     }
 }
