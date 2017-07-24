@@ -183,6 +183,19 @@ namespace AskMonaViewer
             return true;
         }
 
+        private static string GetIdColorString(string userTimes)
+        {
+            int times = int.Parse(userTimes.Substring(userTimes.IndexOf("/") + 1));
+            if (times == 1)
+                return "black";
+            else if (times < 5)
+                return "green";
+            else if (times < 10)
+                return "blue";
+            else
+                return "red";
+        }
+
         private async Task<string> BuildHtml(ResponseList responseList)
         {
             StringBuilder html = new StringBuilder();
@@ -192,9 +205,9 @@ namespace AskMonaViewer
                 {
                     double receive = Double.Parse(response.Receive) / 100000000;
                     html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}さん</a> " +
-                        "投稿日：{3} <font color=red>ID：</font>{4} [{5}] <b>+{6}MONA/{7}人</b> <a href=\"#send?r_id={8}\" class=\"send\">←送る</a>\n",
+                        "投稿日：{3} <font color={4}>ID：</font>{5} [{6}] <b>+{7}MONA/{8}人</b> <a href=\"#send?r_id={9}\" class=\"send\">←送る</a>\n",
                         response.Id, response.UserId, SecurityElement.Escape(response.UserName + response.UserDan),
-                        UnixTimeStampToDateTime(response.Created).ToString(), response.UserId, response.UserTimes,
+                        UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId, response.UserTimes,
                         receive.ToString(Digits(receive)), response.ReceivedCount, response.Id));
 
                     var res = SecurityElement.Escape(response.Text);
