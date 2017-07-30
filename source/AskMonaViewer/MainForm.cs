@@ -545,14 +545,14 @@ namespace AskMonaViewer
                 using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
                     mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
             }
-            if (File.Exists("css/style.css"))
+            if (File.Exists("common/style.css"))
             {
-                var css = new StreamReader("css/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
+                var css = new StreamReader("common/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
                 mHtmlHeader += String.Format("<style type=\"text/css\">\n{0}\n</style>\n", css);
             }
-            if (File.Exists("css/script.js"))
+            if (File.Exists("common/script.js"))
             {
-                var js = new StreamReader("css/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
+                var js = new StreamReader("common/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
                 mHtmlHeader += String.Format("<script type=\"text/javascript\" " +
                     "src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js\"></script>\n" +
                     "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
