@@ -224,8 +224,8 @@ namespace AskMonaViewer
                         @"<a href=.+>https?://(youtu.be/)?(www.youtube.com/watch\?v=)?(?<Id>[a-zA-Z0-9\-]+)([\?\&].+)?</a>",
                         "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/${Id}\" frameorder=\"0\" allowfullscreen></iframe>");
                     res = Regex.Replace(res,
-                        ">>[0-9]+",
-                        "<a class=\"tooltip\" href=\"#anchor\">$&<span class=\"tooltiptext\">anchor</span></a>");
+                        "&gt;&gt;(?<Id>[0-9]+)",
+                        String.Format("<a class=\"popup\" href=\"#res_{0}", responseList.Topic.Id) + "_${Id}\">&gt;&gt;${Id}</a>");
                     res = res.Replace("\n", "<br>");
 
                     if (response.Level < 2)
@@ -553,7 +553,9 @@ namespace AskMonaViewer
             if (File.Exists("css/script.js"))
             {
                 var js = new StreamReader("css/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-                mHtmlHeader += String.Format("<script type=\"text/javascript\">\n{0}\n</script>\n", js);
+                mHtmlHeader += String.Format("<script type=\"text/javascript\" " +
+                    "src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js\"></script>\n" +
+                    "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
             }
             mHtmlHeader += "</head>\n<body>\n";
 
