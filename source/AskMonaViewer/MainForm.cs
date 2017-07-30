@@ -51,6 +51,9 @@ namespace AskMonaViewer
             mResponseCacheList = new List<ResponseCache>();
             mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             mAccount = new Account();
+            mHtmlHeader = "<html lang=\"ja\">\n<head>\n" +
+                "<meta charset=\"UTF-8\">\n" +
+                "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n";
         }
 
         public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
@@ -545,13 +548,15 @@ namespace AskMonaViewer
             if (File.Exists("css/style.css"))
             {
                 var css = new StreamReader("css/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-                mHtmlHeader = String.Format("<html lang=\"ja\">\n<head>\n" +
-                    "<meta charset=\"UTF-8\">\n" +
-                    "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n" +
-                    "<style type=\"text/css\">\n{0}\n</style>" +
-                    "\n</head>\n" +
-                    "<body>\n", css);
+                mHtmlHeader += String.Format("<style type=\"text/css\">\n{0}\n</style>\n", css);
             }
+            if (File.Exists("css/script.js"))
+            {
+                var js = new StreamReader("css/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
+                mHtmlHeader += String.Format("<script type=\"text/javascript\">\n{0}\n</script>\n", js);
+            }
+            mHtmlHeader += "</head>\n<body>\n";
+
             mHttpClient = new HttpClient();
             mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
             mZaifApi = new ZaifApi(mHttpClient);
