@@ -1,11 +1,11 @@
 $(function() {
-    var $body = $("body");
-    var $tooltip = $("");
-
     $("a.popup").each(function() {
         var $this = $(this);
-        var t_id = $(this).attr("href").split("_")[1];
-        var r_id = $(this).attr("href").split("_")[2];
+        var $body = $("body");
+        var $tooltip = $("");
+
+        var t_id = $this.attr("href").split("_")[1];
+        var r_id = $this.attr("href").split("_")[2];
 
         $.support.cors = true;
         $.ajax({
@@ -27,14 +27,14 @@ $(function() {
                     ].join(""));
                     $body.append($tooltip);
 
-                    var ttSize = {
+                    var size = {
                         width: $tooltip.outerWidth(),
                         height: $tooltip.outerHeight()
                     };
                     var offset = $this.offset();
 
                     $tooltip.css({
-                        top: offset.top - ttSize.height,
+                        top: offset.top - size.height,
                         left: offset.left
                     });
                 }).on("mouseleave", function() {

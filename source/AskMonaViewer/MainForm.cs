@@ -73,7 +73,7 @@ namespace AskMonaViewer
             return String.Format("F{0}", valueString.Substring(index + 1).Length);
         }
 
-        private void RefreshColumnColors()
+        private void UpdateColumnColors()
         {
             bool flag = true;
             foreach(ListViewItem lvi in listView1.Items)
@@ -137,7 +137,7 @@ namespace AskMonaViewer
             }
             mTopicList = topicList.Topics;
             listView1.ListViewItemSorter = mListViewItemSorter;
-            RefreshColumnColors();
+            UpdateColumnColors();
             listView1.EndUpdate();
             toolStripStatusLabel1.Text = "受信完了";
             return true;
@@ -181,7 +181,7 @@ namespace AskMonaViewer
                 }
             }
             listView1.ListViewItemSorter = mListViewItemSorter;
-            RefreshColumnColors();
+            UpdateColumnColors();
             listView1.EndUpdate();
             return true;
         }
@@ -455,7 +455,7 @@ namespace AskMonaViewer
         {
             mListViewItemSorter.Column = e.Column;
             listView1.Sort();
-            RefreshColumnColors();
+            UpdateColumnColors();
         }
 
         private async void button1_Click(object sender, EventArgs e)

@@ -200,7 +200,7 @@ namespace AskMonaViewer
         [DataMember(Name = "send")]
         public string Send { get; set; }
 
-        [DataMember(Name = "receivee")]
+        [DataMember(Name = "receive")]
         public string Receive { get; set; }
 
         [DataMember(Name = "withdraw")]

@@ -26,7 +26,7 @@ p.res_lv5 {
 
 a {
     color: blue;
-    text-decoration:underline;
+    text-decoration: underline;
 }
 
 a.user {
@@ -52,7 +52,7 @@ a.popup {
 }
 .tooltip {
     position: absolute;
-    padding:10px;
+    padding: 10px;
     display: block;
     color: #ffffff;
     background-color: rgba(0, 0, 0, 0.8);
