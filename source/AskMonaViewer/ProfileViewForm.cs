@@ -74,5 +74,30 @@ namespace AskMonaViewer
         {
             this.Close();
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value += (decimal)0.3939;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value += (decimal)0.003939;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value += (decimal)0.114114;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value += (decimal)0.00114114;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value = 0;
+        }
     }
 }

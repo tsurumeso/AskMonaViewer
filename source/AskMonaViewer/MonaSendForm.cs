@@ -66,5 +66,30 @@ namespace AskMonaViewer
             double.TryParse(textBox4.Text, out balance);
             button1.Enabled = value > 0 && balance >= value;
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value += (decimal)0.3939;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value += (decimal)0.003939;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value += (decimal)0.114114;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value += (decimal)0.00114114;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value = 0;
+        }
     }
 }
