@@ -337,7 +337,7 @@ namespace AskMonaViewer
             return true;
         }
 
-        private async Task<bool> ReloadResponce(int topicId)
+        public async Task<bool> ReloadResponce(int topicId)
         {
             toolStripStatusLabel1.Text = "通信中";
             toolStripComboBox1.Text = "https://askmona.org/" + topicId;
@@ -507,7 +507,7 @@ namespace AskMonaViewer
         {
             if (mTopic != null)
             {
-                var responseForm = new ResponseForm(mApi, mTopic.Id);
+                var responseForm = new ResponseForm(this, mApi, mTopic.Id);
                 responseForm.ShowDialog();
             }
         }

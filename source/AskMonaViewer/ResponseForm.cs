@@ -5,12 +5,14 @@ namespace AskMonaViewer
 {
     public partial class ResponseForm : Form
     {
+        MainForm mParent;
         AskMonaApi mApi;
         int mTopicId;
 
-        public ResponseForm(AskMonaApi api, int t_id)
+        public ResponseForm(MainForm parent, AskMonaApi api, int t_id)
         {
             InitializeComponent();
+            mParent = parent;
             mApi = api;
             mTopicId = t_id;
             button1.Enabled = false;
@@ -24,6 +26,8 @@ namespace AskMonaViewer
             {
                 if (result.Status == 0)
                     MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    await mParent.ReloadResponce(mTopicId);
             }
             else
                 MessageBox.Show("レスの投稿に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
