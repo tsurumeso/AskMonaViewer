@@ -28,6 +28,7 @@ namespace AskMonaViewer
         private DateTime mUnixEpoch;
         private string mHtmlHeader = "";
         private List<ResponseCache> mResponseCacheList;
+        private string mVersionString = "1.3.0";
 
         public MainForm()
         {
@@ -640,6 +641,18 @@ namespace AskMonaViewer
         private async void toolStripButton10_Click(object sender, EventArgs e)
         {
             await ReloadResponce(mTopic.Id);
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void About_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var text = String.Format("プログラム名:\n    AskMonaViewer {0}\nホームページ:\n    https://github.com/tsurumeso/AskMonaViewer",
+                mVersionString);
+            MessageBox.Show(text, "AskMonaViewerについて", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
