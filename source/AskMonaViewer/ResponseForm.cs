@@ -5,9 +5,10 @@ namespace AskMonaViewer
 {
     public partial class ResponseForm : Form
     {
-        MainForm mParent;
-        AskMonaApi mApi;
-        int mTopicId;
+        private MainForm mParent;
+        private AskMonaApi mApi;
+        private int mTopicId;
+        private bool mHasCompleted = false;
 
         public ResponseForm(MainForm parent, AskMonaApi api, int t_id)
         {
@@ -20,6 +21,11 @@ namespace AskMonaViewer
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            if (mHasCompleted)
+                return;
+            else
+                mHasCompleted = true;
+
             int sage = checkBox1.Checked ? 1 : 0;
             var result = await mApi.PostResponseAsync(mTopicId, textBox1.Text, sage);
             if (result != null)

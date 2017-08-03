@@ -5,9 +5,9 @@ namespace AskMonaViewer
 {
     public partial class MonaSendForm : Form
     {
-        AskMonaApi mApi;
-        int mTopicId;
-        int mResponseId;
+        private AskMonaApi mApi;
+        private int mTopicId;
+        private int mResponseId;
 
         public MonaSendForm(AskMonaApi api, int t_id, int r_id)
         {

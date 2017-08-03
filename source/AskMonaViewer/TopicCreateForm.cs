@@ -40,6 +40,7 @@ namespace AskMonaViewer
             }
             else
                 MessageBox.Show("トピックの作成に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             this.Close();
         }
 
