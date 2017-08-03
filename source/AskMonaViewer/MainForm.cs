@@ -654,5 +654,11 @@ namespace AskMonaViewer
                 mVersionString);
             MessageBox.Show(text, "AskMonaViewerについて", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void toolStripButton11_Click(object sender, EventArgs e)
+        {
+            var transactionViewFrom = new TransactionViewForm(mApi);
+            transactionViewFrom.ShowDialog();
+        }
     }
 }

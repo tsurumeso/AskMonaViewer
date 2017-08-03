@@ -159,6 +159,16 @@ namespace AskMonaViewer
 
             return await CallAsync<UserProfile>(mApiBaseUrl + "users/profile", prms);
         }
+
+        public async Task<TransactionDetail> FetchTransactionAsync(string item, int limit = 200, int offset = 0)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("item", item);
+            prms.Add("limit", limit.ToString());
+            prms.Add("offset", offset.ToString());
+
+            return await CallAuthAsync<TransactionDetail>(mApiBaseUrl + "account/txdetail", prms);
+        }
     }
 
     [DataContract]
@@ -169,6 +179,59 @@ namespace AskMonaViewer
 
         [DataMember(Name = "error")]
         public string Error { get; set; }
+    }
+
+    [DataContract]
+    public class TransactionDetail : ApiResult
+    {
+        [DataMember(Name = "transactions")]
+        public List<Transaction> Transactions { get; set; }
+
+        public TransactionDetail()
+        {
+            Transactions = new List<Transaction>();
+        }
+    }
+
+    [DataContract]
+    public class Transaction
+    {
+        [DataMember(Name = "created")]
+        public int Created { get; set; }
+
+        [DataMember(Name = "item")]
+        public string Item { get; set; }
+
+        [DataMember(Name = "amount")]
+        public string Amount { get; set; }
+
+        [DataMember(Name = "t_id")]
+        public int TopicId { get; set; }
+
+        [DataMember(Name = "r_id")]
+        public int ResponceId { get; set; }
+
+        [DataMember(Name = "anonymous")]
+        public int Anonymous { get; set; }
+
+        [DataMember(Name = "user")]
+        public User User { get; set; }
+
+        [DataMember(Name = "msg_text")]
+        public string Message { get; set; }
+    }
+
+    [DataContract]
+    public class User
+    {
+        [DataMember(Name = "u_id")]
+        public int UserId { get; set; }
+
+        [DataMember(Name = "u_name")]
+        public string UserName { get; set; }
+
+        [DataMember(Name = "u_dan")]
+        public string UserDan { get; set; }
     }
 
     [DataContract]
