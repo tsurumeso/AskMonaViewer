@@ -459,12 +459,7 @@ namespace AskMonaViewer
             UpdateColumnColors();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
-        {
-            await FilterTopics(comboBox1.Text);
-        }
-
-        private async void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
+        private async void comboBox1_TextUpdate(object sender, EventArgs e)
         {
             await FilterTopics(comboBox1.Text);
         }
