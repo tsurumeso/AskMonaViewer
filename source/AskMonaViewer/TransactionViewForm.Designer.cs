@@ -30,12 +30,12 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.listViewEx1 = new AskMonaViewer.ListViewEx();
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.listViewEx2 = new AskMonaViewer.ListViewEx();
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -73,22 +73,32 @@
             this.tabPage1.Text = "入出金";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.listViewEx2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 24);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabPage2.Size = new System.Drawing.Size(512, 337);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "ばらまき・受け取り";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // listViewEx1
             // 
-            this.listViewEx1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewEx1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader8,
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
+            this.listViewEx1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewEx1.FullRowSelect = true;
             this.listViewEx1.GridLines = true;
-            this.listViewEx1.Location = new System.Drawing.Point(6, 8);
+            this.listViewEx1.Location = new System.Drawing.Point(3, 4);
             this.listViewEx1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listViewEx1.Name = "listViewEx1";
-            this.listViewEx1.Size = new System.Drawing.Size(500, 321);
+            this.listViewEx1.Size = new System.Drawing.Size(506, 329);
             this.listViewEx1.TabIndex = 0;
             this.listViewEx1.UseCompatibleStateImageBehavior = false;
             this.listViewEx1.View = System.Windows.Forms.View.Details;
@@ -114,35 +124,21 @@
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.columnHeader3.Width = 100;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.listViewEx2);
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage2.Size = new System.Drawing.Size(522, 337);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "ばらまき・受け取り";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // listViewEx2
             // 
-            this.listViewEx2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewEx2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader9,
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader6,
             this.columnHeader7});
+            this.listViewEx2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewEx2.FullRowSelect = true;
             this.listViewEx2.GridLines = true;
-            this.listViewEx2.Location = new System.Drawing.Point(6, 8);
+            this.listViewEx2.Location = new System.Drawing.Point(3, 4);
             this.listViewEx2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listViewEx2.Name = "listViewEx2";
-            this.listViewEx2.Size = new System.Drawing.Size(510, 321);
+            this.listViewEx2.Size = new System.Drawing.Size(506, 329);
             this.listViewEx2.TabIndex = 0;
             this.listViewEx2.UseCompatibleStateImageBehavior = false;
             this.listViewEx2.View = System.Windows.Forms.View.Details;

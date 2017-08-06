@@ -57,7 +57,7 @@
             this.textBox1.Location = new System.Drawing.Point(12, 27);
             this.textBox1.MaxLength = 32;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(310, 23);
+            this.textBox1.Size = new System.Drawing.Size(440, 23);
             this.textBox1.TabIndex = 1;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -70,7 +70,7 @@
             this.textBox2.MaxLength = 1024;
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(310, 111);
+            this.textBox2.Size = new System.Drawing.Size(440, 161);
             this.textBox2.TabIndex = 3;
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
@@ -129,13 +129,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox3.Location = new System.Drawing.Point(12, 115);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(310, 23);
+            this.textBox3.Size = new System.Drawing.Size(440, 23);
             this.textBox3.TabIndex = 7;
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(247, 276);
+            this.button1.Location = new System.Drawing.Point(377, 326);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 8;
@@ -146,7 +146,7 @@
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(166, 276);
+            this.button2.Location = new System.Drawing.Point(296, 326);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 9;
@@ -158,7 +158,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 311);
+            this.ClientSize = new System.Drawing.Size(464, 361);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox3);
@@ -171,7 +171,7 @@
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MinimumSize = new System.Drawing.Size(350, 350);
+            this.MinimumSize = new System.Drawing.Size(480, 400);
             this.Name = "TopicCreateForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "トピックの新規作成";
