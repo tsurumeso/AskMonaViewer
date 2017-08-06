@@ -27,7 +27,7 @@ namespace AskMonaViewer
                 if (balance.Status == 0)
                     MessageBox.Show("残高の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
-                    textBox4.Text = (double.Parse(balance.Value) / 100000000).ToString("F6");
+                    textBox4.Text = (double.Parse(balance.Value) / 100000000).ToString("F8");
             }
         }
 

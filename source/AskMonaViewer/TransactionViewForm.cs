@@ -73,7 +73,7 @@ namespace AskMonaViewer
                             (i + 1).ToString(),
                             UnixTimeStampToDateTime(txs[i].Created).ToString(),
                             txs[i].Item == "deposit" ? "入金" : "出金",
-                            (Double.Parse(txs[i].Amount) / 100000000).ToString()
+                            (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
                         }
                     );
                     listViewEx1.Items.Add(lvi);
@@ -97,7 +97,7 @@ namespace AskMonaViewer
                             UnixTimeStampToDateTime(txs[i].Created).ToString(),
                             txs[i].Item == "receive" ? "受け取り" : "ばらまき",
                             txs[i].User != null ? txs[i].User.UserName + txs[i].User.UserDan : "匿名",
-                            (Double.Parse(txs[i].Amount) / 100000000).ToString()
+                            (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
                         }
                     );
                     listViewEx2.Items.Add(lvi);
