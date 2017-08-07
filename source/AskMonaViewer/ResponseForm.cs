@@ -50,5 +50,37 @@ namespace AskMonaViewer
         {
             button1.Enabled = !String.IsNullOrEmpty(textBox1.Text);
         }
+
+        private int DateTimeToUnixTimeStamp(DateTime dateTime)
+        {
+            var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
+            return (int)(dateTime - unixEpoch).TotalSeconds;
+        }
+
+        private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var profile = await mApi.EditUserProfileAsync();
+            if (profile == null)
+                return;
+
+            var response = new Response();
+            var responseList = new ResponseList();
+
+            response.Id = 1;
+            response.UserId = mApi.UserId;
+            response.UserName = profile.UserName;
+            response.UserDan = profile.UserDan;
+            response.Created = DateTimeToUnixTimeStamp(DateTime.Now);
+            response.UserTimes = "1/1";
+            response.Receive = "0";
+            response.ReceivedCount = 0;
+            response.Level = 0;
+            response.Text = textBox1.Text;
+            responseList.Topic = new Topic();
+            responseList.Topic.Id = mTopicId;
+            responseList.Responses.Add(response);
+
+            webBrowser1.DocumentText = await mParent.BuildWebBrowserDocument(responseList);
+        }
     }
 }

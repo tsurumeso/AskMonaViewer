@@ -244,6 +244,12 @@ namespace AskMonaViewer
             return html.ToString();
         }
 
+        public async Task<string> BuildWebBrowserDocument(ResponseList responseList)
+        {
+            var html = await BuildHtml(responseList);
+            return mHtmlHeader + html + "</body>\n</html>";
+        }
+
         private static string CompressString(string source)
         {
             var bytes = Encoding.UTF8.GetBytes(source);

@@ -18,6 +18,14 @@ namespace AskMonaViewer
         private DateTime mUnixEpoch;
         private Account mAccount;
 
+        public int UserId
+        {
+            get
+            {
+                return mAccount.UserId;
+            }
+        }
+
         public AskMonaApi(HttpClient client, Account account)
         {
             mHttpClient = client;
@@ -158,6 +166,17 @@ namespace AskMonaViewer
             prms.Add("u_id", u_id.ToString());
 
             return await CallAsync<UserProfile>(mApiBaseUrl + "users/profile", prms);
+        }
+
+        public async Task<UserProfile> EditUserProfileAsync(string u_name=null, string profile=null)
+        {
+            var prms = new Dictionary<string, string>();
+            if (!String.IsNullOrEmpty(u_name))
+                prms.Add("u_name", u_name);
+            if (!String.IsNullOrEmpty(profile))
+                prms.Add("profile", profile);
+
+            return await CallAuthAsync<UserProfile>(mApiBaseUrl + "users/myprofile", prms);
         }
 
         public async Task<TransactionDetail> FetchTransactionAsync(string item, int limit = 200, int offset = 0)
