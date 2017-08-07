@@ -113,6 +113,12 @@
     <Compile Include="ProfileEditForm.Designer.cs">
       <DependentUpon>ProfileEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TopicEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TopicEditForm.Designer.cs">
+      <DependentUpon>TopicEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TransactionViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TopicCreateForm.resx">
       <DependentUpon>TopicCreateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TopicEditForm.resx">
+      <DependentUpon>TopicEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TransactionViewForm.resx">
       <DependentUpon>TransactionViewForm.cs</DependentUpon>

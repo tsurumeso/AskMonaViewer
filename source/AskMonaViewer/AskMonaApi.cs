@@ -114,6 +114,18 @@ namespace AskMonaViewer
             return await CallAuthAsync<ApiResult>(mApiBaseUrl + "topics/new", prms);
         }
 
+        public async Task<ApiResult> EditTopicAsync(int t_id, int cat_id, string tags, string lead, string ps)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("t_id", t_id.ToString());
+            prms.Add("cat_id", cat_id.ToString());
+            prms.Add("tags", tags);
+            prms.Add("lead", lead);
+            prms.Add("ps", ps);
+
+            return await CallAuthAsync<ApiResult>(mApiBaseUrl + "topics/edit", prms);
+        }
+
         public async Task<TopicList> FetchTopicListAsync(int cat_id = 0, int limit = 100)
         {
             var prms = new Dictionary<string, string>();

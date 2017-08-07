@@ -30,7 +30,6 @@ namespace AskMonaViewer
             }
 
             var result = await mApi.CreateTopicAsync(textBox1.Text, textBox2.Text, comboBox1.SelectedIndex, textBox3.Text);
-
             if (result != null)
             {
                 if (result.Status == 0)

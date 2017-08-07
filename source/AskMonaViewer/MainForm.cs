@@ -667,5 +667,14 @@ namespace AskMonaViewer
             var profileEditForm = new ProfileEditForm(mApi);
             profileEditForm.ShowDialog();
         }
+
+        private void toolStripButton13_Click(object sender, EventArgs e)
+        {
+            if (mTopic == null)
+                return;
+
+            var topicEditForm = new TopicEditForm(mApi, mTopic);
+            topicEditForm.ShowDialog();
+        }
     }
 }
