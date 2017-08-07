@@ -661,5 +661,11 @@ namespace AskMonaViewer
             var transactionViewFrom = new TransactionViewForm(mApi);
             transactionViewFrom.ShowDialog();
         }
+
+        private void toolStripButton12_Click(object sender, EventArgs e)
+        {
+            var profileEditForm = new ProfileEditForm(mApi);
+            profileEditForm.ShowDialog();
+        }
     }
 }

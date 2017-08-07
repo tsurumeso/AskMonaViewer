@@ -107,15 +107,24 @@
     <Compile Include="TopicCreateForm.Designer.cs">
       <DependentUpon>TopicCreateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProfileEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProfileEditForm.Designer.cs">
+      <DependentUpon>ProfileEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TransactionViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TransactionViewForm.Designer.cs">
-        <DependentUpon>TransactionViewForm.cs</DependentUpon>
+      <DependentUpon>TransactionViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ZaifApi.cs" />
     <EmbeddedResource Include="MonaWithdrawForm.resx">
       <DependentUpon>MonaWithdrawForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProfileEditForm.resx">
+      <DependentUpon>ProfileEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProfileViewForm.resx">
       <DependentUpon>ProfileViewForm.cs</DependentUpon>
@@ -146,7 +155,7 @@
       <DependentUpon>TopicCreateForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TransactionViewForm.resx">
-        <DependentUpon>TransactionViewForm.cs</DependentUpon>
+      <DependentUpon>TransactionViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
