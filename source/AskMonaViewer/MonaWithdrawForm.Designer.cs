@@ -69,7 +69,7 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.DecimalPlaces = 6;
+            this.numericUpDown1.DecimalPlaces = 8;
             this.numericUpDown1.Increment = new decimal(new int[] {
             1,
             0,

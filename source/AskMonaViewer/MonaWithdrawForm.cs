@@ -22,7 +22,7 @@ namespace AskMonaViewer
                     MessageBox.Show("残高の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
-                    textBox4.Text = (double.Parse(balance.Value) / 100000000).ToString("F6");
+                    textBox4.Text = (double.Parse(balance.Value) / 100000000).ToString("F8");
                     numericUpDown1.Text = textBox4.Text;
                 }
             }
