@@ -20,7 +20,8 @@ namespace AskMonaViewer
                 return;
 
             textBox1.Text = profile.UserName;
-            textBox2.Text = profile.Text.Replace("\\n", Environment.NewLine);
+            if (profile.Text != null)
+                textBox2.Text = profile.Text.Replace("\\n", Environment.NewLine);
         }
 
         private async void button1_Click(object sender, EventArgs e)

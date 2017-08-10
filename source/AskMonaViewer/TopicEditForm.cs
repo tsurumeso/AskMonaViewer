@@ -19,8 +19,10 @@ namespace AskMonaViewer
         private void TopicEditForm_Load(object sender, EventArgs e)
         {
             textBox1.Text = mTopic.Title;
-            textBox2.Text = mTopic.Lead.Replace("\n", "\r\n");
-            textBox3.Text = mTopic.Supplyment.Replace("\n", "\r\n");
+            if (mTopic.Lead != null)
+                textBox2.Text = mTopic.Lead.Replace("\n", "\r\n");
+            if (mTopic.Supplyment != null)
+                textBox3.Text = mTopic.Supplyment.Replace("\n", "\r\n");
             textBox4.Text = mTopic.Tags;
             comboBox1.SelectedIndex = mTopic.CategoryId;
         }
