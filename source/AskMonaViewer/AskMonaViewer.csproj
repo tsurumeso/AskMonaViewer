@@ -73,6 +73,12 @@
     <Compile Include="ProfileViewForm.Designer.cs">
       <DependentUpon>ProfileViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SendTogetherForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SendTogetherForm.Designer.cs">
+      <DependentUpon>SendTogetherForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SignUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProfileViewForm.resx">
       <DependentUpon>ProfileViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SendTogetherForm.resx">
+      <DependentUpon>SendTogetherForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SignUpForm.resx">
       <DependentUpon>SignUpForm.cs</DependentUpon>

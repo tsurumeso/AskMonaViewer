@@ -680,5 +680,14 @@ namespace AskMonaViewer
             var topicEditForm = new TopicEditForm(mApi, mTopic);
             topicEditForm.ShowDialog();
         }
+
+        private void toolStripButton14_Click(object sender, EventArgs e)
+        {
+            if (mTopic == null)
+                return;
+
+            var sendTogetherForm = new SendTogetherForm(mApi, mTopic.Id);
+            sendTogetherForm.ShowDialog();
+        }
     }
 }
