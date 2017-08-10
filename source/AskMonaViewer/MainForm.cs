@@ -124,11 +124,12 @@ namespace AskMonaViewer
                         topic.Rank.ToString(),
                         topic.Category,
                         topic.Title,
-                        (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
                         topic.Count.ToString(),
                         topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
                         newArrivals == 0 ? "" : newArrivals.ToString(),
                         topic.Increased == 0 ? "" : topic.Increased.ToString(),
+                        (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
+                        topic.Favorites.ToString(),
                         ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
                         UnixTimeStampToDateTime(topic.Updated).ToString()
                     }
@@ -168,11 +169,12 @@ namespace AskMonaViewer
                             topic.Rank.ToString(),
                             topic.Category,
                             topic.Title,
-                            (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
                             topic.Count.ToString(),
                             topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
                             newArrivals == 0 ? "" : newArrivals.ToString(),
                             topic.Increased == 0 ? "" : topic.Increased.ToString(),
+                            (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
+                            topic.Favorites.ToString(),
                             ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
                             UnixTimeStampToDateTime(topic.Updated).ToString()
                         }
@@ -377,8 +379,8 @@ namespace AskMonaViewer
 
             var topic = (Topic)listView1.SelectedItems[0].Tag;
             await UpdateResponce(topic.Id);
-            listView1.SelectedItems[0].SubItems[5].Text = mTopic.Count.ToString();
-            listView1.SelectedItems[0].SubItems[6].Text = "";
+            listView1.SelectedItems[0].SubItems[4].Text = mTopic.Count.ToString();
+            listView1.SelectedItems[0].SubItems[5].Text = "";
         }
 
         void Document_Click(object sender, HtmlElementEventArgs e)
