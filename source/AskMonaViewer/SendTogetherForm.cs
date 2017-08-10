@@ -24,6 +24,7 @@ namespace AskMonaViewer
             textBox2.Text = mResponseList.Responses.Where(x => x.UserId != mApi.UserId)
                 .Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value)
                 .Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value).Count().ToString();
+            timer1.Enabled = true;
 
             var balance = await mApi.FetchBlanceAsync(0);
             if (balance != null)
@@ -45,11 +46,12 @@ namespace AskMonaViewer
             bool flag = true;
             int sage = checkBox1.Checked ? 1 : 0;
             int anonymous = checkBox2.Checked ? 1 : 0;
-            foreach (var response in mResponseList.Responses)
-            {
-                if (response.UserId == mApi.UserId)
-                    break;
+            var responseList = mResponseList.Responses.Where(x => x.UserId != mApi.UserId)
+                .Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value)
+                .Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value).ToList();
 
+            foreach (var response in responseList)
+            {
                 var result = await mApi.SendMonaAsync(mTopicId, response.Id, (ulong)(numericUpDown1.Value * 100000000), anonymous, textBox3.Text, sage);
                 if (result != null)
                 {
@@ -115,6 +117,11 @@ namespace AskMonaViewer
         private void button7_Click(object sender, EventArgs e)
         {
             numericUpDown1.Value = 0;
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            textBox3.ReadOnly = checkBox2.Checked;
         }
     }
 }
