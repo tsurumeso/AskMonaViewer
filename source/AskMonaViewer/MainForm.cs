@@ -401,6 +401,7 @@ namespace AskMonaViewer
 
                 var mSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
                 var mUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)");
+                var mAnchor = Regex.Match(link, @"about:blank#res_.+");
                 var mAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
                 if (mSend.Success)
                 {
@@ -417,6 +418,7 @@ namespace AskMonaViewer
                     var profileViewForm = new ProfileViewForm(mApi, int.Parse(mUser.Groups["Id"].Value));
                     profileViewForm.ShowDialog();
                 }
+                else if (mAnchor.Success) { }
                 else if (link == "about:blank#id") { }
                 else
                     System.Diagnostics.Process.Start(link);
