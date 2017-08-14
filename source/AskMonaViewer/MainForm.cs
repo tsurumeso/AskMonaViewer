@@ -408,7 +408,7 @@ namespace AskMonaViewer
                 var mAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
                 if (mSend.Success)
                 {
-                    var monaRequestForm = new MonaSendForm(mApi, mTopic.Id, int.Parse(mSend.Groups["Id"].Value));
+                    var monaRequestForm = new MonaSendForm(mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
                     monaRequestForm.ShowDialog();
                 }
                 else if (mAskMona.Success)
@@ -687,7 +687,7 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var sendTogetherForm = new SendTogetherForm(mApi, mTopic.Id);
+            var sendTogetherForm = new SendTogetherForm(mApi, mTopic);
             sendTogetherForm.ShowDialog();
         }
     }

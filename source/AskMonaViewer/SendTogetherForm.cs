@@ -8,19 +8,20 @@ namespace AskMonaViewer
     public partial class SendTogetherForm : Form
     {
         private AskMonaApi mApi;
-        private int mTopicId;
+        private Topic mTopic;
         private ResponseList mResponseList;
 
-        public SendTogetherForm(AskMonaApi api, int t_id)
+        public SendTogetherForm(AskMonaApi api, Topic topic)
         {
             InitializeComponent();
             mApi = api;
-            mTopicId = t_id;
+            mTopic = topic;
+            textBox5.Text = topic.Title;
         }
 
         private async void SendTogetherForm_Load(object sender, EventArgs e)
         {
-            mResponseList = await mApi.FetchResponseListAsync(mTopicId);
+            mResponseList = await mApi.FetchResponseListAsync(mTopic.Id);
             textBox2.Text = mResponseList.Responses.Where(x => x.UserId != mApi.UserId)
                 .Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value)
                 .Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value).Count().ToString();
@@ -52,7 +53,7 @@ namespace AskMonaViewer
 
             foreach (var response in responseList)
             {
-                var result = await mApi.SendMonaAsync(mTopicId, response.Id, (ulong)(numericUpDown1.Value * 100000000), anonymous, textBox3.Text, sage);
+                var result = await mApi.SendMonaAsync(mTopic.Id, response.Id, (ulong)(numericUpDown1.Value * 100000000), anonymous, textBox3.Text, sage);
                 if (result != null)
                 {
                     if (result.Status == 0)

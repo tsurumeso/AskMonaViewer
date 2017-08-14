@@ -6,16 +6,16 @@ namespace AskMonaViewer
     public partial class MonaSendForm : Form
     {
         private AskMonaApi mApi;
-        private int mTopicId;
+        private Topic mTopic;
         private int mResponseId;
 
-        public MonaSendForm(AskMonaApi api, int t_id, int r_id)
+        public MonaSendForm(AskMonaApi api, Topic topic, int r_id)
         {
             InitializeComponent();
             mApi = api;
-            mTopicId = t_id;
+            mTopic = topic;
             mResponseId = r_id;
-            textBox1.Text = t_id.ToString();
+            textBox1.Text = topic.Title;
             textBox2.Text = r_id.ToString();
         }
 
@@ -35,7 +35,7 @@ namespace AskMonaViewer
         {
             int sage = checkBox1.Checked ? 1 : 0;
             int anonymous = checkBox2.Checked ? 1 : 0;
-            var result = await mApi.SendMonaAsync(mTopicId, mResponseId, (ulong)(numericUpDown1.Value * 100000000), anonymous, textBox3.Text, sage);
+            var result = await mApi.SendMonaAsync(mTopic.Id, mResponseId, (ulong)(numericUpDown1.Value * 100000000), anonymous, textBox3.Text, sage);
             if (result != null)
             {
                 if (result.Status == 0)
