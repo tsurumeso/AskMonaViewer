@@ -629,6 +629,9 @@ namespace AskMonaViewer
 
         private async void toolStripButton9_Click(object sender, EventArgs e)
         {
+            if (mTopic == null)
+                return;
+
             int idx = mFavoriteTopicList.FindIndex(x => x.Id == mTopic.Id);
             if (idx == -1)
             {
@@ -646,6 +649,9 @@ namespace AskMonaViewer
 
         private async void toolStripButton10_Click(object sender, EventArgs e)
         {
+            if (mTopic == null)
+                return;
+
             await ReloadResponce(mTopic.Id);
         }
 
