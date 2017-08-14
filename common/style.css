@@ -47,7 +47,6 @@ a.send:hover{
     text-decoration: underline
 }
 
-
 a.popup {
 }
 .tooltip {
@@ -55,6 +54,6 @@ a.popup {
     padding: 10px;
     display: block;
     color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.8);
     font-size: 12pt;
 }
