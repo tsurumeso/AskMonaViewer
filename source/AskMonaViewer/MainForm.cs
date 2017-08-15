@@ -28,7 +28,7 @@ namespace AskMonaViewer
         private DateTime mUnixEpoch;
         private string mHtmlHeader = "";
         private List<ResponseCache> mResponseCacheList;
-        private string mVersionString = "1.4.0";
+        private string mVersionString = "1.4.1";
 
         public MainForm()
         {
