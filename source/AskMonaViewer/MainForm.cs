@@ -90,6 +90,27 @@ namespace AskMonaViewer
             }
         }
 
+        private ListViewItem CreateListViewItem(Topic topic, long time)
+        {
+            int newArrivals = topic.CachedCount == 0 ? 0 : topic.Count - topic.CachedCount;
+            var lvi = new ListViewItem(
+                new string[] {
+                    topic.Rank.ToString(),
+                    topic.Category,
+                    topic.Title,
+                    topic.Count.ToString(),
+                    topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
+                    newArrivals == 0 ? "" : newArrivals.ToString(),
+                    topic.Increased == 0 ? "" : topic.Increased.ToString(),
+                    (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
+                    topic.Favorites.ToString(),
+                    ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
+                    UnixTimeStampToDateTime(topic.Updated).ToString()
+                }
+            );
+            return lvi;
+        }
+
         private async Task<bool> UpdateTopicList(int cat_id, bool reflesh = true)
         {
             toolStripStatusLabel1.Text = "通信中";
@@ -103,7 +124,7 @@ namespace AskMonaViewer
             if (cat_id == -1)
                 topicList = await mApi.FetchFavoriteTopicListAsync();
             else
-                topicList = await mApi.FetchTopicListAsync(cat_id, offset: offset);
+                topicList = await mApi.FetchTopicListAsync(cat_id, 50, offset);
 
             if (topicList == null)
             {
@@ -126,22 +147,7 @@ namespace AskMonaViewer
                 if (cachedTopic != null)
                     topic.CachedCount = cachedTopic.Topic.Count;
 
-                int newArrivals = topic.CachedCount == 0 ? 0 : topic.Count - topic.CachedCount;
-                var lvi = new ListViewItem(
-                    new string[] {
-                        topic.Rank.ToString(),
-                        topic.Category,
-                        topic.Title,
-                        topic.Count.ToString(),
-                        topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
-                        newArrivals == 0 ? "" : newArrivals.ToString(),
-                        topic.Increased == 0 ? "" : topic.Increased.ToString(),
-                        (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
-                        topic.Favorites.ToString(),
-                        ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
-                        UnixTimeStampToDateTime(topic.Updated).ToString()
-                    }
-                );
+                var lvi = CreateListViewItem(topic, time);
                 lvi.Tag = topic;
                 listView1.Items.Add(lvi);
             }
@@ -171,22 +177,7 @@ namespace AskMonaViewer
             {
                 if (topic.Title.ToLower().Contains(key.ToLower()))
                 {
-                    int newArrivals = topic.CachedCount == 0 ? 0 : topic.Count - topic.CachedCount;
-                    var lvi = new ListViewItem(
-                        new string[] {
-                            topic.Rank.ToString(),
-                            topic.Category,
-                            topic.Title,
-                            topic.Count.ToString(),
-                            topic.CachedCount == 0 ? "" : topic.CachedCount.ToString(),
-                            newArrivals == 0 ? "" : newArrivals.ToString(),
-                            topic.Increased == 0 ? "" : topic.Increased.ToString(),
-                            (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
-                            topic.Favorites.ToString(),
-                            ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
-                            UnixTimeStampToDateTime(topic.Updated).ToString()
-                        }
-                    );
+                    var lvi = CreateListViewItem(topic, time);
                     lvi.Tag = topic;
                     listView1.Items.Add(lvi);
                 }
