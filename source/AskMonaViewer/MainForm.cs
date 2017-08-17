@@ -66,7 +66,7 @@ namespace AskMonaViewer
 
         private static string Digits(double value)
         {
-            string valueString = value.ToString().TrimEnd('0');
+            string valueString = value.ToString("F8").TrimEnd('0');
 
             int index = valueString.IndexOf('.');
             if (index == -1)
