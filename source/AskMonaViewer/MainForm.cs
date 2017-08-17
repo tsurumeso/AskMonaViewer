@@ -20,7 +20,9 @@ namespace AskMonaViewer
         private ZaifApi mZaifApi;
         private HttpClient mHttpClient;
         private int mCategoryId = 0;
+        private int mTopIndex = 0;
         private bool mHasDocumentLoaded = true;
+        private bool mIsTopicListUpdating = false;
         private TopicComparer mListViewItemSorter;
         private Topic mTopic;
         private List<Topic> mTopicList;
@@ -88,14 +90,20 @@ namespace AskMonaViewer
             }
         }
 
-        private async Task<bool> UpdateTopicList(int cat_id)
+        private async Task<bool> UpdateTopicList(int cat_id, bool reflesh = true)
         {
             toolStripStatusLabel1.Text = "通信中";
+            int offset = 0;
+            if (reflesh)
+                listView1.Items.Clear();
+            else
+                offset = listView1.Items.Count;
+
             TopicList topicList;
             if (cat_id == -1)
                 topicList = await mApi.FetchFavoriteTopicListAsync();
             else
-                topicList = await mApi.FetchTopicListAsync(cat_id);
+                topicList = await mApi.FetchTopicListAsync(cat_id, offset: offset);
 
             if (topicList == null)
             {
@@ -103,7 +111,6 @@ namespace AskMonaViewer
                 return false;
             }
 
-            listView1.Items.Clear();
             listView1.BeginUpdate();
             var time = (long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds;
             foreach (var topic in topicList.Topics)
@@ -695,6 +702,21 @@ namespace AskMonaViewer
 
             var sendTogetherForm = new SendTogetherForm(mApi, mTopic);
             sendTogetherForm.ShowDialog();
+        }
+
+        private async void listView1_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (listView1.Items.Count == 0 || mIsTopicListUpdating)
+                return;
+
+            if (mTopIndex != 0 && mTopIndex == listView1.TopItem.Index)
+            {
+                mIsTopicListUpdating = true;
+                await UpdateTopicList(mCategoryId, false);
+                mIsTopicListUpdating = false;
+            }
+
+            mTopIndex = listView1.TopItem.Index;
         }
     }
 }

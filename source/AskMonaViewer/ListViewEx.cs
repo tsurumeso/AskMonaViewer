@@ -22,9 +22,13 @@ namespace AskMonaViewer
 
         // Windows Messages
         private const int WM_PAINT = 0x000F;
-        #endregion
+        private const int WM_MOUSEWHEEL = 0x020A;
 
+        private ArrayList _embeddedControls = new ArrayList();
         protected override bool DoubleBuffered { get { return true; } set { } }
+        public delegate void ScrollDelegate(object sender, ScrollEventArgs e);
+        private ScrollDelegate onScroll;
+        #endregion
 
         /// <summary>
         /// Structure to hold an embedded control's info
@@ -38,7 +42,18 @@ namespace AskMonaViewer
             public ListViewItem Item;
         }
 
-        private ArrayList _embeddedControls = new ArrayList();
+        public event ScrollDelegate Scroll
+        {
+            add
+            {
+                onScroll += value;
+            }
+            remove
+            {
+                onScroll -= value;
+            }
+        }
+
 
         public ListViewEx()
         {
@@ -232,8 +247,14 @@ namespace AskMonaViewer
             return (short)((int)input & 0xFFFF);
         }
 
+        protected short HiWord(long input)
+        {
+            return (short)((int)input >> 16);
+        }
+
         protected override void WndProc(ref Message m)
         {
+            base.WndProc(ref m);
             switch (m.Msg)
             {
                 case WM_PAINT:
@@ -282,8 +303,16 @@ namespace AskMonaViewer
                         ec.Control.Bounds = rc;
                     }
                     break;
+                case WM_MOUSEWHEEL:
+                    short hi = HiWord((long)m.WParam);
+                    short lo = LoWord((long)m.WParam);
+                    if (onScroll != null)
+                    {
+                        ScrollEventArgs e = new ScrollEventArgs(ScrollEventType.EndScroll, hi, ScrollOrientation.VerticalScroll);
+                        onScroll(this, e);
+                    }
+                    break;
             }
-            base.WndProc(ref m);
         }
 
         private void _embeddedControl_Click(object sender, EventArgs e)
@@ -298,32 +327,5 @@ namespace AskMonaViewer
                 }
             }
         }
-
-        //public Dictionary<string, Image> Images = new Dictionary<string, Image>();
-
-        //private void ListViewEx_DrawItem(object sender, DrawListViewItemEventArgs e)
-        //{
-        //    Image img;
-        //    try
-        //    {
-        //        img = Images[e.Item.ImageKey];
-        //    }
-        //    catch
-        //    {
-        //        img = SystemIcons.Error.ToBitmap();
-        //    }
-
-        //    Rectangle rect = e.Item.Bounds;
-        //    int x = (rect.Width - img.Width) / 2;
-        //    int y = (this.LargeImageList.ImageSize.Height - img.Height) / 2;
-        //    e.Graphics.DrawImage(img, rect.Left + x, rect.Top + y + 2, img.Width, img.Height);
-
-        //    e.DrawDefault = true;
-
-        //    if ((e.State & ListViewItemStates.Selected) == ListViewItemStates.Selected)
-        //    {
-        //        e.DrawFocusRectangle();
-        //    }
-        //}
     }
 }
