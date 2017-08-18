@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
@@ -22,9 +23,7 @@ namespace AskMonaViewer
         private async void SendTogetherForm_Load(object sender, EventArgs e)
         {
             mResponseList = await mApi.FetchResponseListAsync(mTopic.Id);
-            textBox2.Text = mResponseList.Responses.Where(x => x.UserId != mApi.UserId)
-                .Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value)
-                .Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value).Count().ToString();
+            textBox2.Text = FilterResponseList(mResponseList.Responses).Count().ToString();
             timer1.Enabled = true;
 
             var balance = await mApi.FetchBlanceAsync(0);
@@ -42,18 +41,39 @@ namespace AskMonaViewer
             return int.Parse(userTimes.Substring(userTimes.IndexOf("/") + 1));
         }
 
+        private IEnumerable<Response> FilterResponseList(List<Response> responseList)
+        {
+            var filteredResponseList = responseList.Where(x => x.UserId != mApi.UserId);
+            if (checkBox3.Checked)
+                filteredResponseList = filteredResponseList.Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value);
+            if (checkBox4.Checked)
+                filteredResponseList = filteredResponseList.Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value);
+            return filteredResponseList;
+        }
+
         private async void button1_Click(object sender, EventArgs e)
         {
             bool flag = true;
             int sage = checkBox1.Checked ? 1 : 0;
             int anonymous = checkBox2.Checked ? 1 : 0;
-            var responseList = mResponseList.Responses.Where(x => x.UserId != mApi.UserId)
-                .Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value)
-                .Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value).ToList();
+            var responseList = FilterResponseList(mResponseList.Responses);
 
             foreach (var response in responseList)
             {
-                var result = await mApi.SendMonaAsync(mTopic.Id, response.Id, (ulong)(numericUpDown1.Value * 100000000), anonymous, textBox3.Text, sage);
+                ulong value = 0;
+                if (checkBox5.Checked)
+                {
+                    var receive = double.Parse(response.Receive) / 100000000;
+                    if (receive < (double)numericUpDown4.Value)
+                        value = (ulong)(((double)numericUpDown4.Value - receive) * 100000000);
+                }
+                else
+                    value = (ulong)(numericUpDown1.Value * 100000000);
+
+                if (value == 0)
+                    continue;
+
+                var result = await mApi.SendMonaAsync(mTopic.Id, response.Id, value, anonymous, textBox3.Text, sage);
                 if (result != null)
                 {
                     if (result.Status == 0)
@@ -86,13 +106,26 @@ namespace AskMonaViewer
             double value, balance;
             double.TryParse(numericUpDown1.Text, out value);
             double.TryParse(textBox4.Text, out balance);
-            var count = mResponseList.Responses.Where(x => x.UserId != mApi.UserId)
-                .Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value)
-                .Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value).Count();
-            var trueValue = value * count;
-            textBox1.Text = trueValue.ToString("F8");
+            var count = FilterResponseList(mResponseList.Responses).Count();
+            double sumValue = 0;
+            if (checkBox5.Checked)
+            {
+                count = 0;
+                foreach (var response in mResponseList.Responses)
+                {
+                    var receive = double.Parse(response.Receive) / 100000000;
+                    if (receive < (double)numericUpDown4.Value)
+                    {
+                        sumValue += (double)numericUpDown4.Value - receive;
+                        count++;
+                    }
+                }
+            }
+            else
+                sumValue = value * count;
+            textBox1.Text = sumValue.ToString("F8");
             textBox2.Text = count.ToString();
-            button1.Enabled = trueValue > 0 && balance >= trueValue;
+            button1.Enabled = sumValue > 0 && balance >= sumValue;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -123,6 +156,18 @@ namespace AskMonaViewer
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             textBox3.ReadOnly = checkBox2.Checked;
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            numericUpDown1.Enabled = !checkBox5.Checked;
+            checkBox3.Enabled = !checkBox5.Checked;
+            checkBox4.Enabled = !checkBox5.Checked;
+            button3.Enabled = !checkBox5.Checked;
+            button4.Enabled = !checkBox5.Checked;
+            button5.Enabled = !checkBox5.Checked;
+            button6.Enabled = !checkBox5.Checked;
+            button7.Enabled = !checkBox5.Checked;
         }
     }
 }
