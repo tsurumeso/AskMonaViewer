@@ -81,7 +81,7 @@ namespace AskMonaViewer
         private void UpdateColumnColors()
         {
             bool flag = true;
-            foreach(ListViewItem lvi in listView1.Items)
+            foreach (ListViewItem lvi in listView1.Items)
             {
                 if (flag)
                     lvi.BackColor = System.Drawing.Color.White;
@@ -407,7 +407,7 @@ namespace AskMonaViewer
                 var mAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
                 if (mSend.Success)
                 {
-                    var monaRequestForm = new MonaSendForm(mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
+                    var monaRequestForm = new MonaSendForm(this, mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
                     monaRequestForm.ShowDialog();
                 }
                 else if (mAskMona.Success)
@@ -692,7 +692,7 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var sendTogetherForm = new SendTogetherForm(mApi, mTopic);
+            var sendTogetherForm = new SendTogetherForm(this, mApi, mTopic);
             sendTogetherForm.ShowDialog();
         }
 

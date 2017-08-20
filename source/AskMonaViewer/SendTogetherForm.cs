@@ -8,13 +8,15 @@ namespace AskMonaViewer
 {
     public partial class SendTogetherForm : Form
     {
+        private MainForm mParent;
         private AskMonaApi mApi;
         private Topic mTopic;
         private ResponseList mResponseList;
 
-        public SendTogetherForm(AskMonaApi api, Topic topic)
+        public SendTogetherForm(MainForm parent, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
+            mParent = parent;
             mApi = api;
             mTopic = topic;
             textBox5.Text = topic.Title;
@@ -91,7 +93,10 @@ namespace AskMonaViewer
                 }
             }
             if (flag)
+            {
                 MessageBox.Show("送金に成功しました", "通知", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                await mParent.ReloadResponce(mTopic.Id);
+            }
 
             this.Close();
         }

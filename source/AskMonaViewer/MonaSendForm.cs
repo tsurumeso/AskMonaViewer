@@ -5,13 +5,15 @@ namespace AskMonaViewer
 {
     public partial class MonaSendForm : Form
     {
+        private MainForm mParent;
         private AskMonaApi mApi;
         private Topic mTopic;
         private int mResponseId;
 
-        public MonaSendForm(AskMonaApi api, Topic topic, int r_id)
+        public MonaSendForm(MainForm parent, AskMonaApi api, Topic topic, int r_id)
         {
             InitializeComponent();
+            mParent = parent;
             mApi = api;
             mTopic = topic;
             mResponseId = r_id;
@@ -41,7 +43,10 @@ namespace AskMonaViewer
                 if (result.Status == 0)
                     MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
+                {
                     MessageBox.Show("送金に成功しました", "通知", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await mParent.ReloadResponce(mTopic.Id);
+                }
             }
             else
                 MessageBox.Show("送金に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
