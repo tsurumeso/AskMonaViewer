@@ -15,22 +15,23 @@ namespace AskMonaViewer
 {
     public partial class MainForm : Form
     {
+        private int mCategoryId = 0;
+        private int mTopIndex = 0;
+        private int mWheelDelta = 0;
+        private bool mHasDocumentLoaded = true;
+        private bool mIsTopicListUpdating = false;
+        private string mHtmlHeader = "";
+        private string mVersionString = "1.4.1";
         private Account mAccount;
         private AskMonaApi mApi;
         private ZaifApi mZaifApi;
         private HttpClient mHttpClient;
-        private int mCategoryId = 0;
-        private int mTopIndex = 0;
-        private bool mHasDocumentLoaded = true;
-        private bool mIsTopicListUpdating = false;
         private TopicComparer mListViewItemSorter;
         private Topic mTopic;
+        private DateTime mUnixEpoch;
         private List<Topic> mTopicList;
         private List<Topic> mFavoriteTopicList;
-        private DateTime mUnixEpoch;
-        private string mHtmlHeader = "";
         private List<ResponseCache> mResponseCacheList;
-        private string mVersionString = "1.4.1";
 
         public MainForm()
         {
@@ -697,16 +698,17 @@ namespace AskMonaViewer
 
         private async void listView1_Scroll(object sender, ScrollEventArgs e)
         {
-            if (listView1.Items.Count == 0 || mIsTopicListUpdating)
+            mWheelDelta += e.NewValue;
+            if (listView1.Items.Count == 0 || mIsTopicListUpdating || mWheelDelta > -120)
                 return;
 
+            mWheelDelta = 0;
             if (mTopIndex != 0 && mTopIndex == listView1.TopItem.Index)
             {
                 mIsTopicListUpdating = true;
                 await UpdateTopicList(mCategoryId, false);
                 mIsTopicListUpdating = false;
             }
-
             mTopIndex = listView1.TopItem.Index;
         }
     }
