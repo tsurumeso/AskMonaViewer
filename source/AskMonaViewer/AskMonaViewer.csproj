@@ -64,6 +64,12 @@
     <Compile Include="ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MessageViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MessageViewForm.Designer.cs">
+        <DependentUpon>MessageViewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MonaWithdrawForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +141,9 @@
       <DependentUpon>TransactionViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ZaifApi.cs" />
+    <EmbeddedResource Include="MessageViewForm.resx">
+        <DependentUpon>MessageViewForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MonaWithdrawForm.resx">
       <DependentUpon>MonaWithdrawForm.cs</DependentUpon>
     </EmbeddedResource>

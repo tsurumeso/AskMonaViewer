@@ -7,13 +7,15 @@ namespace AskMonaViewer
 {
     public partial class TransactionViewForm : Form
     {
-        AskMonaApi mApi;
-        TopicComparer mListViewItemSorterDW;
-        TopicComparer mListViewItemSorterRS;
+        private MainForm mParent;
+        private AskMonaApi mApi;
+        private TopicComparer mListViewItemSorterDW;
+        private TopicComparer mListViewItemSorterRS;
 
-        public TransactionViewForm(AskMonaApi api)
+        public TransactionViewForm(MainForm parent, AskMonaApi api)
         {
             InitializeComponent();
+            mParent = parent;
             mApi = api;
             mListViewItemSorterDW = new TopicComparer();
             mListViewItemSorterDW.ColumnModes = new TopicComparer.ComparerMode[]
@@ -100,6 +102,7 @@ namespace AskMonaViewer
                             (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
                         }
                     );
+                    lvi.Tag = txs[i];
                     listViewEx2.Items.Add(lvi);
                 }
                 listViewEx2.ListViewItemSorter = mListViewItemSorterRS;
@@ -124,6 +127,15 @@ namespace AskMonaViewer
             UpdateColumnColors(listViewEx2);
             for (int i = 0; i < listViewEx2.Items.Count; i++)
                 listViewEx2.Items[i].SubItems[0].Text = (i + 1).ToString();
+        }
+
+        private async void listViewEx2_DoubleClick(object sender, EventArgs e)
+        {
+            var tx = (Transaction)listViewEx2.SelectedItems[0].Tag;
+            var responseList = await mApi.FetchResponseListAsync(tx.TopicId, tx.ResponceId, tx.ResponceId, 1);
+            var html = await mParent.BuildWebBrowserDocument(responseList);
+            var messageViewForm = new MessageViewForm(html, tx.Message);
+            messageViewForm.ShowDialog();
         }
     }
 }

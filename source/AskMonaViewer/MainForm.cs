@@ -668,7 +668,7 @@ namespace AskMonaViewer
 
         private void toolStripButton11_Click(object sender, EventArgs e)
         {
-            var transactionViewFrom = new TransactionViewForm(mApi);
+            var transactionViewFrom = new TransactionViewForm(this, mApi);
             transactionViewFrom.ShowDialog();
         }
 
