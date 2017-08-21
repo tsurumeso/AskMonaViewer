@@ -67,7 +67,7 @@ namespace AskMonaViewer
             var response = new Response();
             var responseList = new ResponseList();
 
-            response.Id = 1;
+            response.Id = mTopic.Count + 1;
             response.UserId = mApi.UserId;
             response.UserName = profile.UserName;
             response.UserDan = profile.UserDan;
