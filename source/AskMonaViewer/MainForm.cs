@@ -651,7 +651,11 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            await ReloadResponce(mTopic.Id);
+            var res = MessageBox.Show("トピックのキャッシュを削除して再度読み込みます\nよろしいですか？", "確認",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
+
+            if (res == DialogResult.Yes)
+                await ReloadResponce(mTopic.Id);
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
