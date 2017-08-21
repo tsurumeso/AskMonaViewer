@@ -46,9 +46,9 @@ namespace AskMonaViewer
         private IEnumerable<Response> FilterResponseList(List<Response> responseList)
         {
             var filteredResponseList = responseList.Where(x => x.UserId != mApi.UserId);
-            if (checkBox3.Checked)
+            if (checkBox3.Enabled && checkBox3.Checked)
                 filteredResponseList = filteredResponseList.Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value);
-            if (checkBox4.Checked)
+            if (checkBox4.Enabled && checkBox4.Checked)
                 filteredResponseList = filteredResponseList.Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value);
             return filteredResponseList;
         }
@@ -166,6 +166,8 @@ namespace AskMonaViewer
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
             numericUpDown1.Enabled = !checkBox5.Checked;
+            numericUpDown2.Enabled = !checkBox5.Checked;
+            numericUpDown3.Enabled = !checkBox5.Checked;
             checkBox3.Enabled = !checkBox5.Checked;
             checkBox4.Enabled = !checkBox5.Checked;
             button3.Enabled = !checkBox5.Checked;
