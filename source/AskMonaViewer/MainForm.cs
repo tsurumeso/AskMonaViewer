@@ -512,7 +512,7 @@ namespace AskMonaViewer
         {
             if (mTopic != null)
             {
-                var responseForm = new ResponseForm(this, mApi, mTopic.Id);
+                var responseForm = new ResponseForm(this, mApi, mTopic);
                 responseForm.ShowDialog();
             }
         }

@@ -7,15 +7,16 @@ namespace AskMonaViewer
     {
         private MainForm mParent;
         private AskMonaApi mApi;
-        private int mTopicId;
+        private Topic mTopic;
         private bool mHasCompleted = false;
 
-        public ResponseForm(MainForm parent, AskMonaApi api, int t_id)
+        public ResponseForm(MainForm parent, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
             mParent = parent;
             mApi = api;
-            mTopicId = t_id;
+            mTopic = topic;
+            textBox2.Text = mTopic.Title;
             button1.Enabled = false;
         }
 
@@ -27,13 +28,13 @@ namespace AskMonaViewer
                 mHasCompleted = true;
 
             int sage = checkBox1.Checked ? 1 : 0;
-            var result = await mApi.PostResponseAsync(mTopicId, textBox1.Text, sage);
+            var result = await mApi.PostResponseAsync(mTopic.Id, textBox1.Text, sage);
             if (result != null)
             {
                 if (result.Status == 0)
                     MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
-                    await mParent.ReloadResponce(mTopicId);
+                    await mParent.ReloadResponce(mTopic.Id);
             }
             else
                 MessageBox.Show("レスの投稿に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -76,8 +77,7 @@ namespace AskMonaViewer
             response.ReceivedCount = 0;
             response.Level = 0;
             response.Text = textBox1.Text;
-            responseList.Topic = new Topic();
-            responseList.Topic.Id = mTopicId;
+            responseList.Topic = mTopic;
             responseList.Responses.Add(response);
 
             webBrowser1.DocumentText = await mParent.BuildWebBrowserDocument(responseList);
