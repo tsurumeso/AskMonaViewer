@@ -560,7 +560,7 @@ namespace AskMonaViewer
             {
                 var js = new StreamReader("common/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
                 mHtmlHeader += String.Format("<script type=\"text/javascript\" " +
-                    "src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js\"></script>\n" +
+                    "src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
                     "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
             }
             mHtmlHeader += "</head>\n<body>\n";
