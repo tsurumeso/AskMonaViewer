@@ -12,23 +12,25 @@ $(function() {
                 from: r_id
             },
             dataType: "jsonp",
-            success: function(data) {
-                var response = data.responses[0].response
-                response = response.replace(/\r?\n/g, "<br>");
-                response = response.replace(/(https?:\/\/(i.)?imgur.com\/[a-zA-Z0-9]+)\.([a-zA-Z]+)/gi,
-                    "<a class=\"thumbnail\" href=\"$1.$3\"><img src=\"$1m.$3\"></a>");
-                var $tooltip = $('<span class="tooltip">' + response + '</span>');
-                $this.append($tooltip);
-                var size = {
-                    width: $tooltip.outerWidth(),
-                    height: $tooltip.outerHeight()
-                };
-                var offset = $this.offset();
-                $tooltip.css({
-                    top: offset.top - size.height,
-                    left: offset.left
-                });
+        }).done(function(data) {
+            if (data.responses.length == 0) {
+                return false;
             }
+            var response = data.responses[0].response
+            response = response.replace(/\r?\n/g, "<br>");
+            response = response.replace(/(https?:\/\/(i.)?imgur.com\/[a-zA-Z0-9]+)\.([a-zA-Z]+)/gi,
+                "<a class=\"thumbnail\" href=\"$1.$3\"><img src=\"$1m.$3\"></a>");
+            var $tooltip = $('<span class="tooltip">' + response + '</span>');
+            $this.append($tooltip);
+            var size = {
+                width: $tooltip.outerWidth(),
+                height: $tooltip.outerHeight()
+            };
+            var offset = $this.offset();
+            $tooltip.css({
+                top: offset.top - size.height,
+                left: offset.left
+            });
         });
     }).on("mouseleave", function() {
         $(this).find(".tooltip").remove();
