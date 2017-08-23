@@ -210,7 +210,7 @@ namespace AskMonaViewer
                 foreach (var response in responseList.Responses)
                 {
                     double receive = Double.Parse(response.Receive) / 100000000;
-                    html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}さん</a> " +
+                    html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> " +
                         "投稿日：{3} <font color={4}>ID：</font>{5} [{6}] <b>+{7}MONA/{8}人</b> <a href=\"#send?r_id={9}\" class=\"send\">←送る</a>\n",
                         response.Id, response.UserId, SecurityElement.Escape(response.UserName + response.UserDan),
                         UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId, response.UserTimes,
