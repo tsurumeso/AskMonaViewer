@@ -137,6 +137,7 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 227);
             this.label1.Name = "label1";
@@ -146,6 +147,8 @@
             // 
             // textBox2
             // 
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox2.Location = new System.Drawing.Point(60, 224);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
@@ -165,7 +168,7 @@
             this.Controls.Add(this.button1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MinimumSize = new System.Drawing.Size(480, 300);
+            this.MinimumSize = new System.Drawing.Size(480, 329);
             this.Name = "ResponseForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "レス投稿";

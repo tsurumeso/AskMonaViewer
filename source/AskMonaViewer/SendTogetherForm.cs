@@ -135,27 +135,42 @@ namespace AskMonaViewer
 
         private void button5_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value += (decimal)0.3939;
+            if (checkBox5.Checked)
+                numericUpDown4.Value += (decimal)0.3939;
+            else
+                numericUpDown1.Value += (decimal)0.3939;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value += (decimal)0.003939;
+            if (checkBox5.Checked)
+                numericUpDown4.Value += (decimal)0.003939;
+            else
+                numericUpDown1.Value += (decimal)0.003939;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value += (decimal)0.114114;
+            if (checkBox5.Checked)
+                numericUpDown4.Value += (decimal)0.114114;
+            else
+                numericUpDown1.Value += (decimal)0.114114;
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value += (decimal)0.00114114;
+            if (checkBox5.Checked)
+                numericUpDown4.Value += (decimal)0.00114114;
+            else
+                numericUpDown1.Value += (decimal)0.00114114;
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value = 0;
+            if (checkBox5.Checked)
+                numericUpDown4.Value = 0;
+            else
+                numericUpDown1.Value = 0;
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -166,15 +181,7 @@ namespace AskMonaViewer
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
             numericUpDown1.Enabled = !checkBox5.Checked;
-            numericUpDown2.Enabled = !checkBox5.Checked;
-            numericUpDown3.Enabled = !checkBox5.Checked;
-            checkBox3.Enabled = !checkBox5.Checked;
-            checkBox4.Enabled = !checkBox5.Checked;
-            button3.Enabled = !checkBox5.Checked;
-            button4.Enabled = !checkBox5.Checked;
-            button5.Enabled = !checkBox5.Checked;
-            button6.Enabled = !checkBox5.Checked;
-            button7.Enabled = !checkBox5.Checked;
+            groupBox1.Enabled = !checkBox5.Checked;
         }
     }
 }

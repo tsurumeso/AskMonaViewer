@@ -50,15 +50,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -66,9 +66,9 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -141,7 +141,7 @@
             this.checkBox2.AutoSize = true;
             this.checkBox2.Checked = true;
             this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(15, 185);
+            this.checkBox2.Location = new System.Drawing.Point(15, 127);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(81, 19);
             this.checkBox2.TabIndex = 53;
@@ -199,7 +199,7 @@
             // 
             // checkBox1
             // 
-            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(231, 387);
             this.checkBox1.Name = "checkBox1";
@@ -231,7 +231,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 213);
+            this.label3.Location = new System.Drawing.Point(12, 155);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 15);
             this.label3.TabIndex = 45;
@@ -242,17 +242,17 @@
             this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(79, 210);
+            this.textBox3.Location = new System.Drawing.Point(79, 152);
             this.textBox3.MaxLength = 255;
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(367, 23);
+            this.textBox3.Size = new System.Drawing.Size(364, 23);
             this.textBox3.TabIndex = 44;
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(371, 384);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
@@ -263,7 +263,7 @@
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.BackColor = System.Drawing.SystemColors.Control;
             this.button1.Enabled = false;
             this.button1.Location = new System.Drawing.Point(290, 383);
@@ -276,8 +276,9 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 159);
+            this.label2.Location = new System.Drawing.Point(12, 213);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 15);
             this.label2.TabIndex = 41;
@@ -285,7 +286,8 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(79, 156);
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBox2.Location = new System.Drawing.Point(79, 210);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(100, 23);
@@ -295,9 +297,6 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.checkBox5);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.numericUpDown4);
             this.groupBox1.Controls.Add(this.checkBox4);
             this.groupBox1.Controls.Add(this.checkBox3);
             this.groupBox1.Controls.Add(this.label10);
@@ -306,48 +305,10 @@
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Location = new System.Drawing.Point(12, 41);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(434, 109);
+            this.groupBox1.Size = new System.Drawing.Size(434, 80);
             this.groupBox1.TabIndex = 59;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "フィルター";
-            // 
-            // checkBox5
-            // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(6, 81);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(161, 19);
-            this.checkBox5.TabIndex = 71;
-            this.checkBox5.Text = "1レスに対する総ばらまき量が";
-            this.checkBox5.UseVisualStyleBackColor = true;
-            this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(269, 82);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(134, 15);
-            this.label1.TabIndex = 70;
-            this.label1.Text = "MONA になるようにばらまく";
-            // 
-            // numericUpDown4
-            // 
-            this.numericUpDown4.DecimalPlaces = 8;
-            this.numericUpDown4.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDown4.Location = new System.Drawing.Point(173, 80);
-            this.numericUpDown4.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(90, 23);
-            this.numericUpDown4.TabIndex = 69;
             // 
             // checkBox4
             // 
@@ -427,6 +388,47 @@
             this.label9.TabIndex = 62;
             this.label9.Text = "MONA 以下のユーザ";
             // 
+            // checkBox5
+            // 
+            this.checkBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(15, 182);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(161, 19);
+            this.checkBox5.TabIndex = 71;
+            this.checkBox5.Text = "1レスに対する総ばらまき量が";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(278, 183);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(134, 15);
+            this.label1.TabIndex = 70;
+            this.label1.Text = "MONA になるようにばらまく";
+            // 
+            // numericUpDown4
+            // 
+            this.numericUpDown4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numericUpDown4.DecimalPlaces = 8;
+            this.numericUpDown4.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDown4.Location = new System.Drawing.Point(182, 181);
+            this.numericUpDown4.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDown4.Name = "numericUpDown4";
+            this.numericUpDown4.Size = new System.Drawing.Size(90, 23);
+            this.numericUpDown4.TabIndex = 69;
+            // 
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -480,7 +482,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(458, 419);
+            this.Controls.Add(this.checkBox5);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.label13);
+            this.Controls.Add(this.numericUpDown4);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
@@ -515,9 +520,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
