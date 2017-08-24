@@ -111,12 +111,13 @@ namespace AskMonaViewer
             double value, balance;
             double.TryParse(numericUpDown1.Text, out value);
             double.TryParse(textBox4.Text, out balance);
-            var count = FilterResponseList(mResponseList.Responses).Count();
+            var responseList = FilterResponseList(mResponseList.Responses);
+
+            int count = 0;
             double sumValue = 0;
             if (checkBox5.Checked)
             {
-                count = 0;
-                foreach (var response in mResponseList.Responses)
+                foreach (var response in responseList)
                 {
                     var receive = double.Parse(response.Receive) / 100000000;
                     if (receive < (double)numericUpDown4.Value)
@@ -127,7 +128,11 @@ namespace AskMonaViewer
                 }
             }
             else
+            {
+                count = responseList.Count();
                 sumValue = value * count;
+            }
+
             textBox1.Text = sumValue.ToString("F8");
             textBox2.Text = count.ToString();
             button1.Enabled = sumValue > 0 && balance >= sumValue;
