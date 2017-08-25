@@ -1,9 +1,16 @@
 ﻿body {
     font-family: "Meiryo UI";
     font-size: 12pt;
-    background-color: #E6E6E6;
+    background: #e6e6e6;
 }
 
+p.subtxt {
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border: 1px solid #000000;
+}
 p.res_lv1 { 
     color: #000000; 
 }
@@ -47,8 +54,6 @@ a.send:hover{
     text-decoration: underline
 }
 
-a.popup {
-}
 .tooltip {
     position: absolute;
     padding: 10px;

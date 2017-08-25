@@ -203,11 +203,14 @@ namespace AskMonaViewer
                 return "red";
         }
 
-        private async Task<string> BuildHtml(ResponseList responseList)
+        private async Task<string> BuildHtml(ResponseList responseList, bool showSubtxt = true)
         {
             StringBuilder html = new StringBuilder();
             await Task.Run(() =>
             {
+                if (showSubtxt && !String.IsNullOrEmpty(mTopic.Supplyment))
+                    html.Append(String.Format("<p class=\"subtxt\">{0}</p>", mTopic.Supplyment.Replace("\n", "<br>")));
+
                 foreach (var response in responseList.Responses)
                 {
                     double receive = Double.Parse(response.Receive) / 100000000;
@@ -249,7 +252,7 @@ namespace AskMonaViewer
 
         public async Task<string> BuildWebBrowserDocument(ResponseList responseList)
         {
-            var html = await BuildHtml(responseList);
+            var html = await BuildHtml(responseList, false);
             return mHtmlHeader + html + "</body>\n</html>";
         }
 
