@@ -32,6 +32,7 @@ namespace AskMonaViewer
         private List<Topic> mTopicList;
         private List<Topic> mFavoriteTopicList;
         private List<ResponseCache> mResponseCacheList;
+        private ResponseForm mResponseForm = null;
 
         public MainForm()
         {
@@ -379,6 +380,10 @@ namespace AskMonaViewer
 
             var topic = (Topic)listView1.SelectedItems[0].Tag;
             await UpdateResponce(topic.Id);
+            if (mResponseForm == null || mResponseForm.IsDisposed)
+                mResponseForm = new ResponseForm(this, mApi, topic);
+            else
+                mResponseForm.UpdateTopic(topic);
             listView1.SelectedItems[0].SubItems[4].Text = mTopic.Count.ToString();
             listView1.SelectedItems[0].SubItems[5].Text = "";
         }
@@ -510,11 +515,12 @@ namespace AskMonaViewer
 
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
-            if (mTopic != null)
-            {
-                var responseForm = new ResponseForm(this, mApi, mTopic);
-                responseForm.ShowDialog();
-            }
+            if (mTopic == null)
+                return;
+
+            if (mResponseForm == null || mResponseForm.IsDisposed)
+                mResponseForm = new ResponseForm(this, mApi, mTopic);
+            mResponseForm.Show();
         }
 
         public void SetAccount(string addr, string pass)

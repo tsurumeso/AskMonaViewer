@@ -42,6 +42,12 @@ namespace AskMonaViewer
             this.Close();
         }
 
+        public void UpdateTopic(Topic topic)
+        {
+            mTopic = topic;
+            this.Text = "『" + topic.Title + "』にレス";
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
