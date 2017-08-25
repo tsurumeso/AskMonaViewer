@@ -118,7 +118,10 @@ namespace AskMonaViewer
             toolStripStatusLabel1.Text = "通信中";
             int offset = 0;
             if (reflesh)
+            {
                 listView1.Items.Clear();
+                mTopicList.Clear();
+            }
             else
                 offset = listView1.Items.Count;
 
@@ -153,7 +156,7 @@ namespace AskMonaViewer
                 lvi.Tag = topic;
                 listView1.Items.Add(lvi);
             }
-            mTopicList = topicList.Topics;
+            mTopicList.AddRange(topicList.Topics);
             listView1.ListViewItemSorter = mListViewItemSorter;
             UpdateColumnColors();
             listView1.EndUpdate();
@@ -161,14 +164,30 @@ namespace AskMonaViewer
             return true;
         }
 
-        private async Task<bool> FilterTopics(string key)
+        private void UpdateTopicList(List<Topic> topicList)
+        {
+            listView1.Items.Clear();
+            listView1.BeginUpdate();
+            var time = (long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds;
+            foreach (var topic in topicList)
+            {
+                var lvi = CreateListViewItem(topic, time);
+                lvi.Tag = topic;
+                listView1.Items.Add(lvi);
+            }
+            listView1.ListViewItemSorter = mListViewItemSorter;
+            UpdateColumnColors();
+            listView1.EndUpdate();
+        }
+
+        private bool FilterTopics(string key)
         {
             if (mTopicList.Count == 0)
                 return false;
 
             if (String.IsNullOrEmpty(key))
             {
-                await UpdateTopicList(mCategoryId);
+                UpdateTopicList(mTopicList);
                 return false;
             }
 
@@ -477,9 +496,9 @@ namespace AskMonaViewer
             UpdateColumnColors();
         }
 
-        private async void comboBox1_TextUpdate(object sender, EventArgs e)
+        private void comboBox1_TextUpdate(object sender, EventArgs e)
         {
-            await FilterTopics(comboBox1.Text);
+            FilterTopics(comboBox1.Text);
         }
 
         private async void toolStripButton3_Click(object sender, EventArgs e)
