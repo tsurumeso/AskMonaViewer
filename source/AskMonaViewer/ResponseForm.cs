@@ -16,7 +16,7 @@ namespace AskMonaViewer
             mParent = parent;
             mApi = api;
             mTopic = topic;
-            textBox2.Text = mTopic.Title;
+            this.Text = "『" + topic.Title + "』にレス";
             button1.Enabled = false;
         }
 

@@ -17,7 +17,7 @@ namespace AskMonaViewer
             mApi = api;
             mTopic = topic;
             mResponseId = r_id;
-            textBox1.Text = topic.Title;
+            this.Text = "『" + topic.Title + "』に送る";
             textBox2.Text = r_id.ToString();
         }
 

@@ -19,7 +19,7 @@ namespace AskMonaViewer
             mParent = parent;
             mApi = api;
             mTopic = topic;
-            textBox5.Text = topic.Title;
+            this.Text = "『" + topic.Title + "』にばらまく";
         }
 
         private async void SendTogetherForm_Load(object sender, EventArgs e)

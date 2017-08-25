@@ -14,11 +14,11 @@ namespace AskMonaViewer
             InitializeComponent();
             mApi = api;
             mTopic = topic;
+            this.Text = "『" + topic.Title + "』の編集";
         }
 
         private void TopicEditForm_Load(object sender, EventArgs e)
         {
-            textBox1.Text = mTopic.Title;
             if (mTopic.Lead != null)
                 textBox2.Text = mTopic.Lead.Replace("\n", "\r\n");
             if (mTopic.Supplyment != null)
