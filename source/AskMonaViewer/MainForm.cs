@@ -731,7 +731,7 @@ namespace AskMonaViewer
         private async void listView1_Scroll(object sender, ScrollEventArgs e)
         {
             mWheelDelta += e.NewValue;
-            if (listView1.Items.Count == 0 || mIsTopicListUpdating || mWheelDelta > -120)
+            if (listView1.Items.Count == 0 || mCategoryId == -1 || mIsTopicListUpdating || mWheelDelta > -120)
                 return;
 
             mWheelDelta = 0;
