@@ -320,11 +320,8 @@ namespace AskMonaViewer
             }
         }
 
-        private async Task<bool> UpdateResponce(int topicId)
+        private void CacheScrollPosition()
         {
-            toolStripStatusLabel1.Text = "通信中";
-            toolStripComboBox1.Text = "https://askmona.org/" + topicId;
-
             if (webBrowser1.Document != null)
             {
                 var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
@@ -332,6 +329,13 @@ namespace AskMonaViewer
                 var cur = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
                 mResponseCacheList[cur].Topic.Scrolled = new System.Drawing.Point(elm.scrollLeft, elm.scrollTop);
             }
+        }
+
+        private async Task<bool> UpdateResponce(int topicId)
+        {
+            CacheScrollPosition();
+            toolStripStatusLabel1.Text = "通信中";
+            toolStripComboBox1.Text = "https://askmona.org/" + topicId;
 
             var html = "";
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
@@ -431,11 +435,11 @@ namespace AskMonaViewer
                 string link = null;
                 HtmlElement clickedElement = webBrowser1.Document.GetElementFromPoint(e.MousePosition);
 
-                if (clickedElement.TagName == "a" || clickedElement.TagName == "A")
+                if (clickedElement.TagName.ToLower() == "a")
                     link = clickedElement.GetAttribute("href");
                 else if (clickedElement.Parent != null)
                 {
-                    if (clickedElement.Parent.TagName == "a" || clickedElement.Parent.TagName == "A")
+                    if (clickedElement.Parent.TagName.ToLower() == "a")
                         link = clickedElement.Parent.GetAttribute("href");
                 }
 
@@ -569,7 +573,7 @@ namespace AskMonaViewer
             mAccount = new Account().FromAuthCode(authCode);
         }
 
-        private async void MainForm_Load(object sender, EventArgs e)
+        private void LoadSettings()
         {
             if (File.Exists("AskMonaViewer.xml"))
             {
@@ -593,6 +597,10 @@ namespace AskMonaViewer
                 using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
                     mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
             }
+        }
+
+        private void LoadHtmlHeader()
+        {
             if (File.Exists("common/style.css"))
             {
                 var css = new StreamReader("common/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
@@ -606,6 +614,12 @@ namespace AskMonaViewer
                     "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
             }
             mHtmlHeader += "</head>\n<body>\n";
+        }
+
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
+            LoadSettings();
+            LoadHtmlHeader();
 
             mHttpClient = new HttpClient();
             mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
@@ -627,14 +641,7 @@ namespace AskMonaViewer
             using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mAccount);
 
-            if (webBrowser1.Document != null)
-            {
-                var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
-                var elm = (mshtml.IHTMLElement2)doc3.documentElement;
-                var cur = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
-                mResponseCacheList[cur].Topic.Scrolled = new System.Drawing.Point(elm.scrollLeft, elm.scrollTop);
-            }
-
+            CacheScrollPosition();
             xs = new XmlSerializer(typeof(List<ResponseCache>));
             using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mResponseCacheList);
@@ -672,7 +679,7 @@ namespace AskMonaViewer
         {
             var doc = (mshtml.IHTMLDocument2)this.webBrowser1.Document.DomDocument;
             var range = (mshtml.IHTMLTxtRange)doc.selection.createRange();
-            var url = "https://www.google.co.jp/#q=" + System.Net.WebUtility.UrlEncode(range.text);
+            var url = "https://www.google.co.jp/search?q=" + System.Net.WebUtility.UrlEncode(range.text);
             System.Diagnostics.Process.Start(url);
         }
 
