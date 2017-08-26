@@ -393,6 +393,8 @@ namespace AskMonaViewer
 
         public int Increased { get; set; }
 
+        public System.Drawing.Point Scrolled { get; set; }
+
         public int CachedCount { get; set; }
 
         [DataMember(Name = "receive")]
@@ -406,6 +408,11 @@ namespace AskMonaViewer
 
         [DataMember(Name = "sh_host")]
         public int IsHost { get; set; }
+
+        public Topic()
+        {
+            Scrolled = new System.Drawing.Point(0, 0);
+        }
     }
 
     [DataContract]

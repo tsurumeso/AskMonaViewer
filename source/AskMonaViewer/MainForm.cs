@@ -325,6 +325,14 @@ namespace AskMonaViewer
             toolStripStatusLabel1.Text = "通信中";
             toolStripComboBox1.Text = "https://askmona.org/" + topicId;
 
+            if (webBrowser1.Document != null)
+            {
+                var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
+                var elm = (mshtml.IHTMLElement2)doc3.documentElement;
+                var cur = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
+                mResponseCacheList[cur].Topic.Scrolled = new System.Drawing.Point(elm.scrollLeft, elm.scrollTop);
+            }
+
             var html = "";
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
             if (idx == -1)
@@ -356,6 +364,7 @@ namespace AskMonaViewer
                 else
                 {
                     mTopic = responseList.Topic;
+                    mTopic.Scrolled = cache.Topic.Scrolled;
                     html = await BuildHtml(responseList);
                     mResponseCacheList.RemoveAt(idx);
                     mResponseCacheList.Add(new ResponseCache(mTopic, CompressString(html.ToString())));
@@ -382,10 +391,15 @@ namespace AskMonaViewer
             }
 
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
+            var scrolled = new System.Drawing.Point(0, 0);
             if (idx != -1)
+            {
+                scrolled = mResponseCacheList[idx].Topic.Scrolled;
                 mResponseCacheList.RemoveAt(idx);
+            }
 
             mTopic = responseList.Topic;
+            mTopic.Scrolled = scrolled;
             html = await BuildHtml(responseList);
             mResponseCacheList.Add(new ResponseCache(mTopic, CompressString(html.ToString())));
 
@@ -475,7 +489,7 @@ namespace AskMonaViewer
             }
             this.webBrowser1.Document.Click += new HtmlElementEventHandler(Document_Click);
             this.webBrowser1.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
-            this.webBrowser1.Document.Body.ScrollIntoView(false);
+            this.webBrowser1.Document.Window.ScrollTo(mTopic.Scrolled);
             mHasDocumentLoaded = true;
             toolStripStatusLabel1.Text = "受信完了";
         }
@@ -612,6 +626,14 @@ namespace AskMonaViewer
             var xs = new XmlSerializer(typeof(Account));
             using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mAccount);
+
+            if (webBrowser1.Document != null)
+            {
+                var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
+                var elm = (mshtml.IHTMLElement2)doc3.documentElement;
+                var cur = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
+                mResponseCacheList[cur].Topic.Scrolled = new System.Drawing.Point(elm.scrollLeft, elm.scrollTop);
+            }
 
             xs = new XmlSerializer(typeof(List<ResponseCache>));
             using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
