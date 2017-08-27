@@ -34,7 +34,7 @@ namespace AskMonaViewer
                 if (result.Status == 0)
                     MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
-                    await mParent.ReloadResponce(mTopic.Id);
+                    await mParent.ReloadResponce();
             }
             else
                 MessageBox.Show("レスの投稿に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);

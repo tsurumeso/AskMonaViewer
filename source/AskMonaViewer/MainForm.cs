@@ -320,20 +320,8 @@ namespace AskMonaViewer
             }
         }
 
-        private void CacheScrollPosition()
-        {
-            if (webBrowser1.Document != null)
-            {
-                var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
-                var elm = (mshtml.IHTMLElement2)doc3.documentElement;
-                var cur = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
-                mResponseCacheList[cur].Topic.Scrolled = new System.Drawing.Point(elm.scrollLeft, elm.scrollTop);
-            }
-        }
-
         private async Task<bool> UpdateResponce(int topicId)
         {
-            CacheScrollPosition();
             toolStripStatusLabel1.Text = "通信中";
             toolStripComboBox1.Text = "https://askmona.org/" + topicId;
 
@@ -381,20 +369,20 @@ namespace AskMonaViewer
             return true;
         }
 
-        public async Task<bool> ReloadResponce(int topicId)
+        public async Task<bool> ReloadResponce()
         {
             toolStripStatusLabel1.Text = "通信中";
-            toolStripComboBox1.Text = "https://askmona.org/" + topicId;
+            toolStripComboBox1.Text = "https://askmona.org/" + mTopic.Id;
 
             var html = "";
-            var responseList = await mApi.FetchResponseListAsync(topicId, 1, 1000, 1);
+            var responseList = await mApi.FetchResponseListAsync(mTopic.Id, 1, 1000, 1);
             if (responseList == null)
             {
                 toolStripStatusLabel1.Text = "受信失敗";
                 return false;
             }
 
-            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
+            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
             var scrolled = new System.Drawing.Point(0, 0);
             if (idx != -1)
             {
@@ -489,13 +477,31 @@ namespace AskMonaViewer
             {
                 this.webBrowser1.Document.Click -= new HtmlElementEventHandler(Document_Click);
                 this.webBrowser1.Document.ContextMenuShowing -= new HtmlElementEventHandler(Document_ContextMenuShowing);
+                this.webBrowser1.Document.Window.DetachEventHandler("onscroll", OnScrollEventHandler);
                 mHasDocumentLoaded = false;
             }
             this.webBrowser1.Document.Click += new HtmlElementEventHandler(Document_Click);
             this.webBrowser1.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
+            this.webBrowser1.Document.Window.AttachEventHandler("onscroll", OnScrollEventHandler);
             this.webBrowser1.Document.Window.ScrollTo(mTopic.Scrolled);
             mHasDocumentLoaded = true;
             toolStripStatusLabel1.Text = "受信完了";
+        }
+
+        private void OnScrollEventHandler(object sender, EventArgs e)
+        {
+            if (mTopic == null)
+                return;
+
+            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
+            if (idx == -1)
+                return;
+
+            var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
+            var elm = (mshtml.IHTMLElement2)doc3.documentElement;
+            var scrolled = new System.Drawing.Point(elm.scrollLeft, elm.scrollTop);
+            if (mResponseCacheList[idx].Topic.Scrolled.Y < scrolled.Y)
+                mResponseCacheList[idx].Topic.Scrolled = scrolled;
         }
 
         private void Document_ContextMenuShowing(object sender, HtmlElementEventArgs e)
@@ -641,7 +647,6 @@ namespace AskMonaViewer
             using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mAccount);
 
-            CacheScrollPosition();
             xs = new XmlSerializer(typeof(List<ResponseCache>));
             using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mResponseCacheList);
@@ -712,7 +717,7 @@ namespace AskMonaViewer
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
 
             if (res == DialogResult.Yes)
-                await ReloadResponce(mTopic.Id);
+                await ReloadResponce();
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)

@@ -45,7 +45,7 @@ namespace AskMonaViewer
                 else
                 {
                     MessageBox.Show("送金に成功しました", "通知", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    await mParent.ReloadResponce(mTopic.Id);
+                    await mParent.ReloadResponce();
                 }
             }
             else
