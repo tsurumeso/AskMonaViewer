@@ -11,12 +11,14 @@ namespace AskMonaViewer
         private AskMonaApi mApi;
         private TopicComparer mListViewItemSorterDW;
         private TopicComparer mListViewItemSorterRS;
+        private TransactionViewFormSettings mSettings;
 
         public TransactionViewForm(MainForm parent, AskMonaApi api)
         {
             InitializeComponent();
             mParent = parent;
             mApi = api;
+            mSettings = new TransactionViewFormSettings();
             mListViewItemSorterDW = new TopicComparer();
             mListViewItemSorterDW.ColumnModes = new TopicComparer.ComparerMode[]
             {
@@ -135,7 +137,23 @@ namespace AskMonaViewer
             var responseList = await mApi.FetchResponseListAsync(tx.TopicId, tx.ResponceId, tx.ResponceId, 1);
             var html = await mParent.BuildWebBrowserDocument(responseList);
             var messageViewForm = new MessageViewForm(html, tx.Message);
+            messageViewForm.LoadSettings(mSettings.MessageViewFormSettings);
             messageViewForm.ShowDialog();
+            mSettings.MessageViewFormSettings = messageViewForm.SaveSettings();
+        }
+
+        public TransactionViewFormSettings SaveSettings()
+        {
+            mSettings.Size = this.Size;
+            mSettings.Location = this.Location;
+            return mSettings;
+        }
+
+        public void LoadSettings(TransactionViewFormSettings settings)
+        {
+            this.Size = settings.Size;
+            this.Location = settings.Location;
+            this.mSettings = settings;
         }
     }
 }

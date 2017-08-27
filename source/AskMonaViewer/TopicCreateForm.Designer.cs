@@ -172,7 +172,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(473, 340);
             this.Name = "TopicCreateForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "トピックの新規作成";
             this.ResumeLayout(false);
             this.PerformLayout();

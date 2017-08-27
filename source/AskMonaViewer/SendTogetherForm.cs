@@ -188,5 +188,19 @@ namespace AskMonaViewer
             numericUpDown1.Enabled = !checkBox5.Checked;
             groupBox1.Enabled = !checkBox5.Checked;
         }
+
+        public FormSettings SaveSettings()
+        {
+            var settings = new FormSettings();
+            settings.Size = this.Size;
+            settings.Location = Location;
+            return settings;
+        }
+
+        public void LoadSettings(FormSettings settings)
+        {
+            this.Size = settings.Size;
+            this.Location = settings.Location;
+        }
     }
 }

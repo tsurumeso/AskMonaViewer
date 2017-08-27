@@ -90,6 +90,7 @@
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "MessageViewForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "メッセージ";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);

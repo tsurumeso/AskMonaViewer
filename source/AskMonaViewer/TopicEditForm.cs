@@ -52,5 +52,19 @@ namespace AskMonaViewer
         {
             this.Close();
         }
+
+        public FormSettings SaveSettings()
+        {
+            var settings = new FormSettings();
+            settings.Size = this.Size;
+            settings.Location = Location;
+            return settings;
+        }
+
+        public void LoadSettings(FormSettings settings)
+        {
+            this.Size = settings.Size;
+            this.Location = settings.Location;
+        }
     }
 }

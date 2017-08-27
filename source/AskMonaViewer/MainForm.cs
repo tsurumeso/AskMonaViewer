@@ -22,7 +22,7 @@ namespace AskMonaViewer
         private bool mIsTopicListUpdating = false;
         private string mHtmlHeader = "";
         private const string mVersionString = "1.5.2";
-        private Account mAccount;
+        private Settings mSettings;
         private AskMonaApi mApi;
         private ZaifApi mZaifApi;
         private HttpClient mHttpClient;
@@ -56,7 +56,7 @@ namespace AskMonaViewer
             mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
             mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            mAccount = new Account();
+            mSettings = new Settings();
             mHtmlHeader = "<html lang=\"ja\">\n<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
                 "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n";
@@ -408,9 +408,7 @@ namespace AskMonaViewer
 
             var topic = (Topic)listView1.SelectedItems[0].Tag;
             await UpdateResponce(topic.Id);
-            if (mResponseForm == null || mResponseForm.IsDisposed)
-                mResponseForm = new ResponseForm(this, mApi, topic);
-            else
+            if (mResponseForm != null)
                 mResponseForm.UpdateTopic(topic);
             listView1.SelectedItems[0].SubItems[4].Text = mTopic.Count.ToString();
             listView1.SelectedItems[0].SubItems[5].Text = "";
@@ -440,8 +438,10 @@ namespace AskMonaViewer
                 var mAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
                 if (mSend.Success)
                 {
-                    var monaRequestForm = new MonaSendForm(this, mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
-                    monaRequestForm.ShowDialog();
+                    var monaSendForm = new MonaSendForm(this, mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
+                    monaSendForm.LoadSettings(mSettings.MonaSendFormSettings);
+                    monaSendForm.ShowDialog();
+                    mSettings.MonaSendFormSettings = monaSendForm.SaveSettings();
                 }
                 else if (mAskMona.Success)
                 {
@@ -451,7 +451,9 @@ namespace AskMonaViewer
                 else if (mUser.Success)
                 {
                     var profileViewForm = new ProfileViewForm(mApi, int.Parse(mUser.Groups["Id"].Value));
+                    profileViewForm.LoadSettings(mSettings.ProfileEditFormSettings);
                     profileViewForm.ShowDialog();
+                    mSettings.ProfileEditFormSettings = profileViewForm.SaveSettings();
                 }
                 else if (mAnchor.Success) { }
                 else if (link == "about:blank#id") { }
@@ -564,37 +566,58 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            if (mResponseForm == null || mResponseForm.IsDisposed)
+            if (mResponseForm == null)
+            {
                 mResponseForm = new ResponseForm(this, mApi, mTopic);
+                mResponseForm.LoadSettings(mSettings.ResponseFormSettings);
+                mResponseForm.FormClosed += OnResponseFormClosed;
+            }
             mResponseForm.Show();
+        }
+
+        private void OnResponseFormClosed(object sender, EventArgs e)
+        {
+            mSettings.ResponseFormSettings = mResponseForm.SaveSettings();
+            mResponseForm = null;
         }
 
         public void SetAccount(string addr, string pass)
         {
-            mAccount = new Account(addr, pass);
+            mSettings.Account = new Account(addr, pass);
         }
 
         public void SetAccount(string authCode)
         {
-            mAccount = new Account().FromAuthCode(authCode);
+            mSettings.Account = new Account().FromAuthCode(authCode);
+        }
+
+        private void SaveSettings()
+        {
+            var xs = new XmlSerializer(typeof(Settings));
+            using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mSettings);
+
+            xs = new XmlSerializer(typeof(List<ResponseCache>));
+            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mResponseCacheList);
         }
 
         private void LoadSettings()
         {
             if (File.Exists("AskMonaViewer.xml"))
             {
-                var xs = new XmlSerializer(typeof(Account));
+                var xs = new XmlSerializer(typeof(Settings));
                 using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
-                    mAccount = xs.Deserialize(sr) as Account;
-                if (String.IsNullOrEmpty(mAccount.SecretKey))
+                    mSettings = xs.Deserialize(sr) as Settings;
+                if (String.IsNullOrEmpty(mSettings.Account.SecretKey))
                 {
-                    var signUpForm = new SignUpForm(this, mAccount);
+                    var signUpForm = new SignUpForm(this, mSettings.Account);
                     signUpForm.ShowDialog();
                 }
             }
             else
             {
-                var signUpForm = new SignUpForm(this, mAccount);
+                var signUpForm = new SignUpForm(this, mSettings.Account);
                 signUpForm.ShowDialog();
             }
             if (File.Exists("ResponseCache.xml"))
@@ -627,10 +650,24 @@ namespace AskMonaViewer
             LoadSettings();
             LoadHtmlHeader();
 
+            if (mSettings.MainFormSettings != null)
+            {
+                this.WindowState = mSettings.MainFormSettings.WindowState;
+                this.Bounds = new System.Drawing.Rectangle(mSettings.MainFormSettings.Location, mSettings.MainFormSettings.Size);
+                if (mSettings.MainFormSettings.IsHorizontal)
+                {
+                    toolStripButton4.Checked = false;
+                    toolStripButton5.Checked = true;
+                    splitContainer1.Orientation = Orientation.Vertical;
+                }
+                this.splitContainer1.SplitterDistance = mSettings.MainFormSettings.VSplitterDistance;
+                this.splitContainer2.SplitterDistance = mSettings.MainFormSettings.HSplitterDistance;
+            }
+
             mHttpClient = new HttpClient();
             mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
             mZaifApi = new ZaifApi(mHttpClient);
-            mApi = new AskMonaApi(mHttpClient, mAccount);
+            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
             var topicList = await mApi.FetchFavoriteTopicListAsync();
             if (topicList != null)
                 mFavoriteTopicList = topicList.Topics;
@@ -643,19 +680,32 @@ namespace AskMonaViewer
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var xs = new XmlSerializer(typeof(Account));
-            using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mAccount);
+            if (mSettings.MainFormSettings == null)
+                mSettings.MainFormSettings = new MainFormSettings();
 
-            xs = new XmlSerializer(typeof(List<ResponseCache>));
-            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mResponseCacheList);
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                mSettings.MainFormSettings.Size = this.Bounds.Size;
+                mSettings.MainFormSettings.Location = this.Bounds.Location;
+            }
+            else
+            {
+                mSettings.MainFormSettings.Size = this.RestoreBounds.Size;
+                mSettings.MainFormSettings.Location = this.RestoreBounds.Location;
+            }
+            mSettings.MainFormSettings.WindowState = this.WindowState;
+            mSettings.MainFormSettings.IsHorizontal = toolStripButton5.Checked;
+            mSettings.MainFormSettings.VSplitterDistance = this.splitContainer1.SplitterDistance;
+            mSettings.MainFormSettings.HSplitterDistance = this.splitContainer2.SplitterDistance;
+            SaveSettings();
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             var topicCreateForm = new TopicCreateForm(mApi);
+            topicCreateForm.LoadSettings(mSettings.TopicCreateFormSettings);
             topicCreateForm.ShowDialog();
+            mSettings.TopicCreateFormSettings = topicCreateForm.SaveSettings();
         }
 
         private void toolStripButton8_Click(object sender, EventArgs e)
@@ -734,13 +784,17 @@ namespace AskMonaViewer
         private void toolStripButton11_Click(object sender, EventArgs e)
         {
             var transactionViewFrom = new TransactionViewForm(this, mApi);
+            transactionViewFrom.LoadSettings(mSettings.TransactionViewFormSettings);
             transactionViewFrom.ShowDialog();
+            mSettings.TransactionViewFormSettings = transactionViewFrom.SaveSettings();
         }
 
         private void toolStripButton12_Click(object sender, EventArgs e)
         {
             var profileEditForm = new ProfileEditForm(mApi);
+            profileEditForm.LoadSettings(mSettings.ProfileEditFormSettings);
             profileEditForm.ShowDialog();
+            mSettings.ProfileEditFormSettings = profileEditForm.SaveSettings();
         }
 
         private void toolStripButton13_Click(object sender, EventArgs e)
@@ -749,7 +803,9 @@ namespace AskMonaViewer
                 return;
 
             var topicEditForm = new TopicEditForm(mApi, mTopic);
+            topicEditForm.LoadSettings(mSettings.TopicEditFormSettings);
             topicEditForm.ShowDialog();
+            mSettings.TopicEditFormSettings = topicEditForm.SaveSettings();
         }
 
         private void toolStripButton14_Click(object sender, EventArgs e)
@@ -758,7 +814,9 @@ namespace AskMonaViewer
                 return;
 
             var sendTogetherForm = new SendTogetherForm(this, mApi, mTopic);
+            sendTogetherForm.LoadSettings(mSettings.SendTogetherFormSettings);
             sendTogetherForm.ShowDialog();
+            mSettings.SendTogetherFormSettings = sendTogetherForm.SaveSettings();
         }
 
         private async void listView1_Scroll(object sender, ScrollEventArgs e)
@@ -787,7 +845,6 @@ namespace AskMonaViewer
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
             if (res == DialogResult.Yes)
                 await ReloadResponce();
-
         }
     }
 }

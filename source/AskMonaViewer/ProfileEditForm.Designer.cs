@@ -116,7 +116,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(473, 300);
             this.Name = "ProfileEditForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "マイプロフィールの編集";
             this.Load += new System.EventHandler(this.ProfileEditForm_Load);
             this.ResumeLayout(false);

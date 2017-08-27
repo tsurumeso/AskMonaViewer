@@ -176,7 +176,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(473, 348);
             this.Name = "TopicEditForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "トピックの編集";
             this.Load += new System.EventHandler(this.TopicEditForm_Load);
             this.ResumeLayout(false);

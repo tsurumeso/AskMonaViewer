@@ -88,6 +88,7 @@
     <Compile Include="SendTogetherForm.Designer.cs">
       <DependentUpon>SendTogetherForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="SignUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
