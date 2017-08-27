@@ -35,4 +35,11 @@ $(function() {
     }).on("mouseleave", function() {
         $(this).find(".tooltip").remove();
     });
+
+    $(document).keydown(function(event) {
+        var keyCode = event.keyCode;
+        if (keyCode == 116) {
+            return false;
+        }
+    });
 })

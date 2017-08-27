@@ -715,7 +715,6 @@ namespace AskMonaViewer
 
             var res = MessageBox.Show("トピックのキャッシュを削除して再度読み込みます\nよろしいですか？", "確認",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
-
             if (res == DialogResult.Yes)
                 await ReloadResponce();
         }
@@ -776,6 +775,19 @@ namespace AskMonaViewer
                 mIsTopicListUpdating = false;
             }
             mTopIndex = listView1.TopItem.Index;
+        }
+
+        private async void webBrowser1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            e.IsInputKey = true;
+            if (mTopic == null)
+                return;
+
+            var res = MessageBox.Show("トピックのキャッシュを削除して再度読み込みます\nよろしいですか？", "確認",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
+            if (res == DialogResult.Yes)
+                await ReloadResponce();
+
         }
     }
 }
