@@ -148,7 +148,7 @@
             this.Controls.Add(this.button1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(360, 173);
+            this.MinimumSize = new System.Drawing.Size(238, 173);
             this.Name = "MonaWithdrawForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "出金依頼";
