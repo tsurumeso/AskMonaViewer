@@ -1,18 +1,4 @@
 $(function() {
-    $('.pagetop').click(function () {
-        $('body, html').animate({
-            scrollTop: 0
-        }, 500);
-        return false;
-    });
-
-    $('.pagebottom').click(function () {
-        $('body, html').animate({
-            scrollTop: $(document).height()
-        }, 500);
-        return false;
-    });
-
     $("a.popup").on("mouseenter", function() {
         $this = $(this)
         var t_id = $this.attr("href").split("_")[1];
