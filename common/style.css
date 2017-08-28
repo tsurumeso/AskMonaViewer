@@ -54,6 +54,46 @@ a.send:hover{
     text-decoration: underline
 }
 
+.pagetop {
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+}
+.pagetop a {
+    background: #666;
+    text-decoration: none;
+    color: #fff;
+    width: 120px;
+    padding: 10px;
+    text-align: center;
+    display: block;
+    border-radius: 5px;
+}
+.pagetop a:hover {
+    text-decoration: none;
+    background: #999;
+}
+
+.pagebottom {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+}
+.pagebottom a {
+    background: #666;
+    text-decoration: none;
+    color: #fff;
+    width: 120px;
+    padding: 10px;
+    text-align: center;
+    display: block;
+    border-radius: 5px;
+}
+.pagebottom a:hover {
+    text-decoration: none;
+    background: #999;
+}
+
 .tooltip {
     position: absolute;
     padding: 10px;

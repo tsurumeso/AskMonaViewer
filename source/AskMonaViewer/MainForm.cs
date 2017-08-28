@@ -204,11 +204,16 @@ namespace AskMonaViewer
                 return "red";
         }
 
-        private async Task<string> BuildHtml(ResponseList responseList, bool showSubtxt = true)
+        private async Task<string> BuildHtml(ResponseList responseList, bool showButton = true, bool showSubtxt = true)
         {
             StringBuilder html = new StringBuilder();
             await Task.Run(() =>
             {
+                if (showButton)
+                {
+                    html.Append("<p class=\"pagetop\"><a href=\"#wrap\">最上部へ</a></p>");
+                    html.Append("<p class=\"pagebottom\"><a href=\"#wrap\">最下部へ</a></p>");
+                }
                 if (showSubtxt && !String.IsNullOrEmpty(mTopic.Supplyment))
                     html.Append(String.Format("<p class=\"subtxt\">{0}</p>", mTopic.Supplyment.Replace("\n", "<br>")));
 
@@ -253,7 +258,7 @@ namespace AskMonaViewer
 
         public async Task<string> BuildWebBrowserDocument(ResponseList responseList)
         {
-            var html = await BuildHtml(responseList, false);
+            var html = await BuildHtml(responseList, false, false);
             return mHtmlHeader + html + "</body>\n</html>";
         }
 
