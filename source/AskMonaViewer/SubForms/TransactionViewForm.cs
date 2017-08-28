@@ -121,7 +121,7 @@ namespace AskMonaViewer.SubForms
             var tx = (Transaction)listViewEx2.SelectedItems[0].Tag;
             var responseList = await mApi.FetchResponseListAsync(tx.TopicId, tx.ResponceId, tx.ResponceId, 1);
             var html = await mParent.BuildWebBrowserDocument(responseList);
-            var messageViewForm = new MessageViewForm(html, tx.Message);
+            var messageViewForm = new MessageViewForm(html, tx.Message, responseList.Topic.Title);
             messageViewForm.LoadSettings(mSettings.MessageViewFormSettings);
             messageViewForm.ShowDialog();
             mSettings.MessageViewFormSettings = messageViewForm.SaveSettings();
@@ -129,8 +129,17 @@ namespace AskMonaViewer.SubForms
 
         public TransactionViewFormSettings SaveSettings()
         {
-            mSettings.Size = this.Size;
-            mSettings.Location = this.Location;
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                mSettings.Size = this.Bounds.Size;
+                mSettings.Location = this.Bounds.Location;
+            }
+            else
+            {
+                mSettings.Size = this.RestoreBounds.Size;
+                mSettings.Location = this.RestoreBounds.Location;
+            }
+            mSettings.WindowState = this.WindowState;
             return mSettings;
         }
 
