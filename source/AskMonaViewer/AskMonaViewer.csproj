@@ -61,6 +61,9 @@
     <Compile Include="Api\AskMonaApi.cs" />
     <Compile Include="Account.cs" />
     <Compile Include="Api\AskMonaApiMethods.cs" />
+    <Compile Include="Utilities\FormEx.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utilities\Common.cs" />
     <Compile Include="Utilities\ListViewEx.cs">
       <SubType>Component</SubType>

@@ -3,10 +3,11 @@ using System.Linq;
 using System.Windows.Forms;
 
 using AskMonaViewer.Api;
+using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class TopicEditForm : Form
+    public partial class TopicEditForm : FormEx
     {
         private AskMonaApi mApi;
         private Topic mTopic;
@@ -53,20 +54,6 @@ namespace AskMonaViewer.SubForms
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        public FormSettings SaveSettings()
-        {
-            var settings = new FormSettings();
-            settings.Size = this.Size;
-            settings.Location = Location;
-            return settings;
-        }
-
-        public void LoadSettings(FormSettings settings)
-        {
-            this.Size = settings.Size;
-            this.Location = settings.Location;
         }
     }
 }

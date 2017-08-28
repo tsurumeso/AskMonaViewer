@@ -3,10 +3,11 @@ using System.Linq;
 using System.Windows.Forms;
 
 using AskMonaViewer.Api;
+using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class TopicCreateForm : Form
+    public partial class TopicCreateForm : FormEx
     {
         private AskMonaApi mApi;
 
@@ -53,20 +54,6 @@ namespace AskMonaViewer.SubForms
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
             button2.Enabled = !String.IsNullOrEmpty(textBox1.Text) && !String.IsNullOrEmpty(textBox2.Text);
-        }
-
-        public FormSettings SaveSettings()
-        {
-            var settings = new FormSettings();
-            settings.Size = this.Size;
-            settings.Location = Location;
-            return settings;
-        }
-
-        public void LoadSettings(FormSettings settings)
-        {
-            this.Size = settings.Size;
-            this.Location = settings.Location;
         }
     }
 }

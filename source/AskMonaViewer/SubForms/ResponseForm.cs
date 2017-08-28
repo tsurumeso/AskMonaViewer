@@ -6,7 +6,7 @@ using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class ResponseForm : Form
+    public partial class ResponseForm : FormEx
     {
         private MainForm mParent;
         private AskMonaApi mApi;
@@ -84,20 +84,6 @@ namespace AskMonaViewer.SubForms
             responseList.Responses.Add(response);
 
             webBrowser1.DocumentText = await mParent.BuildWebBrowserDocument(responseList);
-        }
-
-        public FormSettings SaveSettings()
-        {
-            var settings = new FormSettings();
-            settings.Size = this.Size;
-            settings.Location = Location;
-            return settings;
-        }
-
-        public void LoadSettings(FormSettings settings)
-        {
-            this.Size = settings.Size;
-            this.Location = settings.Location;
         }
     }
 }

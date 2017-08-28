@@ -2,10 +2,11 @@
 using System.Windows.Forms;
 
 using AskMonaViewer.Api;
+using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class MonaSendForm : Form
+    public partial class MonaSendForm : FormEx
     {
         private MainForm mParent;
         private AskMonaApi mApi;
@@ -97,20 +98,6 @@ namespace AskMonaViewer.SubForms
         private void button7_Click(object sender, EventArgs e)
         {
             numericUpDown1.Value = 0;
-        }
-
-        public FormSettings SaveSettings()
-        {
-            var settings = new FormSettings();
-            settings.Size = this.Size;
-            settings.Location = Location;
-            return settings;
-        }
-
-        public void LoadSettings(FormSettings settings)
-        {
-            this.Size = settings.Size;
-            this.Location = settings.Location;
         }
     }
 }

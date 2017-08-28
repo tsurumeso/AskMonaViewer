@@ -33,17 +33,18 @@ namespace AskMonaViewer
     {
         public Size Size { get; set; }
         public Point Location { get; set; }
+        public FormWindowState WindowState { get; set; }
 
         public FormSettings()
         {
             Size = new Size(0, 0);
             Location = new Point(0, 0);
+            WindowState = FormWindowState.Normal;
         }
     }
 
     public class MainFormSettings : FormSettings
     {
-        public FormWindowState WindowState { get; set; }
         public bool IsHorizontal { get; set; }
         public int VSplitterDistance { get; set; }
         public int HSplitterDistance { get; set; }
