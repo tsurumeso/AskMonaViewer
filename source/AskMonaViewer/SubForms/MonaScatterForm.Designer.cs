@@ -1,6 +1,6 @@
-﻿namespace AskMonaViewer
+﻿namespace AskMonaViewer.SubForms
 {
-    partial class SendTogetherForm
+    partial class MonaScatterForm
     {
         /// <summary>
         /// Required designer variable.

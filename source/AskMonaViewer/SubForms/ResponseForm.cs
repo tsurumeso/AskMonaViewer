@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AskMonaViewer
+using AskMonaViewer.Api;
+using AskMonaViewer.Utilities;
+
+namespace AskMonaViewer.SubForms
 {
     public partial class ResponseForm : Form
     {
@@ -58,12 +61,6 @@ namespace AskMonaViewer
             button1.Enabled = !String.IsNullOrEmpty(textBox1.Text);
         }
 
-        private int DateTimeToUnixTimeStamp(DateTime dateTime)
-        {
-            var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
-            return (int)(dateTime - unixEpoch).TotalSeconds;
-        }
-
         private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var profile = await mApi.EditUserProfileAsync();
@@ -77,7 +74,7 @@ namespace AskMonaViewer
             response.UserId = mApi.UserId;
             response.UserName = profile.UserName;
             response.UserDan = profile.UserDan;
-            response.Created = DateTimeToUnixTimeStamp(DateTime.Now);
+            response.Created = Common.DateTimeToUnixTimeStamp(DateTime.Now);
             response.UserTimes = "1/1";
             response.Receive = "0";
             response.ReceivedCount = 0;

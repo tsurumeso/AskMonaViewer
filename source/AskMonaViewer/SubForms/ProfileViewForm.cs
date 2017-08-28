@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AskMonaViewer
+using AskMonaViewer.Api;
+
+namespace AskMonaViewer.SubForms
 {
     public partial class ProfileViewForm : Form
     {

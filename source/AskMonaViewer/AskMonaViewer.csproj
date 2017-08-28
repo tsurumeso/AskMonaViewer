@@ -58,41 +58,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AskMonaApi.cs" />
+    <Compile Include="Api\AskMonaApi.cs" />
     <Compile Include="Account.cs" />
-    <Compile Include="AskMonaApiMethods.cs" />
-    <Compile Include="ListViewEx.cs">
+    <Compile Include="Api\AskMonaApiMethods.cs" />
+    <Compile Include="Utilities\Common.cs" />
+    <Compile Include="Utilities\ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MessageViewForm.cs">
+    <Compile Include="SubForms\MessageViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MessageViewForm.Designer.cs">
+    <Compile Include="SubForms\MessageViewForm.Designer.cs">
       <DependentUpon>MessageViewForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonaWithdrawForm.cs">
+    <Compile Include="SubForms\MonaWithdrawForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MonaWithdrawForm.Designer.cs">
+    <Compile Include="SubForms\MonaWithdrawForm.Designer.cs">
       <DependentUpon>MonaWithdrawForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProfileViewForm.cs">
+    <Compile Include="SubForms\ProfileViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProfileViewForm.Designer.cs">
+    <Compile Include="SubForms\ProfileViewForm.Designer.cs">
       <DependentUpon>ProfileViewForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SendTogetherForm.cs">
+    <Compile Include="SubForms\MonaScatterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SendTogetherForm.Designer.cs">
-      <DependentUpon>SendTogetherForm.cs</DependentUpon>
+    <Compile Include="SubForms\MonaScatterForm.Designer.cs">
+      <DependentUpon>MonaScatterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="SignUpForm.cs">
+    <Compile Include="SubForms\SignUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SignUpForm.Designer.cs">
+    <Compile Include="SubForms\SignUpForm.Designer.cs">
       <DependentUpon>SignUpForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
@@ -101,69 +102,69 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonaSendForm.cs">
+    <Compile Include="SubForms\MonaSendForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MonaSendForm.Designer.cs">
+    <Compile Include="SubForms\MonaSendForm.Designer.cs">
       <DependentUpon>MonaSendForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseCache.cs" />
-    <Compile Include="ResponseForm.cs">
+    <Compile Include="SubForms\ResponseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ResponseForm.Designer.cs">
+    <Compile Include="SubForms\ResponseForm.Designer.cs">
       <DependentUpon>ResponseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TopicComparer.cs" />
-    <Compile Include="TopicCreateForm.cs">
+    <Compile Include="Utilities\ListViewItemComparer.cs" />
+    <Compile Include="SubForms\TopicCreateForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TopicCreateForm.Designer.cs">
+    <Compile Include="SubForms\TopicCreateForm.Designer.cs">
       <DependentUpon>TopicCreateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProfileEditForm.cs">
+    <Compile Include="SubForms\ProfileEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProfileEditForm.Designer.cs">
+    <Compile Include="SubForms\ProfileEditForm.Designer.cs">
       <DependentUpon>ProfileEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TopicEditForm.cs">
+    <Compile Include="SubForms\TopicEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TopicEditForm.Designer.cs">
+    <Compile Include="SubForms\TopicEditForm.Designer.cs">
       <DependentUpon>TopicEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TransactionViewForm.cs">
+    <Compile Include="SubForms\TransactionViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TransactionViewForm.Designer.cs">
+    <Compile Include="SubForms\TransactionViewForm.Designer.cs">
       <DependentUpon>TransactionViewForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ZaifApi.cs" />
-    <EmbeddedResource Include="MessageViewForm.resx">
+    <Compile Include="Api\ZaifApi.cs" />
+    <EmbeddedResource Include="SubForms\MessageViewForm.resx">
       <DependentUpon>MessageViewForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MonaWithdrawForm.resx">
+    <EmbeddedResource Include="SubForms\MonaWithdrawForm.resx">
       <DependentUpon>MonaWithdrawForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProfileEditForm.resx">
+    <EmbeddedResource Include="SubForms\ProfileEditForm.resx">
       <DependentUpon>ProfileEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProfileViewForm.resx">
+    <EmbeddedResource Include="SubForms\ProfileViewForm.resx">
       <DependentUpon>ProfileViewForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SendTogetherForm.resx">
-      <DependentUpon>SendTogetherForm.cs</DependentUpon>
+    <EmbeddedResource Include="SubForms\MonaScatterForm.resx">
+      <DependentUpon>MonaScatterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SignUpForm.resx">
+    <EmbeddedResource Include="SubForms\SignUpForm.resx">
       <DependentUpon>SignUpForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MonaSendForm.resx">
+    <EmbeddedResource Include="SubForms\MonaSendForm.resx">
       <DependentUpon>MonaSendForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -176,16 +177,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ResponseForm.resx">
+    <EmbeddedResource Include="SubForms\ResponseForm.resx">
       <DependentUpon>ResponseForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TopicCreateForm.resx">
+    <EmbeddedResource Include="SubForms\TopicCreateForm.resx">
       <DependentUpon>TopicCreateForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TopicEditForm.resx">
+    <EmbeddedResource Include="SubForms\TopicEditForm.resx">
       <DependentUpon>TopicEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TransactionViewForm.resx">
+    <EmbeddedResource Include="SubForms\TransactionViewForm.resx">
       <DependentUpon>TransactionViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -201,6 +202,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

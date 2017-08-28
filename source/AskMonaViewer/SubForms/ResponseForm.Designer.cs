@@ -1,5 +1,5 @@
-﻿namespace AskMonaViewer
-{
+﻿namespace AskMonaViewer.SubForms
+{ 
     partial class ResponseForm
     {
         /// <summary>

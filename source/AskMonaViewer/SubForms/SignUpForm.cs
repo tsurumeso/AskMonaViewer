@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace AskMonaViewer
+namespace AskMonaViewer.SubForms
 {
     public partial class SignUpForm : Form
     {

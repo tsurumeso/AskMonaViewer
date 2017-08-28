@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Windows.Forms;
 
-namespace AskMonaViewer
+namespace AskMonaViewer.Utilities
 { 
-        public class TopicComparer : IComparer
+        public class ListViewItemComparer : IComparer
         {
             private int _column;
             private SortOrder _order;
@@ -47,14 +47,14 @@ namespace AskMonaViewer
                 }
             }
 
-            public TopicComparer(int col, SortOrder ord, ComparerMode cmod)
+            public ListViewItemComparer(int col, SortOrder ord, ComparerMode cmod)
             {
                 _column = col;
                 _order = ord;
                 _mode = cmod;
             }
 
-            public TopicComparer()
+            public ListViewItemComparer()
             {
                 _column = 0;
                 _order = SortOrder.Ascending;

@@ -1,4 +1,4 @@
-﻿namespace AskMonaViewer
+﻿namespace AskMonaViewer.SubForms
 {
     partial class ProfileEditForm
     {

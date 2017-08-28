@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Linq;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Linq;
 
-namespace AskMonaViewer
+using AskMonaViewer.Api;
+using AskMonaViewer.Utilities;
+
+namespace AskMonaViewer.SubForms
 {
     public partial class TransactionViewForm : Form
     {
         private MainForm mParent;
         private AskMonaApi mApi;
-        private TopicComparer mListViewItemSorterDW;
-        private TopicComparer mListViewItemSorterRS;
+        private ListViewItemComparer mListViewItemSorterDW;
+        private ListViewItemComparer mListViewItemSorterRS;
         private TransactionViewFormSettings mSettings;
 
         public TransactionViewForm(MainForm parent, AskMonaApi api)
@@ -19,42 +23,23 @@ namespace AskMonaViewer
             mParent = parent;
             mApi = api;
             mSettings = new TransactionViewFormSettings();
-            mListViewItemSorterDW = new TopicComparer();
-            mListViewItemSorterDW.ColumnModes = new TopicComparer.ComparerMode[]
+            mListViewItemSorterDW = new ListViewItemComparer();
+            mListViewItemSorterDW.ColumnModes = new ListViewItemComparer.ComparerMode[]
             {
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.DateTime,
-                TopicComparer.ComparerMode.String,
-                TopicComparer.ComparerMode.Double
+                ListViewItemComparer.ComparerMode.Integer,
+                ListViewItemComparer.ComparerMode.DateTime,
+                ListViewItemComparer.ComparerMode.String,
+                ListViewItemComparer.ComparerMode.Double
             };
-            mListViewItemSorterRS = new TopicComparer();
-            mListViewItemSorterRS.ColumnModes = new TopicComparer.ComparerMode[]
+            mListViewItemSorterRS = new ListViewItemComparer();
+            mListViewItemSorterRS.ColumnModes = new ListViewItemComparer.ComparerMode[]
             {
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.DateTime,
-                TopicComparer.ComparerMode.String,
-                TopicComparer.ComparerMode.String,
-                TopicComparer.ComparerMode.Double
+                ListViewItemComparer.ComparerMode.Integer,
+                ListViewItemComparer.ComparerMode.DateTime,
+                ListViewItemComparer.ComparerMode.String,
+                ListViewItemComparer.ComparerMode.String,
+                ListViewItemComparer.ComparerMode.Double
             };
-        }
-
-        private DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-        {
-            // Unix timestamp is seconds past epoch
-            return new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(unixTimeStamp).ToLocalTime();
-        }
-
-        private void UpdateColumnColors(ListViewEx listView)
-        {
-            bool flag = true;
-            foreach (ListViewItem lvi in listView.Items)
-            {
-                if (flag)
-                    lvi.BackColor = System.Drawing.Color.White;
-                else
-                    lvi.BackColor = System.Drawing.Color.Lavender;
-                flag = !flag;
-            }
         }
 
         private async void TransactionViewForm_Load(object sender, EventArgs e)
@@ -75,7 +60,7 @@ namespace AskMonaViewer
                     var lvi = new ListViewItem(
                         new string[] {
                             (i + 1).ToString(),
-                            UnixTimeStampToDateTime(txs[i].Created).ToString(),
+                            Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
                             txs[i].Item == "deposit" ? "入金" : "出金",
                             (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
                         }
@@ -83,7 +68,7 @@ namespace AskMonaViewer
                     listViewEx1.Items.Add(lvi);
                 }
                 listViewEx1.ListViewItemSorter = mListViewItemSorterDW;
-                UpdateColumnColors(listViewEx1);
+                Common.UpdateColumnColors(listViewEx1, Color.White, Color.Lavender);
                 listViewEx1.EndUpdate();
             }
 
@@ -98,7 +83,7 @@ namespace AskMonaViewer
                     var lvi = new ListViewItem(
                         new string[] {
                             (i + 1).ToString(),
-                            UnixTimeStampToDateTime(txs[i].Created).ToString(),
+                            Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
                             txs[i].Item == "receive" ? "受け取り" : "ばらまき",
                             txs[i].User != null ? txs[i].User.UserName + txs[i].User.UserDan : "匿名",
                             (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
@@ -108,7 +93,7 @@ namespace AskMonaViewer
                     listViewEx2.Items.Add(lvi);
                 }
                 listViewEx2.ListViewItemSorter = mListViewItemSorterRS;
-                UpdateColumnColors(listViewEx2);
+                Common.UpdateColumnColors(listViewEx2, Color.White, Color.Lavender);
                 listViewEx2.EndUpdate();
             }
         }
@@ -117,7 +102,7 @@ namespace AskMonaViewer
         {
             mListViewItemSorterDW.Column = e.Column;
             listViewEx1.Sort();
-            UpdateColumnColors(listViewEx1);
+            Common.UpdateColumnColors(listViewEx1, Color.White, Color.Lavender);
             for (int i = 0; i < listViewEx1.Items.Count; i++)
                 listViewEx1.Items[i].SubItems[0].Text = (i + 1).ToString();
         }
@@ -126,7 +111,7 @@ namespace AskMonaViewer
         {
             mListViewItemSorterRS.Column = e.Column;
             listViewEx2.Sort();
-            UpdateColumnColors(listViewEx2);
+            Common.UpdateColumnColors(listViewEx2, Color.White, Color.Lavender);
             for (int i = 0; i < listViewEx2.Items.Count; i++)
                 listViewEx2.Items[i].SubItems[0].Text = (i + 1).ToString();
         }

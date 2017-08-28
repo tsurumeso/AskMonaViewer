@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace AskMonaViewer
+using AskMonaViewer.Utilities;
+
+namespace AskMonaViewer.Api
 {
     public partial class AskMonaApi
     {
@@ -71,7 +73,7 @@ namespace AskMonaViewer
             while (authKey.Contains("+"))
             {
                 nonce = GenerateNonce(32);
-                time = ((long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds).ToString();
+                time = Common.DateTimeToUnixTimeStamp(DateTime.Now).ToString();
                 var byteValues = Encoding.UTF8.GetBytes(mApplicationSecretKey + nonce + time + mAccount.SecretKey);
                 authKey = Convert.ToBase64String(mSHA256Provider.ComputeHash(byteValues));
             }

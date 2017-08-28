@@ -1,15 +1,18 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.Text;
 using System.Linq;
+using System.Drawing;
+using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 using System.Collections.Generic;
-using System.IO.Compression;
 using System.Net.Http;
-using System.Security;
+using System.Xml.Serialization;
+using System.Threading.Tasks;
+
+using AskMonaViewer.Api;
+using AskMonaViewer.Utilities;
+using AskMonaViewer.SubForms;
 
 namespace AskMonaViewer
 {
@@ -26,9 +29,8 @@ namespace AskMonaViewer
         private AskMonaApi mApi;
         private ZaifApi mZaifApi;
         private HttpClient mHttpClient;
-        private TopicComparer mListViewItemSorter;
+        private ListViewItemComparer mListViewItemSorter;
         private Topic mTopic;
-        private DateTime mUnixEpoch;
         private List<Topic> mTopicList;
         private List<Topic> mFavoriteTopicList;
         private List<ResponseCache> mResponseCacheList;
@@ -37,35 +39,28 @@ namespace AskMonaViewer
         public MainForm()
         {
             InitializeComponent();
-            mListViewItemSorter = new TopicComparer();
-            mListViewItemSorter.ColumnModes = new TopicComparer.ComparerMode[]
+            mListViewItemSorter = new ListViewItemComparer();
+            mListViewItemSorter.ColumnModes = new ListViewItemComparer.ComparerMode[]
             {
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.String,
-                TopicComparer.ComparerMode.String,
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.Double,
-                TopicComparer.ComparerMode.Integer,
-                TopicComparer.ComparerMode.Double,
-                TopicComparer.ComparerMode.DateTime
+                ListViewItemComparer.ComparerMode.Integer,
+                ListViewItemComparer.ComparerMode.String,
+                ListViewItemComparer.ComparerMode.String,
+                ListViewItemComparer.ComparerMode.Integer,
+                ListViewItemComparer.ComparerMode.Integer,
+                ListViewItemComparer.ComparerMode.Integer,
+                ListViewItemComparer.ComparerMode.Integer,
+                ListViewItemComparer.ComparerMode.Double,
+                ListViewItemComparer.ComparerMode.Integer,
+                ListViewItemComparer.ComparerMode.Double,
+                ListViewItemComparer.ComparerMode.DateTime
             };
             mTopicList = new List<Topic>();
             mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
-            mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             mSettings = new Settings();
             mHtmlHeader = "<html lang=\"ja\">\n<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
                 "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n";
-        }
-
-        public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-        {
-            // Unix timestamp is seconds past epoch
-            return mUnixEpoch.AddSeconds(unixTimeStamp).ToLocalTime();
         }
 
         private static string Digits(double value)
@@ -77,19 +72,6 @@ namespace AskMonaViewer
                 return "F0";
 
             return String.Format("F{0}", valueString.Substring(index + 1).Length);
-        }
-
-        private void UpdateColumnColors()
-        {
-            bool flag = true;
-            foreach (ListViewItem lvi in listView1.Items)
-            {
-                if (flag)
-                    lvi.BackColor = System.Drawing.Color.White;
-                else
-                    lvi.BackColor = System.Drawing.Color.Lavender;
-                flag = !flag;
-            }
         }
 
         private ListViewItem CreateListViewItem(Topic topic, long time)
@@ -107,7 +89,7 @@ namespace AskMonaViewer
                     (Double.Parse(topic.Receive) / 100000000).ToString("F1"),
                     topic.Favorites.ToString(),
                     ((topic.Count / (double)(time - topic.Created)) * 3600 * 24).ToString("F1"),
-                    UnixTimeStampToDateTime(topic.Updated).ToString()
+                    Common.UnixTimeStampToDateTime(topic.Updated).ToString()
                 }
             );
             return lvi;
@@ -138,7 +120,7 @@ namespace AskMonaViewer
             }
 
             listView1.BeginUpdate();
-            var time = (long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds;
+            var time = Common.DateTimeToUnixTimeStamp(DateTime.Now);
             foreach (var topic in topicList.Topics)
             {
                 var oldTopic = mTopicList.Find(x => x.Id == topic.Id);
@@ -158,7 +140,7 @@ namespace AskMonaViewer
             }
             mTopicList.AddRange(topicList.Topics);
             listView1.ListViewItemSorter = mListViewItemSorter;
-            UpdateColumnColors();
+            Common.UpdateColumnColors(listView1, Color.White, Color.Lavender);
             listView1.EndUpdate();
             toolStripStatusLabel1.Text = "受信完了";
             return true;
@@ -168,7 +150,7 @@ namespace AskMonaViewer
         {
             listView1.Items.Clear();
             listView1.BeginUpdate();
-            var time = (long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds;
+            var time = Common.DateTimeToUnixTimeStamp(DateTime.Now);
             foreach (var topic in topicList)
             {
                 var lvi = CreateListViewItem(topic, time);
@@ -176,7 +158,7 @@ namespace AskMonaViewer
                 listView1.Items.Add(lvi);
             }
             listView1.ListViewItemSorter = mListViewItemSorter;
-            UpdateColumnColors();
+            Common.UpdateColumnColors(listView1, Color.White, Color.Lavender);
             listView1.EndUpdate();
         }
 
@@ -193,7 +175,7 @@ namespace AskMonaViewer
 
             listView1.Items.Clear();
             listView1.BeginUpdate();
-            var time = (long)(DateTime.Now.ToUniversalTime() - mUnixEpoch).TotalSeconds;
+            var time = Common.DateTimeToUnixTimeStamp(DateTime.Now);
             foreach (var topic in mTopicList)
             {
                 if (topic.Title.ToLower().Contains(key.ToLower()))
@@ -204,7 +186,7 @@ namespace AskMonaViewer
                 }
             }
             listView1.ListViewItemSorter = mListViewItemSorter;
-            UpdateColumnColors();
+            Common.UpdateColumnColors(listView1, Color.White, Color.Lavender);
             listView1.EndUpdate();
             return true;
         }
@@ -235,11 +217,11 @@ namespace AskMonaViewer
                     double receive = Double.Parse(response.Receive) / 100000000;
                     html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> " +
                         "投稿日：{3} <font color={4}>ID：</font>{5} [{6}] <b>+{7}MONA/{8}人</b> <a href=\"#send?r_id={9}\" class=\"send\">←送る</a>\n",
-                        response.Id, response.UserId, SecurityElement.Escape(response.UserName + response.UserDan),
-                        UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId, response.UserTimes,
+                        response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
+                        Common.UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId, response.UserTimes,
                         receive.ToString(Digits(receive)), response.ReceivedCount, response.Id));
 
-                    var res = SecurityElement.Escape(response.Text);
+                    var res = System.Security.SecurityElement.Escape(response.Text);
                     res = Regex.Replace(res,
                         @"h?ttps?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+",
                         "<a href=\"$&\">$&</a>");
@@ -275,37 +257,6 @@ namespace AskMonaViewer
             return mHtmlHeader + html + "</body>\n</html>";
         }
 
-        private static string CompressString(string source)
-        {
-            var bytes = Encoding.UTF8.GetBytes(source);
-            using (var ms = new MemoryStream())
-            {
-                var compressedStream = new DeflateStream(ms, CompressionMode.Compress, true);
-                compressedStream.Write(bytes, 0, bytes.Length);
-                // MemoryStream を読む前に Close
-                compressedStream.Close();
-                return Convert.ToBase64String(ms.ToArray());
-            }
-        }
-
-        private static string DecompressString(string source)
-        {
-            var bytes = Convert.FromBase64String(source);
-            using (var ms = new MemoryStream(bytes))
-            using (var buf = new MemoryStream())
-            using (var CompressedStream = new DeflateStream(ms, CompressionMode.Decompress))
-            {
-                while (true)
-                {
-                    int rb = CompressedStream.ReadByte();
-                    if (rb == -1)
-                        break;
-                    buf.WriteByte((byte)rb);
-                }
-                return Encoding.UTF8.GetString(buf.ToArray());
-            }
-        }
-
         private void UpdateFavoriteToolStrip()
         {
             if (mFavoriteTopicList.Any(x => x.Id == mTopic.Id))
@@ -337,7 +288,7 @@ namespace AskMonaViewer
                 }
                 mTopic = responseList.Topic;
                 html = await BuildHtml(responseList);
-                mResponseCacheList.Add(new ResponseCache(mTopic, CompressString(html.ToString())));
+                mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
             }
             else
             {
@@ -351,7 +302,7 @@ namespace AskMonaViewer
                 if (responseList.Status == 2)
                 {
                     mTopic = cache.Topic;
-                    html = DecompressString(cache.Html);
+                    html = Common.DecompressString(cache.Html);
                 }
                 else
                 {
@@ -359,7 +310,7 @@ namespace AskMonaViewer
                     mTopic.Scrolled = cache.Topic.Scrolled;
                     html = await BuildHtml(responseList);
                     mResponseCacheList.RemoveAt(idx);
-                    mResponseCacheList.Add(new ResponseCache(mTopic, CompressString(html.ToString())));
+                    mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
                 }
             }
 
@@ -383,7 +334,7 @@ namespace AskMonaViewer
             }
 
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
-            var scrolled = new System.Drawing.Point(0, 0);
+            var scrolled = new Point(0, 0);
             if (idx != -1)
             {
                 scrolled = mResponseCacheList[idx].Topic.Scrolled;
@@ -393,12 +344,98 @@ namespace AskMonaViewer
             mTopic = responseList.Topic;
             mTopic.Scrolled = scrolled;
             html = await BuildHtml(responseList);
-            mResponseCacheList.Add(new ResponseCache(mTopic, CompressString(html.ToString())));
+            mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
 
             tabControl1.TabPages[0].Text = mTopic.Title;
             webBrowser1.DocumentText = mHtmlHeader + html + "</body>\n</html>";
             UpdateFavoriteToolStrip();
             return true;
+        }
+
+        private void OnScrollEventHandler(object sender, EventArgs e)
+        {
+            if (mTopic == null)
+                return;
+
+            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
+            if (idx == -1)
+                return;
+
+            var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
+            var elm = (mshtml.IHTMLElement2)doc3.documentElement;
+            var scrolled = new Point(elm.scrollLeft, elm.scrollTop);
+            if (mResponseCacheList[idx].Topic.Scrolled.Y < scrolled.Y)
+                mResponseCacheList[idx].Topic.Scrolled = scrolled;
+        }
+
+        private void OnResponseFormClosed(object sender, EventArgs e)
+        {
+            mSettings.ResponseFormSettings = mResponseForm.SaveSettings();
+            mResponseForm = null;
+        }
+
+        public void SetAccount(string addr, string pass)
+        {
+            mSettings.Account = new Account(addr, pass);
+        }
+
+        public void SetAccount(string authCode)
+        {
+            mSettings.Account = new Account().FromAuthCode(authCode);
+        }
+
+        private void SaveSettings()
+        {
+            var xs = new XmlSerializer(typeof(Settings));
+            using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mSettings);
+
+            xs = new XmlSerializer(typeof(List<ResponseCache>));
+            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mResponseCacheList);
+        }
+
+        private void LoadSettings()
+        {
+            if (File.Exists("AskMonaViewer.xml"))
+            {
+                var xs = new XmlSerializer(typeof(Settings));
+                using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
+                    mSettings = xs.Deserialize(sr) as Settings;
+                if (String.IsNullOrEmpty(mSettings.Account.SecretKey))
+                {
+                    var signUpForm = new SignUpForm(this, mSettings.Account);
+                    signUpForm.ShowDialog();
+                }
+            }
+            else
+            {
+                var signUpForm = new SignUpForm(this, mSettings.Account);
+                signUpForm.ShowDialog();
+            }
+            if (File.Exists("ResponseCache.xml"))
+            {
+                var xs = new XmlSerializer(typeof(List<ResponseCache>));
+                using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
+                    mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
+            }
+        }
+
+        private void LoadHtmlHeader()
+        {
+            if (File.Exists("common/style.css"))
+            {
+                var css = new StreamReader("common/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
+                mHtmlHeader += String.Format("<style type=\"text/css\">\n{0}\n</style>\n", css);
+            }
+            if (File.Exists("common/script.js"))
+            {
+                var js = new StreamReader("common/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
+                mHtmlHeader += String.Format("<script type=\"text/javascript\" " +
+                    "src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
+                    "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
+            }
+            mHtmlHeader += "</head>\n<body>\n";
         }
 
         private async void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -490,22 +527,6 @@ namespace AskMonaViewer
             toolStripStatusLabel1.Text = "受信完了";
         }
 
-        private void OnScrollEventHandler(object sender, EventArgs e)
-        {
-            if (mTopic == null)
-                return;
-
-            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
-            if (idx == -1)
-                return;
-
-            var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
-            var elm = (mshtml.IHTMLElement2)doc3.documentElement;
-            var scrolled = new System.Drawing.Point(elm.scrollLeft, elm.scrollTop);
-            if (mResponseCacheList[idx].Topic.Scrolled.Y < scrolled.Y)
-                mResponseCacheList[idx].Topic.Scrolled = scrolled;
-        }
-
         private void Document_ContextMenuShowing(object sender, HtmlElementEventArgs e)
         {
             var doc = (mshtml.IHTMLDocument2)this.webBrowser1.Document.DomDocument;
@@ -519,7 +540,7 @@ namespace AskMonaViewer
         {
             mListViewItemSorter.Column = e.Column;
             listView1.Sort();
-            UpdateColumnColors();
+            Common.UpdateColumnColors(listView1, Color.White, Color.Lavender);
         }
 
         private void comboBox1_TextUpdate(object sender, EventArgs e)
@@ -575,76 +596,6 @@ namespace AskMonaViewer
             mResponseForm.Show();
         }
 
-        private void OnResponseFormClosed(object sender, EventArgs e)
-        {
-            mSettings.ResponseFormSettings = mResponseForm.SaveSettings();
-            mResponseForm = null;
-        }
-
-        public void SetAccount(string addr, string pass)
-        {
-            mSettings.Account = new Account(addr, pass);
-        }
-
-        public void SetAccount(string authCode)
-        {
-            mSettings.Account = new Account().FromAuthCode(authCode);
-        }
-
-        private void SaveSettings()
-        {
-            var xs = new XmlSerializer(typeof(Settings));
-            using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mSettings);
-
-            xs = new XmlSerializer(typeof(List<ResponseCache>));
-            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mResponseCacheList);
-        }
-
-        private void LoadSettings()
-        {
-            if (File.Exists("AskMonaViewer.xml"))
-            {
-                var xs = new XmlSerializer(typeof(Settings));
-                using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
-                    mSettings = xs.Deserialize(sr) as Settings;
-                if (String.IsNullOrEmpty(mSettings.Account.SecretKey))
-                {
-                    var signUpForm = new SignUpForm(this, mSettings.Account);
-                    signUpForm.ShowDialog();
-                }
-            }
-            else
-            {
-                var signUpForm = new SignUpForm(this, mSettings.Account);
-                signUpForm.ShowDialog();
-            }
-            if (File.Exists("ResponseCache.xml"))
-            {
-                var xs = new XmlSerializer(typeof(List<ResponseCache>));
-                using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
-                    mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
-            }
-        }
-
-        private void LoadHtmlHeader()
-        {
-            if (File.Exists("common/style.css"))
-            {
-                var css = new StreamReader("common/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-                mHtmlHeader += String.Format("<style type=\"text/css\">\n{0}\n</style>\n", css);
-            }
-            if (File.Exists("common/script.js"))
-            {
-                var js = new StreamReader("common/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-                mHtmlHeader += String.Format("<script type=\"text/javascript\" " +
-                    "src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
-                    "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
-            }
-            mHtmlHeader += "</head>\n<body>\n";
-        }
-
         private async void MainForm_Load(object sender, EventArgs e)
         {
             LoadSettings();
@@ -653,7 +604,7 @@ namespace AskMonaViewer
             if (mSettings.MainFormSettings != null)
             {
                 this.WindowState = mSettings.MainFormSettings.WindowState;
-                this.Bounds = new System.Drawing.Rectangle(mSettings.MainFormSettings.Location, mSettings.MainFormSettings.Size);
+                this.Bounds = new Rectangle(mSettings.MainFormSettings.Location, mSettings.MainFormSettings.Size);
                 if (mSettings.MainFormSettings.IsHorizontal)
                 {
                     toolStripButton4.Checked = false;
@@ -813,10 +764,10 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var sendTogetherForm = new SendTogetherForm(this, mApi, mTopic);
-            sendTogetherForm.LoadSettings(mSettings.SendTogetherFormSettings);
+            var sendTogetherForm = new MonaScatterForm(this, mApi, mTopic);
+            sendTogetherForm.LoadSettings(mSettings.MonaScatterFormSettings);
             sendTogetherForm.ShowDialog();
-            mSettings.SendTogetherFormSettings = sendTogetherForm.SaveSettings();
+            mSettings.MonaScatterFormSettings = sendTogetherForm.SaveSettings();
         }
 
         private async void listView1_Scroll(object sender, ScrollEventArgs e)

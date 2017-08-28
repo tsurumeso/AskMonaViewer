@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace AskMonaViewer
@@ -12,7 +11,7 @@ namespace AskMonaViewer
         public FormSettings MonaSendFormSettings { get; set; }
         public FormSettings ResponseFormSettings { get; set; }
         public FormSettings ProfileEditFormSettings { get; set; }
-        public FormSettings SendTogetherFormSettings { get; set; }
+        public FormSettings MonaScatterFormSettings { get; set; }
         public FormSettings TopicCreateFormSettings { get; set; }
         public FormSettings TopicEditFormSettings { get; set; }
 
@@ -24,7 +23,7 @@ namespace AskMonaViewer
             MonaSendFormSettings = new FormSettings();
             ResponseFormSettings = new FormSettings();
             ProfileEditFormSettings = new FormSettings();
-            SendTogetherFormSettings = new FormSettings();
+            MonaScatterFormSettings = new FormSettings();
             TopicCreateFormSettings = new FormSettings();
             TopicEditFormSettings = new FormSettings();
         }

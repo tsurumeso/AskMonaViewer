@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace AskMonaViewer
+namespace AskMonaViewer.Api
 {
     public partial class AskMonaApi
     {
@@ -15,7 +15,6 @@ namespace AskMonaViewer
         private const string mApplicationId = "3738";
         private const string mApplicationSecretKey = "AgGu661B9pe9SL49soov7tZNYRzdF4n8TUjsqNUTOTu0=";
         private const string mValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        private DateTime mUnixEpoch;
         private Account mAccount;
 
         public int UserId
@@ -30,7 +29,6 @@ namespace AskMonaViewer
         {
             mHttpClient = client;
             mSHA256Provider = new SHA256CryptoServiceProvider();
-            mUnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             mAccount = account;
         }
 

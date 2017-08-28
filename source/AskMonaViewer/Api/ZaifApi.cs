@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 
-namespace AskMonaViewer
+namespace AskMonaViewer.Api
 {
     public class ZaifApi
     {

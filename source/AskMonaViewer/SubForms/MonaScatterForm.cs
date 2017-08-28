@@ -4,16 +4,18 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace AskMonaViewer
+using AskMonaViewer.Api;
+
+namespace AskMonaViewer.SubForms
 {
-    public partial class SendTogetherForm : Form
+    public partial class MonaScatterForm : Form
     {
         private MainForm mParent;
         private AskMonaApi mApi;
         private Topic mTopic;
         private ResponseList mResponseList;
 
-        public SendTogetherForm(MainForm parent, AskMonaApi api, Topic topic)
+        public MonaScatterForm(MainForm parent, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
             mParent = parent;

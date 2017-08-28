@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace AskMonaViewer
+namespace AskMonaViewer.Utilities
 {
     /// <summary>
     /// Zusammenfassung fÅE ListViewEx.
