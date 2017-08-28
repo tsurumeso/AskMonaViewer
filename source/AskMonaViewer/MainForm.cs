@@ -223,13 +223,13 @@ namespace AskMonaViewer
 
                     var res = System.Security.SecurityElement.Escape(response.Text);
                     res = Regex.Replace(res,
-                        @"h?ttps?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+",
+                        @"https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+",
                         "<a href=\"$&\">$&</a>");
                     res = Regex.Replace(res,
                         @"<a href=.+>(?<Imgur>https?://(i.)?imgur.com/[a-zA-Z0-9]+)\.(?<Ext>[a-zA-Z]+)</a>",
                         "<a class=\"thumbnail\" href=\"${Imgur}.${Ext}\"><img src=\"${Imgur}m.${Ext}\"></a>");
                     res = Regex.Replace(res,
-                        @"<a href=.+>https?://(youtu.be/)?(www.youtube.com/watch\?v=)?(?<Id>[a-zA-Z0-9\-_]+)([\?\&].+)?</a>",
+                        @"<a href=.+>https?://(youtu.be/|(www.|m.)youtube.com/watch\?v=)(?<Id>[a-zA-Z0-9\-_]+)([\?\&].+)?</a>",
                         "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/${Id}\" frameorder=\"0\" allowfullscreen></iframe>");
                     res = Regex.Replace(res,
                         "&gt;&gt;(?<Id>[0-9]+)",
