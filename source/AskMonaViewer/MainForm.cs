@@ -792,10 +792,7 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var res = MessageBox.Show("トピックのキャッシュを削除して再度読み込みます\nよろしいですか？", "確認",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
-            if (res == DialogResult.Yes)
-                await ReloadResponce();
+            await UpdateResponce(mTopic.Id);
         }
     }
 }
