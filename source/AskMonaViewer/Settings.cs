@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer
 {
@@ -26,20 +25,6 @@ namespace AskMonaViewer
             MonaScatterFormSettings = new FormSettings();
             TopicCreateFormSettings = new FormSettings();
             TopicEditFormSettings = new FormSettings();
-        }
-    }
-
-    public class FormSettings
-    {
-        public Size Size { get; set; }
-        public Point Location { get; set; }
-        public FormWindowState WindowState { get; set; }
-
-        public FormSettings()
-        {
-            Size = new Size(0, 0);
-            Location = new Point(0, 0);
-            WindowState = FormWindowState.Normal;
         }
     }
 
