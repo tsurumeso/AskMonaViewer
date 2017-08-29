@@ -764,10 +764,10 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var sendTogetherForm = new MonaScatterForm(this, mApi, mTopic);
-            sendTogetherForm.LoadSettings(mSettings.MonaScatterFormSettings);
-            sendTogetherForm.ShowDialog();
-            mSettings.MonaScatterFormSettings = sendTogetherForm.SaveSettings();
+            var monaScatterForm = new MonaScatterForm(this, mApi, mTopic);
+            monaScatterForm.LoadSettings(mSettings.MonaScatterFormSettings);
+            monaScatterForm.ShowDialog();
+            mSettings.MonaScatterFormSettings = monaScatterForm.SaveSettings();
         }
 
         private async void listView1_Scroll(object sender, ScrollEventArgs e)

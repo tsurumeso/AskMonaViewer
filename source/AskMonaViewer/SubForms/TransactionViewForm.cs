@@ -147,6 +147,7 @@ namespace AskMonaViewer.SubForms
         {
             this.Size = settings.Size;
             this.Location = settings.Location;
+            this.WindowState = settings.WindowState;
             this.mSettings = settings;
         }
     }

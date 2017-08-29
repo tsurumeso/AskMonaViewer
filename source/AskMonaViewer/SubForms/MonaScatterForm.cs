@@ -25,7 +25,7 @@ namespace AskMonaViewer.SubForms
             this.Text = "『" + topic.Title + "』にばらまく";
         }
 
-        private async void SendTogetherForm_Load(object sender, EventArgs e)
+        private async void MonaScatterForm_Load(object sender, EventArgs e)
         {
             mResponseList = await mApi.FetchResponseListAsync(mTopic.Id);
             textBox2.Text = FilterResponseList(mResponseList.Responses).Count().ToString();
