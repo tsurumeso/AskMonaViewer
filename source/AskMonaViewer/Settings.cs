@@ -9,6 +9,7 @@ namespace AskMonaViewer
         public TransactionViewFormSettings TransactionViewFormSettings { get; set; }
         public FormSettings MonaSendFormSettings { get; set; }
         public FormSettings ResponseFormSettings { get; set; }
+        public FormSettings ProfileViewFormSettings { get; set; }
         public FormSettings ProfileEditFormSettings { get; set; }
         public FormSettings MonaScatterFormSettings { get; set; }
         public FormSettings TopicCreateFormSettings { get; set; }
@@ -21,6 +22,7 @@ namespace AskMonaViewer
             TransactionViewFormSettings = new TransactionViewFormSettings();
             MonaSendFormSettings = new FormSettings();
             ResponseFormSettings = new FormSettings();
+            ProfileViewFormSettings = new FormSettings();
             ProfileEditFormSettings = new FormSettings();
             MonaScatterFormSettings = new FormSettings();
             TopicCreateFormSettings = new FormSettings();

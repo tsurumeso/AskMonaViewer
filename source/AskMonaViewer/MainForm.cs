@@ -488,9 +488,9 @@ namespace AskMonaViewer
                 else if (mUser.Success)
                 {
                     var profileViewForm = new ProfileViewForm(mApi, int.Parse(mUser.Groups["Id"].Value));
-                    profileViewForm.LoadSettings(mSettings.ProfileEditFormSettings);
+                    profileViewForm.LoadSettings(mSettings.ProfileViewFormSettings);
                     profileViewForm.ShowDialog();
-                    mSettings.ProfileEditFormSettings = profileViewForm.SaveSettings();
+                    mSettings.ProfileViewFormSettings = profileViewForm.SaveSettings();
                 }
                 else if (mAnchor.Success) { }
                 else if (link == "about:blank#id") { }
