@@ -90,6 +90,7 @@
             this.Name = "MessageViewForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "メッセージ";
+            this.TopMost = true;
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

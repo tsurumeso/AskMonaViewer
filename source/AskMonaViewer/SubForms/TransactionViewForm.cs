@@ -16,6 +16,7 @@ namespace AskMonaViewer.SubForms
         private ListViewItemComparer mListViewItemSorterDW;
         private ListViewItemComparer mListViewItemSorterRS;
         private TransactionViewFormSettings mSettings;
+        private MessageViewForm mMessageViewForm = null;
 
         public TransactionViewForm(MainForm parent, AskMonaApi api)
         {
@@ -84,7 +85,8 @@ namespace AskMonaViewer.SubForms
                         new string[] {
                             (i + 1).ToString(),
                             Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
-                            txs[i].Item == "receive" ? "受け取り" : "ばらまき",
+                            txs[i].Item == "receive" ? "受け取り " : "ばらまき ",
+                            txs[i].ResponceId == 0 ? "ユーザー" : "レス",
                             txs[i].User != null ? txs[i].User.UserName + txs[i].User.UserDan : "匿名",
                             (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
                         }
@@ -119,12 +121,28 @@ namespace AskMonaViewer.SubForms
         private async void listViewEx2_DoubleClick(object sender, EventArgs e)
         {
             var tx = (Transaction)listViewEx2.SelectedItems[0].Tag;
+            if (tx.ResponceId == 0)
+                return;
+
             var responseList = await mApi.FetchResponseListAsync(tx.TopicId, tx.ResponceId, tx.ResponceId, 1);
             var html = await mParent.BuildWebBrowserDocument(responseList);
-            var messageViewForm = new MessageViewForm(html, tx.Message, responseList.Topic.Title);
-            messageViewForm.LoadSettings(mSettings.MessageViewFormSettings);
-            messageViewForm.ShowDialog();
-            mSettings.MessageViewFormSettings = messageViewForm.SaveSettings();
+            if (mMessageViewForm == null)
+            {
+                mMessageViewForm = new MessageViewForm(html, tx.Message, responseList.Topic.Title);
+                mMessageViewForm.LoadSettings(mSettings.MessageViewFormSettings);
+                mMessageViewForm.FormClosed += OnMessageViewFormClosed;
+                mMessageViewForm.Show();
+            }
+            else
+            {
+                mMessageViewForm.UpdateMessage(html, tx.Message, responseList.Topic.Title);
+            }
+        }
+
+        private void OnMessageViewFormClosed(object sender, EventArgs e)
+        {
+            mSettings.MessageViewFormSettings = mMessageViewForm.SaveSettings();
+            mMessageViewForm = null;
         }
 
         public TransactionViewFormSettings SaveSettings()
@@ -149,6 +167,14 @@ namespace AskMonaViewer.SubForms
             this.Location = settings.Location;
             this.WindowState = settings.WindowState;
             this.mSettings = settings;
+        }
+
+        private void TransactionViewForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (mMessageViewForm == null)
+                return;
+
+            mMessageViewForm.Close();
         }
     }
 }
