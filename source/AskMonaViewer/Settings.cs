@@ -14,6 +14,7 @@ namespace AskMonaViewer
         public FormSettings MonaScatterFormSettings { get; set; }
         public FormSettings TopicCreateFormSettings { get; set; }
         public FormSettings TopicEditFormSettings { get; set; }
+        public Option Option { get; set; }
 
         public Settings()
         {
@@ -27,6 +28,7 @@ namespace AskMonaViewer
             MonaScatterFormSettings = new FormSettings();
             TopicCreateFormSettings = new FormSettings();
             TopicEditFormSettings = new FormSettings();
+            Option = new Option();
         }
     }
 

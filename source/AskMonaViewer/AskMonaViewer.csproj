@@ -61,6 +61,13 @@
     <Compile Include="Api\AskMonaApi.cs" />
     <Compile Include="Account.cs" />
     <Compile Include="Api\AskMonaApiMethods.cs" />
+    <Compile Include="Option.cs" />
+    <Compile Include="SubForms\OptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\OptionForm.Designer.cs">
+      <DependentUpon>OptionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\FormEx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\MonaWithdrawForm.resx">
       <DependentUpon>MonaWithdrawForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\OptionForm.resx">
+      <DependentUpon>OptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\ProfileEditForm.resx">
       <DependentUpon>ProfileEditForm.cs</DependentUpon>

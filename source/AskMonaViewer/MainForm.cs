@@ -63,17 +63,6 @@ namespace AskMonaViewer
                 "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n";
         }
 
-        private static string Digits(double value)
-        {
-            string valueString = value.ToString("F8").TrimEnd('0');
-
-            int index = valueString.IndexOf('.');
-            if (index == -1)
-                return "F0";
-
-            return String.Format("F{0}", valueString.Substring(index + 1).Length);
-        }
-
         private ListViewItem CreateListViewItem(Topic topic, long time)
         {
             int newArrivals = topic.CachedCount == 0 ? 0 : topic.Count - topic.CachedCount;
@@ -219,7 +208,7 @@ namespace AskMonaViewer
                         "投稿日：{3} <font color={4}>ID：</font>{5} [{6}] <b>+{7}MONA/{8}人</b> <a href=\"#send?r_id={9}\" class=\"send\">←送る</a>\n",
                         response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
                         Common.UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId, response.UserTimes,
-                        receive.ToString(Digits(receive)), response.ReceivedCount, response.Id));
+                        Common.Digits(receive), response.ReceivedCount, response.Id));
 
                     var res = System.Security.SecurityElement.Escape(response.Text);
                     res = Regex.Replace(res,
@@ -384,6 +373,11 @@ namespace AskMonaViewer
             mSettings.Account = new Account().FromAuthCode(authCode);
         }
 
+        public void SetOption(Option option)
+        {
+            mSettings.Option = option;
+        }
+
         private void SaveSettings()
         {
             var xs = new XmlSerializer(typeof(Settings));
@@ -475,7 +469,7 @@ namespace AskMonaViewer
                 var mAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
                 if (mSend.Success)
                 {
-                    var monaSendForm = new MonaSendForm(this, mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
+                    var monaSendForm = new MonaSendForm(this, mSettings.Option, mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
                     monaSendForm.LoadSettings(mSettings.MonaSendFormSettings);
                     monaSendForm.ShowDialog();
                     mSettings.MonaSendFormSettings = monaSendForm.SaveSettings();
@@ -487,7 +481,7 @@ namespace AskMonaViewer
                 }
                 else if (mUser.Success)
                 {
-                    var profileViewForm = new ProfileViewForm(mApi, int.Parse(mUser.Groups["Id"].Value));
+                    var profileViewForm = new ProfileViewForm(mSettings.Option, mApi, int.Parse(mUser.Groups["Id"].Value));
                     profileViewForm.LoadSettings(mSettings.ProfileViewFormSettings);
                     profileViewForm.ShowDialog();
                     mSettings.ProfileViewFormSettings = profileViewForm.SaveSettings();
@@ -589,7 +583,7 @@ namespace AskMonaViewer
 
             if (mResponseForm == null)
             {
-                mResponseForm = new ResponseForm(this, mApi, mTopic);
+                mResponseForm = new ResponseForm(this, mSettings.Option, mApi, mTopic);
                 mResponseForm.LoadSettings(mSettings.ResponseFormSettings);
                 mResponseForm.FormClosed += OnResponseFormClosed;
             }
@@ -764,7 +758,7 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var monaScatterForm = new MonaScatterForm(this, mApi, mTopic);
+            var monaScatterForm = new MonaScatterForm(this, mSettings.Option, mApi, mTopic);
             monaScatterForm.LoadSettings(mSettings.MonaScatterFormSettings);
             monaScatterForm.ShowDialog();
             mSettings.MonaScatterFormSettings = monaScatterForm.SaveSettings();
@@ -793,6 +787,12 @@ namespace AskMonaViewer
                 return;
 
             await UpdateResponce(mTopic.Id);
+        }
+
+        private void Option_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var optionForm = new OptionForm(this, mSettings.Option);
+            optionForm.ShowDialog();
         }
     }
 }

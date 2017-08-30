@@ -9,6 +9,17 @@ namespace AskMonaViewer.Utilities
 {
     public class Common
     {
+        public static string Digits(double value)
+        {
+            string valueString = value.ToString("F8").TrimEnd('0');
+
+            int index = valueString.IndexOf('.');
+            if (index == -1)
+                return value.ToString("F0");
+
+            return value.ToString(String.Format("F{0}", valueString.Substring(index + 1).Length));
+        }
+
         public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             return new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(unixTimeStamp).ToLocalTime();
