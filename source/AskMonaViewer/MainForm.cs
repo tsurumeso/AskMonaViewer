@@ -81,6 +81,7 @@ namespace AskMonaViewer
                     Common.UnixTimeStampToDateTime(topic.Updated).ToString()
                 }
             );
+            lvi.Tag = topic;
             return lvi;
         }
 
@@ -124,7 +125,6 @@ namespace AskMonaViewer
                     topic.CachedCount = cachedTopic.Topic.Count;
 
                 var lvi = CreateListViewItem(topic, time);
-                lvi.Tag = topic;
                 listView1.Items.Add(lvi);
             }
             mTopicList.AddRange(topicList.Topics);
@@ -143,7 +143,6 @@ namespace AskMonaViewer
             foreach (var topic in topicList)
             {
                 var lvi = CreateListViewItem(topic, time);
-                lvi.Tag = topic;
                 listView1.Items.Add(lvi);
             }
             listView1.ListViewItemSorter = mListViewItemSorter;
@@ -207,8 +206,8 @@ namespace AskMonaViewer
                     html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> " +
                         "投稿日：{3} <font color={4}>ID：</font>{5} [{6}] <b>+{7}MONA/{8}人</b> <a href=\"#send?r_id={9}\" class=\"send\">←送る</a>\n",
                         response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
-                        Common.UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId, response.UserTimes,
-                        Common.Digits(receive), response.ReceivedCount, response.Id));
+                        Common.UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId,
+                        response.UserTimes, Common.Digits(receive), response.ReceivedCount, response.Id));
 
                     var res = System.Security.SecurityElement.Escape(response.Text);
                     res = Regex.Replace(res,
@@ -786,7 +785,8 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            await UpdateResponce(mTopic.Id);
+            if (e.KeyCode == Keys.F5)
+                await UpdateResponce(mTopic.Id);
         }
 
         private void Option_ToolStripMenuItem_Click(object sender, EventArgs e)
