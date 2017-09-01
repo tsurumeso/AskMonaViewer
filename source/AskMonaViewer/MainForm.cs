@@ -392,9 +392,18 @@ namespace AskMonaViewer
         {
             if (File.Exists("AskMonaViewer.xml"))
             {
-                var xs = new XmlSerializer(typeof(Settings));
-                using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
-                    mSettings = xs.Deserialize(sr) as Settings;
+                try
+                {
+                    var xs = new XmlSerializer(typeof(Settings));
+                    using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
+                        mSettings = xs.Deserialize(sr) as Settings;
+                }
+                catch
+                {
+                    var xs = new XmlSerializer(typeof(Account));
+                    using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
+                        mSettings.Account = xs.Deserialize(sr) as Account;
+                }
                 if (String.IsNullOrEmpty(mSettings.Account.SecretKey))
                 {
                     var signUpForm = new SignUpForm(this, mSettings.Account);
