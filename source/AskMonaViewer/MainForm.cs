@@ -398,12 +398,7 @@ namespace AskMonaViewer
                     using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
                         mSettings = xs.Deserialize(sr) as ApplicationSettings;
                 }
-                catch
-                {
-                    var xs = new XmlSerializer(typeof(Account));
-                    using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
-                        mSettings.Account = xs.Deserialize(sr) as Account;
-                }
+                catch { }
                 if (String.IsNullOrEmpty(mSettings.Account.SecretKey))
                 {
                     var signUpForm = new SignUpForm(this, mSettings.Account);
