@@ -14,13 +14,13 @@ namespace AskMonaViewer.SubForms
         private Topic mTopic;
         private bool mHasCompleted = false;
 
-        public ResponseForm(MainForm parent, Option option, AskMonaApi api, Topic topic)
+        public ResponseForm(MainForm parent, Options options, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
             mParent = parent;
             mApi = api;
             mTopic = topic;
-            checkBox1.Checked = option.AlwaysSage;
+            checkBox1.Checked = options.AlwaysSage;
             this.Text = "『" + topic.Title + "』にレス";
             button1.Enabled = false;
         }

@@ -1,6 +1,6 @@
 ﻿namespace AskMonaViewer.Settings
 {
-    public class Option
+    public class Options
     {
         public double FirstButtonMona { get; set; }
         public double SecondButtonMona { get; set; }
@@ -9,7 +9,7 @@
         public bool AlwaysSage { get; set; }
         public bool AlwaysNonAnonymous { get; set; }
 
-        public Option()
+        public Options()
         {
             FirstButtonMona = 0.3939;
             SecondButtonMona = 0.003939;

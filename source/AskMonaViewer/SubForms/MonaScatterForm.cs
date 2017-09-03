@@ -13,24 +13,24 @@ namespace AskMonaViewer.SubForms
     public partial class MonaScatterForm : FormEx
     {
         private MainForm mParent;
-        private Option mOption;
+        private Options mOptions;
         private AskMonaApi mApi;
         private Topic mTopic;
         private ResponseList mResponseList;
 
-        public MonaScatterForm(MainForm parent, Option option, AskMonaApi api, Topic topic)
+        public MonaScatterForm(MainForm parent, Options options, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
             mParent = parent;
-            mOption = option;
+            mOptions = options;
             mApi = api;
             mTopic = topic;
-            button5.Text = Common.Digits(option.FirstButtonMona) + " MONA";
-            button3.Text = Common.Digits(option.SecondButtonMona) + " MONA";
-            button4.Text = Common.Digits(option.ThirdButtonMona) + " MONA";
-            button6.Text = Common.Digits(option.ForthButtonMona) + " MONA";
-            checkBox1.Checked = option.AlwaysSage;
-            checkBox2.Checked = !option.AlwaysNonAnonymous;
+            button5.Text = Common.Digits(options.FirstButtonMona) + " MONA";
+            button3.Text = Common.Digits(options.SecondButtonMona) + " MONA";
+            button4.Text = Common.Digits(options.ThirdButtonMona) + " MONA";
+            button6.Text = Common.Digits(options.ForthButtonMona) + " MONA";
+            checkBox1.Checked = options.AlwaysSage;
+            checkBox2.Checked = !options.AlwaysNonAnonymous;
             this.Text = "『" + topic.Title + "』にばらまく";
         }
 
@@ -153,33 +153,33 @@ namespace AskMonaViewer.SubForms
         private void button5_Click(object sender, EventArgs e)
         {
             if (checkBox5.Checked)
-                numericUpDown4.Value += (decimal)mOption.FirstButtonMona;
+                numericUpDown4.Value += (decimal)mOptions.FirstButtonMona;
             else
-                numericUpDown1.Value += (decimal)mOption.FirstButtonMona;
+                numericUpDown1.Value += (decimal)mOptions.FirstButtonMona;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             if (checkBox5.Checked)
-                numericUpDown4.Value += (decimal)mOption.SecondButtonMona;
+                numericUpDown4.Value += (decimal)mOptions.SecondButtonMona;
             else
-                numericUpDown1.Value += (decimal)mOption.SecondButtonMona;
+                numericUpDown1.Value += (decimal)mOptions.SecondButtonMona;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             if (checkBox5.Checked)
-                numericUpDown4.Value += (decimal)mOption.ThirdButtonMona;
+                numericUpDown4.Value += (decimal)mOptions.ThirdButtonMona;
             else
-                numericUpDown1.Value += (decimal)mOption.ThirdButtonMona;
+                numericUpDown1.Value += (decimal)mOptions.ThirdButtonMona;
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
             if (checkBox5.Checked)
-                numericUpDown4.Value += (decimal)mOption.ForthButtonMona;
+                numericUpDown4.Value += (decimal)mOptions.ForthButtonMona;
             else
-                numericUpDown1.Value += (decimal)mOption.ForthButtonMona;
+                numericUpDown1.Value += (decimal)mOptions.ForthButtonMona;
         }
 
         private void button7_Click(object sender, EventArgs e)

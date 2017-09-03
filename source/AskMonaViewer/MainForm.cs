@@ -372,9 +372,9 @@ namespace AskMonaViewer
             mSettings.Account = new Account().FromAuthCode(authCode);
         }
 
-        public void SetOption(Option option)
+        public void SetOption(Options options)
         {
-            mSettings.Option = option;
+            mSettings.Options = options;
         }
 
         private void SaveSettings()
@@ -472,7 +472,7 @@ namespace AskMonaViewer
                 var mAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
                 if (mSend.Success)
                 {
-                    var monaSendForm = new MonaSendForm(this, mSettings.Option, mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
+                    var monaSendForm = new MonaSendForm(this, mSettings.Options, mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
                     monaSendForm.LoadSettings(mSettings.MonaSendFormSettings);
                     monaSendForm.ShowDialog();
                     mSettings.MonaSendFormSettings = monaSendForm.SaveSettings();
@@ -484,7 +484,7 @@ namespace AskMonaViewer
                 }
                 else if (mUser.Success)
                 {
-                    var profileViewForm = new ProfileViewForm(mSettings.Option, mApi, int.Parse(mUser.Groups["Id"].Value));
+                    var profileViewForm = new ProfileViewForm(mSettings.Options, mApi, int.Parse(mUser.Groups["Id"].Value));
                     profileViewForm.LoadSettings(mSettings.ProfileViewFormSettings);
                     profileViewForm.ShowDialog();
                     mSettings.ProfileViewFormSettings = profileViewForm.SaveSettings();
@@ -586,7 +586,7 @@ namespace AskMonaViewer
 
             if (mResponseForm == null)
             {
-                mResponseForm = new ResponseForm(this, mSettings.Option, mApi, mTopic);
+                mResponseForm = new ResponseForm(this, mSettings.Options, mApi, mTopic);
                 mResponseForm.LoadSettings(mSettings.ResponseFormSettings);
                 mResponseForm.FormClosed += OnResponseFormClosed;
             }
@@ -761,7 +761,7 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var monaScatterForm = new MonaScatterForm(this, mSettings.Option, mApi, mTopic);
+            var monaScatterForm = new MonaScatterForm(this, mSettings.Options, mApi, mTopic);
             monaScatterForm.LoadSettings(mSettings.MonaScatterFormSettings);
             monaScatterForm.ShowDialog();
             mSettings.MonaScatterFormSettings = monaScatterForm.SaveSettings();
@@ -797,7 +797,7 @@ namespace AskMonaViewer
 
         private void Option_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var optionForm = new OptionForm(this, mSettings.Option);
+            var optionForm = new OptionForm(this, mSettings.Options);
             optionForm.ShowDialog();
         }
     }

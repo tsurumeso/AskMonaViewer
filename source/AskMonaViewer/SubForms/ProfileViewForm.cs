@@ -9,22 +9,22 @@ namespace AskMonaViewer.SubForms
 {
     public partial class ProfileViewForm : FormEx
     {
-        private Option mOption;
+        private Options mOptions;
         private AskMonaApi mApi;
         private int mUserId;
 
-        public ProfileViewForm(Option option, AskMonaApi api, int u_id)
+        public ProfileViewForm(Options options, AskMonaApi api, int u_id)
         {
             InitializeComponent();
-            mOption = option;
+            mOptions = options;
             mApi = api;
             mUserId = u_id;
-            button5.Text = "+ " + Common.Digits(option.FirstButtonMona) + " MONA";
-            button3.Text = "+ " + Common.Digits(option.SecondButtonMona) + " MONA";
-            button4.Text = "+ " + Common.Digits(option.ThirdButtonMona) + " MONA";
-            button6.Text = "+ " + Common.Digits(option.ForthButtonMona) + " MONA";
-            checkBox1.Checked = option.AlwaysSage;
-            checkBox2.Checked = !option.AlwaysNonAnonymous;
+            button5.Text = "+ " + Common.Digits(options.FirstButtonMona) + " MONA";
+            button3.Text = "+ " + Common.Digits(options.SecondButtonMona) + " MONA";
+            button4.Text = "+ " + Common.Digits(options.ThirdButtonMona) + " MONA";
+            button6.Text = "+ " + Common.Digits(options.ForthButtonMona) + " MONA";
+            checkBox1.Checked = options.AlwaysSage;
+            checkBox2.Checked = !options.AlwaysNonAnonymous;
         }
 
         private async void ProfileViewForm_Load(object sender, System.EventArgs e)
@@ -89,22 +89,22 @@ namespace AskMonaViewer.SubForms
 
         private void button5_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value += (decimal)mOption.FirstButtonMona;
+            numericUpDown1.Value += (decimal)mOptions.FirstButtonMona;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value += (decimal)mOption.SecondButtonMona;
+            numericUpDown1.Value += (decimal)mOptions.SecondButtonMona;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value += (decimal)mOption.ThirdButtonMona;
+            numericUpDown1.Value += (decimal)mOptions.ThirdButtonMona;
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            numericUpDown1.Value += (decimal)mOption.ForthButtonMona;
+            numericUpDown1.Value += (decimal)mOptions.ForthButtonMona;
         }
 
         private void button7_Click(object sender, EventArgs e)

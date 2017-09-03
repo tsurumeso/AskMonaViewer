@@ -76,7 +76,7 @@
     <Compile Include="Settings\Account.cs" />
     <Compile Include="Api\AskMonaApiMethods.cs" />
     <Compile Include="Settings\MainFormSettings.cs" />
-    <Compile Include="Settings\Option.cs" />
+    <Compile Include="Settings\Options.cs" />
     <Compile Include="Settings\TransactionViewFormSettings.cs" />
     <Compile Include="SubForms\OptionForm.cs">
       <SubType>Form</SubType>
