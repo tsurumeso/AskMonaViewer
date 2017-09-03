@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 
+using AskMonaViewer.Settings;
+
 namespace AskMonaViewer.SubForms
 {
     public partial class SignUpForm : Form

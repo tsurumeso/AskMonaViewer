@@ -1,5 +1,7 @@
 ﻿using System.Windows.Forms;
 
+using AskMonaViewer.Settings;
+
 namespace AskMonaViewer.Utilities
 {
     public class FormEx : Form

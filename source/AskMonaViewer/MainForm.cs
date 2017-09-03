@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using AskMonaViewer.Api;
 using AskMonaViewer.Utilities;
 using AskMonaViewer.SubForms;
+using AskMonaViewer.Settings;
 
 namespace AskMonaViewer
 {
@@ -25,7 +26,7 @@ namespace AskMonaViewer
         private bool mIsTopicListUpdating = false;
         private string mHtmlHeader = "";
         private const string mVersionString = "1.6.1";
-        private Settings mSettings;
+        private ApplicationSettings mSettings;
         private AskMonaApi mApi;
         private ZaifApi mZaifApi;
         private HttpClient mHttpClient;
@@ -57,7 +58,7 @@ namespace AskMonaViewer
             mTopicList = new List<Topic>();
             mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
-            mSettings = new Settings();
+            mSettings = new ApplicationSettings();
             mHtmlHeader = "<html lang=\"ja\">\n<head>\n" +
                 "<meta charset=\"UTF-8\">\n" +
                 "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n";
@@ -379,7 +380,7 @@ namespace AskMonaViewer
 
         private void SaveSettings()
         {
-            var xs = new XmlSerializer(typeof(Settings));
+            var xs = new XmlSerializer(typeof(ApplicationSettings));
             using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mSettings);
 
@@ -394,9 +395,9 @@ namespace AskMonaViewer
             {
                 try
                 {
-                    var xs = new XmlSerializer(typeof(Settings));
+                    var xs = new XmlSerializer(typeof(ApplicationSettings));
                     using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
-                        mSettings = xs.Deserialize(sr) as Settings;
+                        mSettings = xs.Deserialize(sr) as ApplicationSettings;
                 }
                 catch
                 {

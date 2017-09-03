@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace AskMonaViewer.Utilities
+namespace AskMonaViewer.Settings
 {
     public class FormSettings
     {

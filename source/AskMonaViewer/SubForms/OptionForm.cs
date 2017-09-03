@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using AskMonaViewer.Settings;
+
 namespace AskMonaViewer.SubForms
 {
     public partial class OptionForm : Form

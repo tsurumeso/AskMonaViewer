@@ -71,9 +71,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\AskMonaApi.cs" />
-    <Compile Include="Account.cs" />
+    <Compile Include="Api\AskMonaApiResults.cs" />
+    <Compile Include="Api\AuthorizationKey.cs" />
+    <Compile Include="Settings\Account.cs" />
     <Compile Include="Api\AskMonaApiMethods.cs" />
-    <Compile Include="Option.cs" />
+    <Compile Include="Settings\MainFormSettings.cs" />
+    <Compile Include="Settings\Option.cs" />
+    <Compile Include="Settings\TransactionViewFormSettings.cs" />
     <Compile Include="SubForms\OptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,7 +88,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utilities\Common.cs" />
-    <Compile Include="Utilities\FormSettings.cs" />
+    <Compile Include="Settings\FormSettings.cs" />
     <Compile Include="Utilities\ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -112,7 +116,7 @@
     <Compile Include="SubForms\MonaScatterForm.Designer.cs">
       <DependentUpon>MonaScatterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
+    <Compile Include="Settings\ApplicationSettings.cs" />
     <Compile Include="SubForms\SignUpForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,7 +137,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResponseCache.cs" />
+    <Compile Include="Settings\ResponseCache.cs" />
     <Compile Include="SubForms\ResponseForm.cs">
       <SubType>Form</SubType>
     </Compile>

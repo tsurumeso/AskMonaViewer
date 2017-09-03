@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace AskMonaViewer
+namespace AskMonaViewer.Settings
 {
     public class Account
     {

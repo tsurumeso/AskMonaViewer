@@ -1,4 +1,4 @@
-﻿namespace AskMonaViewer
+﻿namespace AskMonaViewer.Settings
 {
     public class Option
     {

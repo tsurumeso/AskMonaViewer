@@ -1,6 +1,6 @@
 ﻿using AskMonaViewer.Api;
 
-namespace AskMonaViewer
+namespace AskMonaViewer.Settings
 {
     public class ResponseCache
     {

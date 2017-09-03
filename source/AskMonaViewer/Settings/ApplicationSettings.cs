@@ -1,8 +1,6 @@
-﻿using AskMonaViewer.Utilities;
-
-namespace AskMonaViewer
+﻿namespace AskMonaViewer.Settings
 {
-    public class Settings
+    public class ApplicationSettings
     {
         public Account Account { get; set; }
         public MainFormSettings MainFormSettings { get; set; }
@@ -16,7 +14,7 @@ namespace AskMonaViewer
         public FormSettings TopicEditFormSettings { get; set; }
         public Option Option { get; set; }
 
-        public Settings()
+        public ApplicationSettings()
         {
             Account = new Account();
             MainFormSettings = null;
@@ -29,23 +27,6 @@ namespace AskMonaViewer
             TopicCreateFormSettings = new FormSettings();
             TopicEditFormSettings = new FormSettings();
             Option = new Option();
-        }
-    }
-
-    public class MainFormSettings : FormSettings
-    {
-        public bool IsHorizontal { get; set; }
-        public int VSplitterDistance { get; set; }
-        public int HSplitterDistance { get; set; }
-    }
-
-    public class TransactionViewFormSettings : FormSettings
-    {
-        public FormSettings MessageViewFormSettings { get; set; }
-
-        public TransactionViewFormSettings()
-        {
-            MessageViewFormSettings = new FormSettings();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 
 using AskMonaViewer.Api;
 using AskMonaViewer.Utilities;
+using AskMonaViewer.Settings;
 
 namespace AskMonaViewer.SubForms
 {
