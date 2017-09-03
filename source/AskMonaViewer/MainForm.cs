@@ -170,7 +170,6 @@ namespace AskMonaViewer
                 if (topic.Title.ToLower().Contains(key.ToLower()))
                 {
                     var lvi = CreateListViewItem(topic, time);
-                    lvi.Tag = topic;
                     listView1.Items.Add(lvi);
                 }
             }

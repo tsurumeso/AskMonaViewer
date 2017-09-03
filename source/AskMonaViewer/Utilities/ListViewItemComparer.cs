@@ -4,62 +4,62 @@ using System.Windows.Forms;
 
 namespace AskMonaViewer.Utilities
 { 
-        public class ListViewItemComparer : IComparer
+    public class ListViewItemComparer : IComparer
+    {
+        private int _column;
+        private SortOrder _order;
+        private ComparerMode _mode;
+        private ComparerMode[] _columnModes;
+
+        public enum ComparerMode
         {
-            private int _column;
-            private SortOrder _order;
-            private ComparerMode _mode;
-            private ComparerMode[] _columnModes;
+            String,
+            Integer,
+            Double,
+            DateTime
+        };
 
-            public enum ComparerMode
+        public int Column
+        {
+            set
             {
-                String,
-                Integer,
-                Double,
-                DateTime
-            };
-
-            public int Column
-            {
-                set
+                // 現在と同じ列の時は，昇順降順を切り替える
+                if (_column == value)
                 {
-                    // 現在と同じ列の時は，昇順降順を切り替える
-                    if (_column == value)
-                    {
-                        if (_order == SortOrder.Ascending)
-                            _order = SortOrder.Descending;
-                        else if (_order == SortOrder.Descending)
-                            _order = SortOrder.Ascending;
-                    }
-                    _column = value;
+                    if (_order == SortOrder.Ascending)
+                        _order = SortOrder.Descending;
+                    else if (_order == SortOrder.Descending)
+                        _order = SortOrder.Ascending;
                 }
-                get
-                {
-                    return _column;
-                }
+                _column = value;
             }
-
-            public ComparerMode[] ColumnModes
+            get
             {
-                set
-                {
-                    _columnModes = value;
-                }
+                return _column;
             }
+        }
 
-            public ListViewItemComparer(int col, SortOrder ord, ComparerMode cmod)
+        public ComparerMode[] ColumnModes
+        {
+            set
             {
-                _column = col;
-                _order = ord;
-                _mode = cmod;
+                _columnModes = value;
             }
+        }
 
-            public ListViewItemComparer()
-            {
-                _column = 0;
-                _order = SortOrder.Ascending;
-                _mode = ComparerMode.String;
-            }
+        public ListViewItemComparer(int col, SortOrder ord, ComparerMode cmod)
+        {
+            _column = col;
+            _order = ord;
+            _mode = cmod;
+        }
+
+        public ListViewItemComparer()
+        {
+            _column = 0;
+            _order = SortOrder.Ascending;
+            _mode = ComparerMode.String;
+        }
 
         // xがyより小さいときはマイナスの数，大きいときはプラスの数，同じときは0を返す
         public int Compare(object x, object y)
