@@ -56,6 +56,10 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.CloseTab_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CloseTheOthers_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CloseAllTab_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Copy_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Search_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,9 +90,6 @@
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton14 = new System.Windows.Forms.ToolStripButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.CloseTab_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CloseAllTab_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new AskMonaViewer.Utilities.ListViewEx();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -101,20 +102,19 @@
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.CloseTheOthers_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
-            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -244,6 +244,36 @@
             this.tabControl1.Size = new System.Drawing.Size(613, 192);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CloseTab_ToolStripMenuItem,
+            this.CloseTheOthers_ToolStripMenuItem,
+            this.CloseAllTab_ToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(202, 70);
+            // 
+            // CloseTab_ToolStripMenuItem
+            // 
+            this.CloseTab_ToolStripMenuItem.Name = "CloseTab_ToolStripMenuItem";
+            this.CloseTab_ToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.CloseTab_ToolStripMenuItem.Text = "表示中のタブを閉じる";
+            this.CloseTab_ToolStripMenuItem.Click += new System.EventHandler(this.CloseTab_ToolStripMenuItem_Click);
+            // 
+            // CloseTheOthers_ToolStripMenuItem
+            // 
+            this.CloseTheOthers_ToolStripMenuItem.Name = "CloseTheOthers_ToolStripMenuItem";
+            this.CloseTheOthers_ToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.CloseTheOthers_ToolStripMenuItem.Text = "表示中のタブ以外を閉じる";
+            this.CloseTheOthers_ToolStripMenuItem.Click += new System.EventHandler(this.CloseTheOthers_ToolStripMenuItem_Click);
+            // 
+            // CloseAllTab_ToolStripMenuItem
+            // 
+            this.CloseAllTab_ToolStripMenuItem.Name = "CloseAllTab_ToolStripMenuItem";
+            this.CloseAllTab_ToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.CloseAllTab_ToolStripMenuItem.Text = "すべてのタブを閉じる";
+            this.CloseAllTab_ToolStripMenuItem.Click += new System.EventHandler(this.CloseAllTab_ToolStripMenuItem_Click);
             // 
             // contextMenuStrip1
             // 
@@ -557,29 +587,6 @@
             this.timer1.Interval = 10000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // contextMenuStrip2
-            // 
-            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CloseTab_ToolStripMenuItem,
-            this.CloseTheOthers_ToolStripMenuItem,
-            this.CloseAllTab_ToolStripMenuItem});
-            this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(174, 92);
-            // 
-            // CloseTab_ToolStripMenuItem
-            // 
-            this.CloseTab_ToolStripMenuItem.Name = "CloseTab_ToolStripMenuItem";
-            this.CloseTab_ToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.CloseTab_ToolStripMenuItem.Text = "このタブを閉じる";
-            this.CloseTab_ToolStripMenuItem.Click += new System.EventHandler(this.CloseTab_ToolStripMenuItem_Click);
-            // 
-            // CloseAllTab_ToolStripMenuItem
-            // 
-            this.CloseAllTab_ToolStripMenuItem.Name = "CloseAllTab_ToolStripMenuItem";
-            this.CloseAllTab_ToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.CloseAllTab_ToolStripMenuItem.Text = "すべてのタブを閉じる";
-            this.CloseAllTab_ToolStripMenuItem.Click += new System.EventHandler(this.CloseAllTab_ToolStripMenuItem_Click);
-            // 
             // listView1
             // 
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -672,13 +679,6 @@
             this.columnHeader5.Text = "更新日時";
             this.columnHeader5.Width = 140;
             // 
-            // CloseTheOthers_ToolStripMenuItem
-            // 
-            this.CloseTheOthers_ToolStripMenuItem.Name = "CloseTheOthers_ToolStripMenuItem";
-            this.CloseTheOthers_ToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.CloseTheOthers_ToolStripMenuItem.Text = "このタブ以外を閉じる";
-            this.CloseTheOthers_ToolStripMenuItem.Click += new System.EventHandler(this.CloseTheOthers_ToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -705,6 +705,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.contextMenuStrip2.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -712,7 +713,6 @@
             this.splitContainer2.ResumeLayout(false);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
-            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

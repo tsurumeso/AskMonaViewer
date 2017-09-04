@@ -260,10 +260,54 @@ namespace AskMonaViewer
             }
         }
 
+        private void AddTabPage(string html, Topic topic)
+        {
+            for (int i = 0; i < tabControl1.TabPages.Count; i++)
+            {
+                if (((Topic)tabControl1.TabPages[i].Tag).Id == topic.Id)
+                {
+                    mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[i].Controls[0];
+                    mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+                    tabControl1.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            var webBrowser = new WebBrowser();
+            webBrowser.Dock = DockStyle.Fill;
+            webBrowser.PreviewKeyDown += new PreviewKeyDownEventHandler(webBrowser_PreviewKeyDown);
+            webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser_DocumentCompleted);
+            webBrowser.IsWebBrowserContextMenuEnabled = false;
+            webBrowser.ContextMenuStrip = contextMenuStrip1;
+            webBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+            mPrimaryWebBrowser = webBrowser;
+
+            var tabPage = new TabPage();
+            tabPage.Padding = new Padding(3, 3, 3, 3);
+            tabPage.BorderStyle = BorderStyle.FixedSingle;
+            tabPage.UseVisualStyleBackColor = true;
+            tabPage.Controls.Add(webBrowser);
+            tabPage.Tag = topic;
+            tabPage.ToolTipText = topic.Title;
+
+            try
+            {
+                tabPage.Text = topic.Title.Substring(0, 15) + "...";
+            }
+            catch
+            {
+                tabPage.Text = topic.Title;
+            }
+
+            tabControl1.TabPages.Add(tabPage);
+            tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
+        }
+
         private async Task<bool> UpdateResponce(int topicId)
         {
             toolStripStatusLabel1.Text = "通信中";
             toolStripComboBox1.Text = "https://askmona.org/" + topicId;
+            mHasDocumentLoaded = false;
 
             var html = "";
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
@@ -305,60 +349,19 @@ namespace AskMonaViewer
 
             AddTabPage(html, mTopic);
             UpdateFavoriteToolStrip();
+            await Task.Run(() =>
+            {
+                while (!mHasDocumentLoaded)
+                    System.Threading.Thread.Sleep(100);
+            });
             return true;
-        }
-
-        private void AddTabPage(string html, Topic topic)
-        {
-            for (int i = 0; i < tabControl1.TabPages.Count; i++)
-            {
-                var t = (Topic)tabControl1.TabPages[i].Tag;
-                if (t.Id == topic.Id)
-                {
-                    mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[i].Controls[0];
-                    mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
-                    tabControl1.SelectedIndex = i;
-                    return;
-                }
-            }
-
-            var webBrowser = new WebBrowser();
-            webBrowser.Dock = DockStyle.Fill;
-            webBrowser.PreviewKeyDown += new PreviewKeyDownEventHandler(webBrowser_PreviewKeyDown);
-            webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser_DocumentCompleted);
-            webBrowser.IsWebBrowserContextMenuEnabled = false;
-            webBrowser.ContextMenuStrip = contextMenuStrip1;
-            webBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
-            mPrimaryWebBrowser = webBrowser;
-
-            var tabPage = new TabPage();
-            tabPage.Margin = new Padding(3, 4, 3, 4);
-            tabPage.Padding = new Padding(3, 4, 3, 4);
-            tabPage.BorderStyle = BorderStyle.FixedSingle;
-            tabPage.UseVisualStyleBackColor = true;
-            tabPage.Controls.Add(webBrowser);
-            tabPage.Tag = topic;
-            tabPage.ToolTipText = topic.Title;
-
-            string text = "";
-            try
-            {
-                text = topic.Title.Substring(0, 15) + "...";
-            }
-            catch
-            {
-                text = topic.Title;
-            }
-            tabPage.Text = text;
-
-            tabControl1.TabPages.Add(tabPage);
-            tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
         }
 
         public async Task<bool> ReloadResponce()
         {
             toolStripStatusLabel1.Text = "通信中";
             toolStripComboBox1.Text = "https://askmona.org/" + mTopic.Id;
+            mHasDocumentLoaded = false;
 
             var html = "";
             var responseList = await mApi.FetchResponseListAsync(mTopic.Id, 1, 1000, 1);
@@ -383,6 +386,11 @@ namespace AskMonaViewer
 
             mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
             UpdateFavoriteToolStrip();
+            await Task.Run(() =>
+            {
+                while (!mHasDocumentLoaded)
+                    System.Threading.Thread.Sleep(100);
+            });
             return true;
         }
 
@@ -555,17 +563,16 @@ namespace AskMonaViewer
 
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            if (mHasDocumentLoaded)
-            {
-                mPrimaryWebBrowser.Document.Click -= new HtmlElementEventHandler(Document_Click);
-                mPrimaryWebBrowser.Document.ContextMenuShowing -= new HtmlElementEventHandler(Document_ContextMenuShowing);
-                mPrimaryWebBrowser.Document.Window.DetachEventHandler("onscroll", OnScrollEventHandler);
-                mHasDocumentLoaded = false;
-            }
+            // イベント削除から登録で常に一つだけ登録されるようにする
+            mPrimaryWebBrowser.Document.Click -= new HtmlElementEventHandler(Document_Click);
+            mPrimaryWebBrowser.Document.ContextMenuShowing -= new HtmlElementEventHandler(Document_ContextMenuShowing);
+            mPrimaryWebBrowser.Document.Window.DetachEventHandler("onscroll", OnScrollEventHandler);
+
             mPrimaryWebBrowser.Document.Click += new HtmlElementEventHandler(Document_Click);
             mPrimaryWebBrowser.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
             mPrimaryWebBrowser.Document.Window.AttachEventHandler("onscroll", OnScrollEventHandler);
             mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
+
             mHasDocumentLoaded = true;
             toolStripStatusLabel1.Text = "受信完了";
         }
@@ -643,6 +650,11 @@ namespace AskMonaViewer
         {
             LoadSettings();
             LoadHtmlHeader();
+            mHttpClient = new HttpClient();
+            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
+            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
+            mZaifApi = new ZaifApi(mHttpClient);
+            await UpdateTopicList(0);
 
             if (mSettings.MainFormSettings != null)
             {
@@ -656,19 +668,16 @@ namespace AskMonaViewer
                 }
                 this.splitContainer1.SplitterDistance = mSettings.MainFormSettings.VSplitterDistance;
                 this.splitContainer2.SplitterDistance = mSettings.MainFormSettings.HSplitterDistance;
+                foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
+                    await UpdateResponce(topicId);
             }
 
-            mHttpClient = new HttpClient();
-            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
-            mZaifApi = new ZaifApi(mHttpClient);
-            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
             var topicList = await mApi.FetchFavoriteTopicListAsync();
             if (topicList != null)
                 mFavoriteTopicList = topicList.Topics;
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
                 toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
-            await UpdateTopicList(0);
             timer1.Enabled = true;
         }
 
@@ -691,6 +700,12 @@ namespace AskMonaViewer
             mSettings.MainFormSettings.IsHorizontal = toolStripButton5.Checked;
             mSettings.MainFormSettings.VSplitterDistance = this.splitContainer1.SplitterDistance;
             mSettings.MainFormSettings.HSplitterDistance = this.splitContainer2.SplitterDistance;
+            mSettings.MainFormSettings.TabTopicList.Clear();
+            foreach (TabPage tabPage in tabControl1.TabPages)
+            {
+                var topic = tabPage.Tag as Topic;
+                mSettings.MainFormSettings.TabTopicList.Add(topic.Id);
+            }
             SaveSettings();
         }
 
