@@ -431,17 +431,6 @@ namespace AskMonaViewer
             mSettings.Options = options;
         }
 
-        private void SaveSettings()
-        {
-            var xs = new XmlSerializer(typeof(ApplicationSettings));
-            using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mSettings);
-
-            xs = new XmlSerializer(typeof(List<ResponseCache>));
-            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mResponseCacheList);
-        }
-
         private void LoadSettings()
         {
             if (File.Exists("AskMonaViewer.xml"))
@@ -487,6 +476,82 @@ namespace AskMonaViewer
                     "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
             }
             mHtmlHeader += "</head>\n<body>\n";
+        }
+
+        private void SaveSettings()
+        {
+            var xs = new XmlSerializer(typeof(ApplicationSettings));
+            using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mSettings);
+
+            xs = new XmlSerializer(typeof(List<ResponseCache>));
+            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mResponseCacheList);
+        }
+
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
+            LoadSettings();
+            LoadHtmlHeader();
+            mHttpClient = new HttpClient();
+            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
+            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
+            mZaifApi = new ZaifApi(mHttpClient);
+
+            if (mSettings.MainFormSettings != null)
+            {
+                this.WindowState = mSettings.MainFormSettings.WindowState;
+                this.Bounds = new Rectangle(mSettings.MainFormSettings.Location, mSettings.MainFormSettings.Size);
+                if (mSettings.MainFormSettings.IsHorizontal)
+                {
+                    toolStripButton4.Checked = false;
+                    toolStripButton5.Checked = true;
+                    splitContainer1.Orientation = Orientation.Vertical;
+                }
+                this.splitContainer1.SplitterDistance = mSettings.MainFormSettings.VSplitterDistance;
+                this.splitContainer2.SplitterDistance = mSettings.MainFormSettings.HSplitterDistance;
+                mCategoryId = mSettings.MainFormSettings.CategoryId;
+                foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
+                    await UpdateResponce(topicId);
+            }
+
+            await UpdateTopicList(mCategoryId);
+            var topicList = await mApi.FetchFavoriteTopicListAsync();
+            if (topicList != null)
+                mFavoriteTopicList = topicList.Topics;
+            var rate = await mZaifApi.FetchRate("mona_jpy");
+            if (rate != null)
+                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
+            timer1.Enabled = true;
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (mSettings.MainFormSettings == null)
+                mSettings.MainFormSettings = new MainFormSettings();
+
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                mSettings.MainFormSettings.Size = this.Bounds.Size;
+                mSettings.MainFormSettings.Location = this.Bounds.Location;
+            }
+            else
+            {
+                mSettings.MainFormSettings.Size = this.RestoreBounds.Size;
+                mSettings.MainFormSettings.Location = this.RestoreBounds.Location;
+            }
+            mSettings.MainFormSettings.WindowState = this.WindowState;
+            mSettings.MainFormSettings.IsHorizontal = toolStripButton5.Checked;
+            mSettings.MainFormSettings.VSplitterDistance = this.splitContainer1.SplitterDistance;
+            mSettings.MainFormSettings.HSplitterDistance = this.splitContainer2.SplitterDistance;
+            mSettings.MainFormSettings.CategoryId = mCategoryId;
+            mSettings.MainFormSettings.TabTopicList.Clear();
+            foreach (TabPage tabPage in tabControl1.TabPages)
+            {
+                var topic = tabPage.Tag as Topic;
+                mSettings.MainFormSettings.TabTopicList.Add(topic.Id);
+            }
+            SaveSettings();
         }
 
         private async void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -644,69 +709,6 @@ namespace AskMonaViewer
                 mResponseForm.FormClosed += OnResponseFormClosed;
             }
             mResponseForm.Show();
-        }
-
-        private async void MainForm_Load(object sender, EventArgs e)
-        {
-            LoadSettings();
-            LoadHtmlHeader();
-            mHttpClient = new HttpClient();
-            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
-            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
-            mZaifApi = new ZaifApi(mHttpClient);
-            await UpdateTopicList(0);
-
-            if (mSettings.MainFormSettings != null)
-            {
-                this.WindowState = mSettings.MainFormSettings.WindowState;
-                this.Bounds = new Rectangle(mSettings.MainFormSettings.Location, mSettings.MainFormSettings.Size);
-                if (mSettings.MainFormSettings.IsHorizontal)
-                {
-                    toolStripButton4.Checked = false;
-                    toolStripButton5.Checked = true;
-                    splitContainer1.Orientation = Orientation.Vertical;
-                }
-                this.splitContainer1.SplitterDistance = mSettings.MainFormSettings.VSplitterDistance;
-                this.splitContainer2.SplitterDistance = mSettings.MainFormSettings.HSplitterDistance;
-                foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
-                    await UpdateResponce(topicId);
-            }
-
-            var topicList = await mApi.FetchFavoriteTopicListAsync();
-            if (topicList != null)
-                mFavoriteTopicList = topicList.Topics;
-            var rate = await mZaifApi.FetchRate("mona_jpy");
-            if (rate != null)
-                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
-            timer1.Enabled = true;
-        }
-
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (mSettings.MainFormSettings == null)
-                mSettings.MainFormSettings = new MainFormSettings();
-
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                mSettings.MainFormSettings.Size = this.Bounds.Size;
-                mSettings.MainFormSettings.Location = this.Bounds.Location;
-            }
-            else
-            {
-                mSettings.MainFormSettings.Size = this.RestoreBounds.Size;
-                mSettings.MainFormSettings.Location = this.RestoreBounds.Location;
-            }
-            mSettings.MainFormSettings.WindowState = this.WindowState;
-            mSettings.MainFormSettings.IsHorizontal = toolStripButton5.Checked;
-            mSettings.MainFormSettings.VSplitterDistance = this.splitContainer1.SplitterDistance;
-            mSettings.MainFormSettings.HSplitterDistance = this.splitContainer2.SplitterDistance;
-            mSettings.MainFormSettings.TabTopicList.Clear();
-            foreach (TabPage tabPage in tabControl1.TabPages)
-            {
-                var topic = tabPage.Tag as Topic;
-                mSettings.MainFormSettings.TabTopicList.Add(topic.Id);
-            }
-            SaveSettings();
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
