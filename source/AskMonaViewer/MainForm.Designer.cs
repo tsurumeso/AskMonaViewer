@@ -46,6 +46,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ツールTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Option_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ヘルプHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.About_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -54,8 +56,6 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Copy_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Search_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,8 +86,9 @@
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton14 = new System.Windows.Forms.ToolStripButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.ツールTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Option_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.CloseTab_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CloseAllTab_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new AskMonaViewer.Utilities.ListViewEx();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -100,20 +101,20 @@
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.CloseTheOthers_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.toolStrip2.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -143,6 +144,21 @@
             this.toolStripMenuItem2.Size = new System.Drawing.Size(113, 22);
             this.toolStripMenuItem2.Text = "終了(&X)";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // ツールTToolStripMenuItem
+            // 
+            this.ツールTToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Option_ToolStripMenuItem});
+            this.ツールTToolStripMenuItem.Name = "ツールTToolStripMenuItem";
+            this.ツールTToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.ツールTToolStripMenuItem.Text = "ツール(&T)";
+            // 
+            // Option_ToolStripMenuItem
+            // 
+            this.Option_ToolStripMenuItem.Name = "Option_ToolStripMenuItem";
+            this.Option_ToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.Option_ToolStripMenuItem.Text = "オプション(O)...";
+            this.Option_ToolStripMenuItem.Click += new System.EventHandler(this.Option_ToolStripMenuItem_Click);
             // 
             // ヘルプHToolStripMenuItem
             // 
@@ -218,40 +234,16 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.ContextMenuStrip = this.contextMenuStrip2;
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.ShowToolTips = true;
             this.tabControl1.Size = new System.Drawing.Size(613, 192);
             this.tabControl1.TabIndex = 1;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tabPage1.Controls.Add(this.webBrowser1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 24);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage1.Size = new System.Drawing.Size(605, 164);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "タイトル";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // webBrowser1
-            // 
-            this.webBrowser1.ContextMenuStrip = this.contextMenuStrip1;
-            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser1.IsWebBrowserContextMenuEnabled = false;
-            this.webBrowser1.Location = new System.Drawing.Point(3, 4);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(597, 154);
-            this.webBrowser1.TabIndex = 0;
-            this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
-            this.webBrowser1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.webBrowser1_PreviewKeyDown);
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // contextMenuStrip1
             // 
@@ -565,20 +557,28 @@
             this.timer1.Interval = 10000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // ツールTToolStripMenuItem
+            // contextMenuStrip2
             // 
-            this.ツールTToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Option_ToolStripMenuItem});
-            this.ツールTToolStripMenuItem.Name = "ツールTToolStripMenuItem";
-            this.ツールTToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
-            this.ツールTToolStripMenuItem.Text = "ツール(&T)";
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CloseTab_ToolStripMenuItem,
+            this.CloseTheOthers_ToolStripMenuItem,
+            this.CloseAllTab_ToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(174, 92);
             // 
-            // Option_ToolStripMenuItem
+            // CloseTab_ToolStripMenuItem
             // 
-            this.Option_ToolStripMenuItem.Name = "Option_ToolStripMenuItem";
-            this.Option_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.Option_ToolStripMenuItem.Text = "オプション(O)...";
-            this.Option_ToolStripMenuItem.Click += new System.EventHandler(this.Option_ToolStripMenuItem_Click);
+            this.CloseTab_ToolStripMenuItem.Name = "CloseTab_ToolStripMenuItem";
+            this.CloseTab_ToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.CloseTab_ToolStripMenuItem.Text = "このタブを閉じる";
+            this.CloseTab_ToolStripMenuItem.Click += new System.EventHandler(this.CloseTab_ToolStripMenuItem_Click);
+            // 
+            // CloseAllTab_ToolStripMenuItem
+            // 
+            this.CloseAllTab_ToolStripMenuItem.Name = "CloseAllTab_ToolStripMenuItem";
+            this.CloseAllTab_ToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.CloseAllTab_ToolStripMenuItem.Text = "すべてのタブを閉じる";
+            this.CloseAllTab_ToolStripMenuItem.Click += new System.EventHandler(this.CloseAllTab_ToolStripMenuItem_Click);
             // 
             // listView1
             // 
@@ -672,6 +672,13 @@
             this.columnHeader5.Text = "更新日時";
             this.columnHeader5.Width = 140;
             // 
+            // CloseTheOthers_ToolStripMenuItem
+            // 
+            this.CloseTheOthers_ToolStripMenuItem.Name = "CloseTheOthers_ToolStripMenuItem";
+            this.CloseTheOthers_ToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.CloseTheOthers_ToolStripMenuItem.Text = "このタブ以外を閉じる";
+            this.CloseTheOthers_ToolStripMenuItem.Click += new System.EventHandler(this.CloseTheOthers_ToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -698,8 +705,6 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -707,6 +712,7 @@
             this.splitContainer2.ResumeLayout(false);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -723,14 +729,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ToolStripMenuItem ヘルプHToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ListView listView2;
         private System.Windows.Forms.ColumnHeader columnHeader8;
@@ -771,6 +775,10 @@
         private System.Windows.Forms.ToolStripButton toolStripButton14;
         private System.Windows.Forms.ToolStripMenuItem ツールTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Option_ToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem CloseTab_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CloseAllTab_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CloseTheOthers_ToolStripMenuItem;
     }
 }
 

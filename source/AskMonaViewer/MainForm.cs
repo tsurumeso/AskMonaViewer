@@ -36,6 +36,7 @@ namespace AskMonaViewer
         private List<Topic> mFavoriteTopicList;
         private List<ResponseCache> mResponseCacheList;
         private ResponseForm mResponseForm = null;
+        private WebBrowser mPrimaryWebBrowser;
 
         public MainForm()
         {
@@ -302,10 +303,56 @@ namespace AskMonaViewer
                 }
             }
 
-            tabControl1.TabPages[0].Text = mTopic.Title;
-            webBrowser1.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+            AddTabPage(html, mTopic);
             UpdateFavoriteToolStrip();
             return true;
+        }
+
+        private void AddTabPage(string html, Topic topic)
+        {
+            for (int i = 0; i < tabControl1.TabPages.Count; i++)
+            {
+                var t = (Topic)tabControl1.TabPages[i].Tag;
+                if (t.Id == topic.Id)
+                {
+                    mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[i].Controls[0];
+                    mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+                    tabControl1.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            var webBrowser = new WebBrowser();
+            webBrowser.Dock = DockStyle.Fill;
+            webBrowser.PreviewKeyDown += new PreviewKeyDownEventHandler(webBrowser_PreviewKeyDown);
+            webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser_DocumentCompleted);
+            webBrowser.IsWebBrowserContextMenuEnabled = false;
+            webBrowser.ContextMenuStrip = contextMenuStrip1;
+            webBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+            mPrimaryWebBrowser = webBrowser;
+
+            var tabPage = new TabPage();
+            tabPage.Margin = new Padding(3, 4, 3, 4);
+            tabPage.Padding = new Padding(3, 4, 3, 4);
+            tabPage.BorderStyle = BorderStyle.FixedSingle;
+            tabPage.UseVisualStyleBackColor = true;
+            tabPage.Controls.Add(webBrowser);
+            tabPage.Tag = topic;
+            tabPage.ToolTipText = topic.Title;
+
+            string text = "";
+            try
+            {
+                text = topic.Title.Substring(0, 15) + "...";
+            }
+            catch
+            {
+                text = topic.Title;
+            }
+            tabPage.Text = text;
+
+            tabControl1.TabPages.Add(tabPage);
+            tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
         }
 
         public async Task<bool> ReloadResponce()
@@ -334,8 +381,7 @@ namespace AskMonaViewer
             html = await BuildHtml(responseList);
             mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
 
-            tabControl1.TabPages[0].Text = mTopic.Title;
-            webBrowser1.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+            mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
             UpdateFavoriteToolStrip();
             return true;
         }
@@ -349,7 +395,7 @@ namespace AskMonaViewer
             if (idx == -1)
                 return;
 
-            var doc3 = (mshtml.IHTMLDocument3)webBrowser1.Document.DomDocument;
+            var doc3 = (mshtml.IHTMLDocument3)mPrimaryWebBrowser.Document.DomDocument;
             var elm = (mshtml.IHTMLElement2)doc3.documentElement;
             var scrolled = new Point(elm.scrollLeft, elm.scrollTop);
             if (mResponseCacheList[idx].Topic.Scrolled.Y < scrolled.Y)
@@ -453,7 +499,7 @@ namespace AskMonaViewer
             try
             {
                 string link = null;
-                HtmlElement clickedElement = webBrowser1.Document.GetElementFromPoint(e.MousePosition);
+                HtmlElement clickedElement = mPrimaryWebBrowser.Document.GetElementFromPoint(e.MousePosition);
 
                 if (clickedElement.TagName.ToLower() == "a")
                     link = clickedElement.GetAttribute("href");
@@ -507,26 +553,26 @@ namespace AskMonaViewer
             }
         }
 
-        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             if (mHasDocumentLoaded)
             {
-                this.webBrowser1.Document.Click -= new HtmlElementEventHandler(Document_Click);
-                this.webBrowser1.Document.ContextMenuShowing -= new HtmlElementEventHandler(Document_ContextMenuShowing);
-                this.webBrowser1.Document.Window.DetachEventHandler("onscroll", OnScrollEventHandler);
+                mPrimaryWebBrowser.Document.Click -= new HtmlElementEventHandler(Document_Click);
+                mPrimaryWebBrowser.Document.ContextMenuShowing -= new HtmlElementEventHandler(Document_ContextMenuShowing);
+                mPrimaryWebBrowser.Document.Window.DetachEventHandler("onscroll", OnScrollEventHandler);
                 mHasDocumentLoaded = false;
             }
-            this.webBrowser1.Document.Click += new HtmlElementEventHandler(Document_Click);
-            this.webBrowser1.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
-            this.webBrowser1.Document.Window.AttachEventHandler("onscroll", OnScrollEventHandler);
-            this.webBrowser1.Document.Window.ScrollTo(mTopic.Scrolled);
+            mPrimaryWebBrowser.Document.Click += new HtmlElementEventHandler(Document_Click);
+            mPrimaryWebBrowser.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
+            mPrimaryWebBrowser.Document.Window.AttachEventHandler("onscroll", OnScrollEventHandler);
+            mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
             mHasDocumentLoaded = true;
             toolStripStatusLabel1.Text = "受信完了";
         }
 
         private void Document_ContextMenuShowing(object sender, HtmlElementEventArgs e)
         {
-            var doc = (mshtml.IHTMLDocument2)this.webBrowser1.Document.DomDocument;
+            var doc = (mshtml.IHTMLDocument2)mPrimaryWebBrowser.Document.DomDocument;
             var range = (mshtml.IHTMLTxtRange)doc.selection.createRange();
             var enabled = !String.IsNullOrEmpty(range.text);
             Copy_ToolStripMenuItem.Enabled = enabled;
@@ -670,17 +716,17 @@ namespace AskMonaViewer
 
         private void Copy_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            webBrowser1.Document.ExecCommand("Copy", false, null);
+            mPrimaryWebBrowser.Document.ExecCommand("Copy", false, null);
         }
 
         private void SelectAll_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            webBrowser1.Document.ExecCommand("SelectAll", false, null);
+            mPrimaryWebBrowser.Document.ExecCommand("SelectAll", false, null);
         }
 
         private void Search_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var doc = (mshtml.IHTMLDocument2)this.webBrowser1.Document.DomDocument;
+            var doc = (mshtml.IHTMLDocument2)mPrimaryWebBrowser.Document.DomDocument;
             var range = (mshtml.IHTMLTxtRange)doc.selection.createRange();
             var url = "https://www.google.co.jp/search?q=" + System.Net.WebUtility.UrlEncode(range.text);
             System.Diagnostics.Process.Start(url);
@@ -785,7 +831,7 @@ namespace AskMonaViewer
             mTopIndex = listView1.TopItem.Index;
         }
 
-        private async void webBrowser1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private async void webBrowser_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             e.IsInputKey = true;
             if (mTopic == null)
@@ -799,6 +845,46 @@ namespace AskMonaViewer
         {
             var optionForm = new OptionForm(this, mSettings.Options);
             optionForm.ShowDialog();
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.TabPages.Count <= 0)
+                return;
+
+            mTopic = (Topic)tabControl1.TabPages[tabControl1.SelectedIndex].Tag;
+            toolStripComboBox1.Text = "https://askmona.org/" + mTopic.Id;
+            if (mResponseForm != null)
+                mResponseForm.UpdateTopic(mTopic);
+            mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0];
+        }
+
+        private void CloseTab_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0].Dispose();
+            tabControl1.TabPages.RemoveAt(tabControl1.SelectedIndex);
+        }
+
+        private void CloseAllTab_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = tabControl1.TabPages.Count - 1; i >= 0; i--)
+            {
+                tabControl1.TabPages[i].Controls[0].Dispose();
+                tabControl1.TabPages.RemoveAt(i);
+            }
+        }
+
+        private void CloseTheOthers_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = tabControl1.TabPages.Count - 1; i >= 0; i--)
+            {
+                var topic = (Topic)tabControl1.TabPages[i].Tag;
+                if (topic.Id != mTopic.Id)
+                {
+                    tabControl1.TabPages[i].Controls[0].Dispose();
+                    tabControl1.TabPages.RemoveAt(i);
+                }
+            }
         }
     }
 }
