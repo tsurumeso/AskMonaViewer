@@ -39,7 +39,7 @@ $(function() {
     $("a.youtube").click(function() {
         $(this).html('<iframe width="480" height="270" src="http://www.youtube.com/embed/' +
             $(this).attr("name") + '" frameborder="0" allowfullscreen></iframe>');
-		$(this).removeClass("youtube");
+        $(this).removeClass("youtube");
     });
 
     $(document).keydown(function(event) {
