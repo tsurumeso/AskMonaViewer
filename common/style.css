@@ -64,3 +64,11 @@ a.send:hover{
     font-size: 12pt;
     font-weight: normal;
 }
+
+iframe, .youtube {
+    border: 1px #999 solid;
+    display: block;
+}
+.youtube {
+    width:480px;
+}

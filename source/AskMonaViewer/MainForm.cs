@@ -204,7 +204,7 @@ namespace AskMonaViewer
                 foreach (var response in responseList.Responses)
                 {
                     double receive = Double.Parse(response.Receive) / 100000000;
-                    html.Append(String.Format("    <a href=#id>{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> " +
+                    html.Append(String.Format("    <a href=\"javascript:void(0);\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> " +
                         "投稿日：{3} <font color={4}>ID：</font>{5} [{6}] <b>+{7}MONA/{8}人</b> <a href=\"#send?r_id={9}\" class=\"send\">←送る</a>\n",
                         response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
                         Common.UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId,
@@ -219,7 +219,8 @@ namespace AskMonaViewer
                         "<a class=\"thumbnail\" href=\"${Imgur}.${Ext}\"><img src=\"${Imgur}m.${Ext}\"></a>");
                     res = Regex.Replace(res,
                         @"<a href=.+>https?://(youtu.be/|(www.|m.)youtube.com/watch\?v=)(?<Id>[a-zA-Z0-9\-_]+)([\?\&].+)?</a>",
-                        "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/${Id}\" frameorder=\"0\" allowfullscreen></iframe>");
+                        "<a class=\"youtube\" name=\"${Id}\" href=\"javascript:void(0);\">" +
+                        "<img src=\"http://img.youtube.com/vi/${Id}/mqdefault.jpg\" width=\"480\" height=\"270\">サムネイルをクリックして動画を見る</a>");
                     res = Regex.Replace(res,
                         "&gt;&gt;(?<Id>[0-9]+)",
                         String.Format("<a class=\"popup\" href=\"#res_{0}", responseList.Topic.Id) + "_${Id}\">&gt;&gt;${Id}</a>");
@@ -471,8 +472,7 @@ namespace AskMonaViewer
             if (File.Exists("common/script.js"))
             {
                 var js = new StreamReader("common/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-                mHtmlHeader += String.Format("<script type=\"text/javascript\" " +
-                    "src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
+                mHtmlHeader += String.Format("<script type=\"text/javascript\" src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
                     "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
             }
             mHtmlHeader += "</head>\n<body>\n";
@@ -609,7 +609,6 @@ namespace AskMonaViewer
                     mSettings.ProfileViewFormSettings = profileViewForm.SaveSettings();
                 }
                 else if (mAnchor.Success) { }
-                else if (link == "about:blank#id") { }
                 else
                     System.Diagnostics.Process.Start(link);
                 e.ReturnValue = false;
@@ -636,7 +635,8 @@ namespace AskMonaViewer
             mPrimaryWebBrowser.Document.Click += new HtmlElementEventHandler(Document_Click);
             mPrimaryWebBrowser.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
             mPrimaryWebBrowser.Document.Window.AttachEventHandler("onscroll", OnScrollEventHandler);
-            mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
+            if (!mHasDocumentLoaded)
+                mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
 
             mHasDocumentLoaded = true;
             toolStripStatusLabel1.Text = "受信完了";
