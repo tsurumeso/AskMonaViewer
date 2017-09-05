@@ -554,7 +554,7 @@ namespace AskMonaViewer
             SaveSettings();
         }
 
-        private async void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private async void listView1_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count == 0)
                 return;
@@ -769,6 +769,14 @@ namespace AskMonaViewer
             UpdateFavoriteToolStrip();
         }
 
+        private async void toolStripButton15_Click(object sender, EventArgs e)
+        {
+            if (mTopic == null)
+                return;
+
+            await UpdateResponce(mTopic.Id);
+        }
+
         private async void toolStripButton10_Click(object sender, EventArgs e)
         {
             if (mTopic == null)
@@ -878,8 +886,15 @@ namespace AskMonaViewer
 
         private void CloseTab_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var index = tabControl1.SelectedIndex;
             tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0].Dispose();
-            tabControl1.TabPages.RemoveAt(tabControl1.SelectedIndex);
+            tabControl1.TabPages.RemoveAt(index);
+
+            if (index == 0) { }
+            else if (index == tabControl1.TabPages.Count)
+                tabControl1.SelectedIndex = index - 1;
+            else
+                tabControl1.SelectedIndex = index;
         }
 
         private void CloseAllTab_ToolStripMenuItem_Click(object sender, EventArgs e)
