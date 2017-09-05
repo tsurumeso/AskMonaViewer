@@ -57,7 +57,7 @@ namespace AskMonaViewer.SubForms
                 else
                 {
                     MessageBox.Show("送金に成功しました", "通知", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    await mParent.ReloadResponce();
+                    await mParent.ReloadResponse();
                 }
             }
             else

@@ -60,14 +60,12 @@ namespace AskMonaViewer
             mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
             mSettings = new ApplicationSettings();
-            mHtmlHeader = "<html lang=\"ja\">\n<head>\n" +
-                "<meta charset=\"UTF-8\">\n" +
-                "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n";
         }
 
         private ListViewItem CreateListViewItem(Topic topic, long time)
         {
             int newArrivals = topic.CachedCount == 0 ? 0 : topic.Count - topic.CachedCount;
+
             var lvi = new ListViewItem(
                 new string[] {
                     topic.Rank.ToString(),
@@ -84,27 +82,21 @@ namespace AskMonaViewer
                 }
             );
             lvi.Tag = topic;
+
             return lvi;
         }
 
-        private async Task<bool> UpdateTopicList(int cat_id, bool reflesh = true)
+        private async Task<TopicList> FetchTopicListAsync(int cat_id, int offset = 0)
+        {
+            if (cat_id == -1)
+                return await mApi.FetchFavoriteTopicListAsync();
+            else
+                return await mApi.FetchTopicListAsync(cat_id, 50, offset);
+        }
+
+        private bool UpdateTopicList(TopicList topicList)
         {
             toolStripStatusLabel1.Text = "通信中";
-            int offset = 0;
-            if (reflesh)
-            {
-                listView1.Items.Clear();
-                mTopicList.Clear();
-            }
-            else
-                offset = listView1.Items.Count;
-
-            TopicList topicList;
-            if (cat_id == -1)
-                topicList = await mApi.FetchFavoriteTopicListAsync();
-            else
-                topicList = await mApi.FetchTopicListAsync(cat_id, 50, offset);
-
             if (topicList == null)
             {
                 toolStripStatusLabel1.Text = "受信失敗";
@@ -129,11 +121,13 @@ namespace AskMonaViewer
                 var lvi = CreateListViewItem(topic, time);
                 listView1.Items.Add(lvi);
             }
-            mTopicList.AddRange(topicList.Topics);
             listView1.ListViewItemSorter = mListViewItemSorter;
             Common.UpdateColumnColors(listView1, Color.White, Color.Lavender);
             listView1.EndUpdate();
+
+            mTopicList.AddRange(topicList.Topics);
             toolStripStatusLabel1.Text = "受信完了";
+
             return true;
         }
 
@@ -177,6 +171,7 @@ namespace AskMonaViewer
             listView1.ListViewItemSorter = mListViewItemSorter;
             Common.UpdateColumnColors(listView1, Color.White, Color.Lavender);
             listView1.EndUpdate();
+
             return true;
         }
 
@@ -193,51 +188,55 @@ namespace AskMonaViewer
                 return "red";
         }
 
-        private async Task<string> BuildHtml(ResponseList responseList, bool showSubtxt = true)
+        private static string ConvertResponse(Response response, int topicId)
+        {
+            response.Text = System.Security.SecurityElement.Escape(response.Text).Replace("\n", "<br>");
+            response.Text = Regex.Replace(response.Text,
+                @"https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+",
+                "<a href=\"$&\">$&</a>");
+            response.Text = Regex.Replace(response.Text,
+                @"<a href=.+>(?<Imgur>https?://(i.)?imgur.com/[a-zA-Z0-9]+)\.(?<Ext>[a-zA-Z]+)</a>",
+                "<a class=\"thumbnail\" href=\"${Imgur}.${Ext}\"><img src=\"${Imgur}m.${Ext}\"></a>");
+            response.Text = Regex.Replace(response.Text,
+                @"<a href=.+>https?://(youtu.be/|(www.|m.)youtube.com/watch\?v=)(?<Id>[a-zA-Z0-9\-_]+)([\?\&].+)?</a>",
+                "<a class=\"youtube\" name=\"${Id}\" href=\"javascript:void(0);\">" +
+                "<img src=\"http://img.youtube.com/vi/${Id}/mqdefault.jpg\" width=\"480\" height=\"270\">サムネイルをクリックして動画を見る</a>");
+            response.Text = Regex.Replace(response.Text,
+                "&gt;&gt;(?<Id>[0-9]+)",
+                String.Format("<a class=\"popup\" href=\"#res_{0}", topicId) + "_${Id}\">&gt;&gt;${Id}</a>");
+
+            if (response.Level < 2)
+                return String.Format("    <p class=\"res_lv1\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+            else if (response.Level < 4)
+                return String.Format("    <p class=\"res_lv2\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+            else if (response.Level < 5)
+                return String.Format("    <p class=\"res_lv3\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+            else if (response.Level < 7)
+                return String.Format("    <p class=\"res_lv4\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+            else
+                return String.Format("    <p class=\"res_lv5\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+        }
+
+        private async Task<string> BuildHtml(ResponseList responseList, bool showSupplyment = true)
         {
             StringBuilder html = new StringBuilder();
+
             await Task.Run(() =>
             {
-                if (showSubtxt && !String.IsNullOrEmpty(mTopic.Supplyment))
+                if (showSupplyment && !String.IsNullOrEmpty(mTopic.Supplyment))
                     html.Append(String.Format("<p class=\"subtxt\">{0}</p>", mTopic.Supplyment.Replace("\n", "<br>")));
 
                 foreach (var response in responseList.Responses)
                 {
-                    double receive = Double.Parse(response.Receive) / 100000000;
                     html.Append(String.Format("    <a href=\"javascript:void(0);\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> " +
                         "投稿日：{3} <font color={4}>ID：</font>{5} [{6}] <b>+{7}MONA/{8}人</b> <a href=\"#send?r_id={9}\" class=\"send\">←送る</a>\n",
                         response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
                         Common.UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId,
-                        response.UserTimes, Common.Digits(receive), response.ReceivedCount, response.Id));
-
-                    var res = System.Security.SecurityElement.Escape(response.Text);
-                    res = Regex.Replace(res,
-                        @"https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+",
-                        "<a href=\"$&\">$&</a>");
-                    res = Regex.Replace(res,
-                        @"<a href=.+>(?<Imgur>https?://(i.)?imgur.com/[a-zA-Z0-9]+)\.(?<Ext>[a-zA-Z]+)</a>",
-                        "<a class=\"thumbnail\" href=\"${Imgur}.${Ext}\"><img src=\"${Imgur}m.${Ext}\"></a>");
-                    res = Regex.Replace(res,
-                        @"<a href=.+>https?://(youtu.be/|(www.|m.)youtube.com/watch\?v=)(?<Id>[a-zA-Z0-9\-_]+)([\?\&].+)?</a>",
-                        "<a class=\"youtube\" name=\"${Id}\" href=\"javascript:void(0);\">" +
-                        "<img src=\"http://img.youtube.com/vi/${Id}/mqdefault.jpg\" width=\"480\" height=\"270\">サムネイルをクリックして動画を見る</a>");
-                    res = Regex.Replace(res,
-                        "&gt;&gt;(?<Id>[0-9]+)",
-                        String.Format("<a class=\"popup\" href=\"#res_{0}", responseList.Topic.Id) + "_${Id}\">&gt;&gt;${Id}</a>");
-                    res = res.Replace("\n", "<br>");
-
-                    if (response.Level < 2)
-                        html.Append(String.Format("    <p class=\"res_lv1\" style=\"padding-left: 32px;\">{0}</p>\n", res));
-                    else if (response.Level < 4)
-                        html.Append(String.Format("    <p class=\"res_lv2\" style=\"padding-left: 32px;\">{0}</p>\n", res));
-                    else if (response.Level < 5)
-                        html.Append(String.Format("    <p class=\"res_lv3\" style=\"padding-left: 32px;\">{0}</p>\n", res));
-                    else if (response.Level < 7)
-                        html.Append(String.Format("    <p class=\"res_lv4\" style=\"padding-left: 32px;\">{0}</p>\n", res));
-                    else
-                        html.Append(String.Format("    <p class=\"res_lv5\" style=\"padding-left: 32px;\">{0}</p>\n", res));
+                        response.UserTimes, Common.Digits(Double.Parse(response.Receive) / 100000000), response.ReceivedCount, response.Id));
+                    html.Append(ConvertResponse(response, responseList.Topic.Id));
                 }
             });
+
             return html.ToString();
         }
 
@@ -304,7 +303,7 @@ namespace AskMonaViewer
             tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
         }
 
-        private async Task<bool> UpdateResponce(int topicId)
+        private async Task<bool> UpdateResponse(int topicId)
         {
             toolStripStatusLabel1.Text = "通信中";
             toolStripComboBox1.Text = "https://askmona.org/" + topicId;
@@ -333,7 +332,7 @@ namespace AskMonaViewer
                     toolStripStatusLabel1.Text = "受信失敗";
                     return false;
                 }
-                if (responseList.Status == 2)
+                else if (responseList.Status == 2)
                 {
                     mTopic = cache.Topic;
                     html = Common.DecompressString(cache.Html);
@@ -350,15 +349,14 @@ namespace AskMonaViewer
 
             AddTabPage(html, mTopic);
             UpdateFavoriteToolStrip();
-            await Task.Run(() =>
-            {
-                while (!mHasDocumentLoaded)
-                    System.Threading.Thread.Sleep(100);
-            });
+
+            // WebBrowser 読み込み完了まで待機
+            await Task.Run(() => { while (!mHasDocumentLoaded) System.Threading.Thread.Sleep(100); });
+
             return true;
         }
 
-        public async Task<bool> ReloadResponce()
+        public async Task<bool> ReloadResponse()
         {
             toolStripStatusLabel1.Text = "通信中";
             toolStripComboBox1.Text = "https://askmona.org/" + mTopic.Id;
@@ -387,11 +385,10 @@ namespace AskMonaViewer
 
             mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
             UpdateFavoriteToolStrip();
-            await Task.Run(() =>
-            {
-                while (!mHasDocumentLoaded)
-                    System.Threading.Thread.Sleep(100);
-            });
+
+            // WebBrowser 読み込み完了まで待機
+            await Task.Run(() => { while (!mHasDocumentLoaded) System.Threading.Thread.Sleep(100); });
+
             return true;
         }
 
@@ -432,6 +429,28 @@ namespace AskMonaViewer
             mSettings.Options = options;
         }
 
+        private void LoadHtmlHeader()
+        {
+            mHtmlHeader = "<html lang=\"ja\">\n<head>\n" +
+                "<meta charset=\"UTF-8\">\n" +
+                "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n";
+
+            if (File.Exists("common/style.css"))
+            {
+                var css = new StreamReader("common/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
+                mHtmlHeader += String.Format("<style type=\"text/css\">\n{0}\n</style>\n", css);
+            }
+
+            if (File.Exists("common/script.js"))
+            {
+                var js = new StreamReader("common/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
+                mHtmlHeader += String.Format("<script type=\"text/javascript\" src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
+                    "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
+            }
+
+            mHtmlHeader += "</head>\n<body>\n";
+        }
+
         private void LoadSettings()
         {
             if (File.Exists("AskMonaViewer.xml"))
@@ -443,6 +462,7 @@ namespace AskMonaViewer
                         mSettings = xs.Deserialize(sr) as ApplicationSettings;
                 }
                 catch { }
+
                 if (String.IsNullOrEmpty(mSettings.Account.SecretKey))
                 {
                     var signUpForm = new SignUpForm(this, mSettings.Account);
@@ -454,28 +474,13 @@ namespace AskMonaViewer
                 var signUpForm = new SignUpForm(this, mSettings.Account);
                 signUpForm.ShowDialog();
             }
+
             if (File.Exists("ResponseCache.xml"))
             {
                 var xs = new XmlSerializer(typeof(List<ResponseCache>));
                 using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
                     mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
             }
-        }
-
-        private void LoadHtmlHeader()
-        {
-            if (File.Exists("common/style.css"))
-            {
-                var css = new StreamReader("common/style.css", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-                mHtmlHeader += String.Format("<style type=\"text/css\">\n{0}\n</style>\n", css);
-            }
-            if (File.Exists("common/script.js"))
-            {
-                var js = new StreamReader("common/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-                mHtmlHeader += String.Format("<script type=\"text/javascript\" src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
-                    "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
-            }
-            mHtmlHeader += "</head>\n<body>\n";
         }
 
         private void SaveSettings()
@@ -512,13 +517,17 @@ namespace AskMonaViewer
                 this.splitContainer2.SplitterDistance = mSettings.MainFormSettings.HSplitterDistance;
                 mCategoryId = mSettings.MainFormSettings.CategoryId;
                 foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
-                    await UpdateResponce(topicId);
+                    await UpdateResponse(topicId);
             }
 
-            await UpdateTopicList(mCategoryId);
+            mTopicList.Clear();
+            listView1.Items.Clear();
+            UpdateTopicList(await FetchTopicListAsync(mCategoryId));
+
             var topicList = await mApi.FetchFavoriteTopicListAsync();
             if (topicList != null)
                 mFavoriteTopicList = topicList.Topics;
+
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
                 toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
@@ -546,11 +555,13 @@ namespace AskMonaViewer
             mSettings.MainFormSettings.HSplitterDistance = this.splitContainer2.SplitterDistance;
             mSettings.MainFormSettings.CategoryId = mCategoryId;
             mSettings.MainFormSettings.TabTopicList.Clear();
+
             foreach (TabPage tabPage in tabControl1.TabPages)
             {
                 var topic = tabPage.Tag as Topic;
                 mSettings.MainFormSettings.TabTopicList.Add(topic.Id);
             }
+
             SaveSettings();
         }
 
@@ -560,7 +571,7 @@ namespace AskMonaViewer
                 return;
 
             var topic = (Topic)listView1.SelectedItems[0].Tag;
-            await UpdateResponce(topic.Id);
+            await UpdateResponse(topic.Id);
             if (mResponseForm != null)
                 mResponseForm.UpdateTopic(topic);
             listView1.SelectedItems[0].SubItems[4].Text = mTopic.Count.ToString();
@@ -585,30 +596,30 @@ namespace AskMonaViewer
                 if (String.IsNullOrEmpty(link))
                     return;
 
-                var mSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
-                var mUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)");
-                var mAnchor = Regex.Match(link, @"about:blank#res_.+");
-                var mAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
-                if (mSend.Success)
+                var matchSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
+                var matchUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)");
+                var matchAnchor = Regex.Match(link, @"about:blank#res_.+");
+                var matchAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
+                if (matchSend.Success)
                 {
-                    var monaSendForm = new MonaSendForm(this, mSettings.Options, mApi, mTopic, int.Parse(mSend.Groups["Id"].Value));
+                    var monaSendForm = new MonaSendForm(this, mSettings.Options, mApi, mTopic, int.Parse(matchSend.Groups["Id"].Value));
                     monaSendForm.LoadSettings(mSettings.MonaSendFormSettings);
                     monaSendForm.ShowDialog();
                     mSettings.MonaSendFormSettings = monaSendForm.SaveSettings();
                 }
-                else if (mAskMona.Success)
+                else if (matchAskMona.Success)
                 {
                     // COMException 回避
-                    var result = UpdateResponce(int.Parse(mAskMona.Groups["Id"].Value));
+                    var result = UpdateResponse(int.Parse(matchAskMona.Groups["Id"].Value));
                 }
-                else if (mUser.Success)
+                else if (matchUser.Success)
                 {
-                    var profileViewForm = new ProfileViewForm(mSettings.Options, mApi, int.Parse(mUser.Groups["Id"].Value));
+                    var profileViewForm = new ProfileViewForm(mSettings.Options, mApi, int.Parse(matchUser.Groups["Id"].Value));
                     profileViewForm.LoadSettings(mSettings.ProfileViewFormSettings);
                     profileViewForm.ShowDialog();
                     mSettings.ProfileViewFormSettings = profileViewForm.SaveSettings();
                 }
-                else if (mAnchor.Success) { }
+                else if (matchAnchor.Success) { }
                 else
                     System.Diagnostics.Process.Start(link);
                 e.ReturnValue = false;
@@ -621,7 +632,9 @@ namespace AskMonaViewer
             if (listView2.SelectedItems.Count > 0)
             {
                 mCategoryId = int.Parse(listView2.SelectedItems[0].Tag.ToString());
-                await UpdateTopicList(mCategoryId);
+                mTopicList.Clear();
+                listView1.Items.Clear();
+                UpdateTopicList(await FetchTopicListAsync(mCategoryId));
             }
         }
 
@@ -665,7 +678,9 @@ namespace AskMonaViewer
 
         private async void toolStripButton3_Click(object sender, EventArgs e)
         {
-            await UpdateTopicList(mCategoryId);
+            mTopicList.Clear();
+            listView1.Items.Clear();
+            UpdateTopicList(await FetchTopicListAsync(mCategoryId));
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -765,7 +780,10 @@ namespace AskMonaViewer
                 await mApi.DeleteFavoriteTopicAsync(mTopic.Id);
                 mFavoriteTopicList.RemoveAt(idx);
             }
-            await UpdateTopicList(mCategoryId);
+
+            mTopicList.Clear();
+            listView1.Items.Clear();
+            UpdateTopicList(await FetchTopicListAsync(mCategoryId));
             UpdateFavoriteToolStrip();
         }
 
@@ -774,7 +792,7 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            await UpdateResponce(mTopic.Id);
+            await UpdateResponse(mTopic.Id);
         }
 
         private async void toolStripButton10_Click(object sender, EventArgs e)
@@ -785,7 +803,7 @@ namespace AskMonaViewer
             var res = MessageBox.Show("トピックのキャッシュを削除して再度読み込みます\nよろしいですか？", "確認",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
             if (res == DialogResult.Yes)
-                await ReloadResponce();
+                await ReloadResponse();
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
@@ -850,7 +868,7 @@ namespace AskMonaViewer
             if (mTopIndex != 0 && mTopIndex == listView1.TopItem.Index)
             {
                 mIsTopicListUpdating = true;
-                await UpdateTopicList(mCategoryId, false);
+                UpdateTopicList(await FetchTopicListAsync(mCategoryId, listView1.Items.Count));
                 mIsTopicListUpdating = false;
             }
             mTopIndex = listView1.TopItem.Index;
@@ -863,7 +881,7 @@ namespace AskMonaViewer
                 return;
 
             if (e.KeyCode == Keys.F5)
-                await UpdateResponce(mTopic.Id);
+                await UpdateResponse(mTopic.Id);
         }
 
         private void Option_ToolStripMenuItem_Click(object sender, EventArgs e)
