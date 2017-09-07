@@ -60,6 +60,9 @@ namespace AskMonaViewer
             mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
             mSettings = new ApplicationSettings();
+            mHttpClient = new HttpClient();
+            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
+            mZaifApi = new ZaifApi(mHttpClient);
         }
 
         private ListViewItem CreateListViewItem(Topic topic, long time)
@@ -305,20 +308,15 @@ namespace AskMonaViewer
 
         private async Task<bool> UpdateResponse(int topicId)
         {
-            toolStripStatusLabel1.Text = "通信中";
-            toolStripComboBox1.Text = "https://askmona.org/" + topicId;
+            var html = "";
             mHasDocumentLoaded = false;
 
-            var html = "";
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
             if (idx == -1)
             {
                 var responseList = await mApi.FetchResponseListAsync(topicId, topic_detail: 1);
                 if (responseList == null)
-                {
-                    toolStripStatusLabel1.Text = "受信失敗";
                     return false;
-                }
                 mTopic = responseList.Topic;
                 html = await BuildHtml(responseList);
                 mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
@@ -328,10 +326,7 @@ namespace AskMonaViewer
                 var cache = mResponseCacheList[idx];
                 var responseList = await mApi.FetchResponseListAsync(topicId, 1, 1000, 1, cache.Topic.Modified);
                 if (responseList == null)
-                {
-                    toolStripStatusLabel1.Text = "受信失敗";
                     return false;
-                }
                 else if (responseList.Status == 2)
                 {
                     mTopic = cache.Topic;
@@ -358,17 +353,12 @@ namespace AskMonaViewer
 
         public async Task<bool> ReloadResponse()
         {
-            toolStripStatusLabel1.Text = "通信中";
-            toolStripComboBox1.Text = "https://askmona.org/" + mTopic.Id;
+            var html = "";
             mHasDocumentLoaded = false;
 
-            var html = "";
             var responseList = await mApi.FetchResponseListAsync(mTopic.Id, 1, 1000, 1);
             if (responseList == null)
-            {
-                toolStripStatusLabel1.Text = "受信失敗";
                 return false;
-            }
 
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
             var scrolled = new Point(0, 0);
@@ -429,6 +419,11 @@ namespace AskMonaViewer
             mSettings.Options = options;
         }
 
+        public void UpdateConnectionStatus(string label)
+        {
+            toolStripStatusLabel1.Text = label;
+        }
+
         private void LoadHtmlHeader()
         {
             mHtmlHeader = "<html lang=\"ja\">\n<head>\n" +
@@ -451,7 +446,7 @@ namespace AskMonaViewer
             mHtmlHeader += "</head>\n<body>\n";
         }
 
-        private void LoadSettings()
+        private bool LoadSettings()
         {
             if (File.Exists("AskMonaViewer.xml"))
             {
@@ -460,20 +455,26 @@ namespace AskMonaViewer
                     var xs = new XmlSerializer(typeof(ApplicationSettings));
                     using (var sr = new StreamReader("AskMonaViewer.xml", new UTF8Encoding(false)))
                         mSettings = xs.Deserialize(sr) as ApplicationSettings;
+
+                    this.WindowState = mSettings.MainFormSettings.WindowState;
+                    this.Bounds = new Rectangle(mSettings.MainFormSettings.Location, mSettings.MainFormSettings.Size);
+                    if (mSettings.MainFormSettings.IsHorizontal)
+                    {
+                        toolStripButton4.Checked = false;
+                        toolStripButton5.Checked = true;
+                        splitContainer1.Orientation = Orientation.Vertical;
+                    }
+                    this.splitContainer1.SplitterDistance = mSettings.MainFormSettings.VSplitterDistance;
+                    this.splitContainer2.SplitterDistance = mSettings.MainFormSettings.HSplitterDistance;
+                    mCategoryId = mSettings.MainFormSettings.CategoryId;
                 }
                 catch { }
 
                 if (String.IsNullOrEmpty(mSettings.Account.SecretKey))
-                {
-                    var signUpForm = new SignUpForm(this, mSettings.Account);
-                    signUpForm.ShowDialog();
-                }
+                    return false;
             }
             else
-            {
-                var signUpForm = new SignUpForm(this, mSettings.Account);
-                signUpForm.ShowDialog();
-            }
+                return false;
 
             if (File.Exists("ResponseCache.xml"))
             {
@@ -481,64 +482,12 @@ namespace AskMonaViewer
                 using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
                     mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
             }
+
+            return true;
         }
 
         private void SaveSettings()
         {
-            var xs = new XmlSerializer(typeof(ApplicationSettings));
-            using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mSettings);
-
-            xs = new XmlSerializer(typeof(List<ResponseCache>));
-            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mResponseCacheList);
-        }
-
-        private async void MainForm_Load(object sender, EventArgs e)
-        {
-            LoadSettings();
-            LoadHtmlHeader();
-            mHttpClient = new HttpClient();
-            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
-            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
-            mZaifApi = new ZaifApi(mHttpClient);
-
-            if (mSettings.MainFormSettings != null)
-            {
-                this.WindowState = mSettings.MainFormSettings.WindowState;
-                this.Bounds = new Rectangle(mSettings.MainFormSettings.Location, mSettings.MainFormSettings.Size);
-                if (mSettings.MainFormSettings.IsHorizontal)
-                {
-                    toolStripButton4.Checked = false;
-                    toolStripButton5.Checked = true;
-                    splitContainer1.Orientation = Orientation.Vertical;
-                }
-                this.splitContainer1.SplitterDistance = mSettings.MainFormSettings.VSplitterDistance;
-                this.splitContainer2.SplitterDistance = mSettings.MainFormSettings.HSplitterDistance;
-                mCategoryId = mSettings.MainFormSettings.CategoryId;
-                foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
-                    await UpdateResponse(topicId);
-            }
-
-            mTopicList.Clear();
-            listView1.Items.Clear();
-            UpdateTopicList(await FetchTopicListAsync(mCategoryId));
-
-            var topicList = await mApi.FetchFavoriteTopicListAsync();
-            if (topicList != null)
-                mFavoriteTopicList = topicList.Topics;
-
-            var rate = await mZaifApi.FetchRate("mona_jpy");
-            if (rate != null)
-                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
-            timer1.Enabled = true;
-        }
-
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (mSettings.MainFormSettings == null)
-                mSettings.MainFormSettings = new MainFormSettings();
-
             if (this.WindowState == FormWindowState.Normal)
             {
                 mSettings.MainFormSettings.Size = this.Bounds.Size;
@@ -562,6 +511,49 @@ namespace AskMonaViewer
                 mSettings.MainFormSettings.TabTopicList.Add(topic.Id);
             }
 
+            var xs = new XmlSerializer(typeof(ApplicationSettings));
+            using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mSettings);
+
+            xs = new XmlSerializer(typeof(List<ResponseCache>));
+            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mResponseCacheList);
+        }
+
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
+            if (!LoadSettings())
+            {
+                var signUpForm = new SignUpForm(this, mSettings.Account);
+                signUpForm.ShowDialog();
+            }
+            LoadHtmlHeader();
+            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
+
+            foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
+            {
+                UpdateConnectionStatus("通信中");
+                toolStripComboBox1.Text = "https://askmona.org/" + topicId;
+                if (!(await UpdateResponse(topicId)))
+                    UpdateConnectionStatus("受信失敗");
+            }
+
+            mTopicList.Clear();
+            listView1.Items.Clear();
+            UpdateTopicList(await FetchTopicListAsync(mCategoryId));
+
+            var topicList = await mApi.FetchFavoriteTopicListAsync();
+            if (topicList != null)
+                mFavoriteTopicList = topicList.Topics;
+
+            var rate = await mZaifApi.FetchRate("mona_jpy");
+            if (rate != null)
+                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
+            timer1.Enabled = true;
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
             SaveSettings();
         }
 
@@ -571,60 +563,65 @@ namespace AskMonaViewer
                 return;
 
             var topic = (Topic)listView1.SelectedItems[0].Tag;
-            await UpdateResponse(topic.Id);
+            UpdateConnectionStatus("通信中");
+            toolStripComboBox1.Text = "https://askmona.org/" + topic.Id;
+            if (!(await UpdateResponse(topic.Id)))
+                UpdateConnectionStatus("受信失敗");
+
             if (mResponseForm != null)
                 mResponseForm.UpdateTopic(topic);
             listView1.SelectedItems[0].SubItems[4].Text = mTopic.Count.ToString();
             listView1.SelectedItems[0].SubItems[5].Text = "";
         }
 
-        void Document_Click(object sender, HtmlElementEventArgs e)
+        private async void Document_Click(object sender, HtmlElementEventArgs e)
         {
-            try
+            string link = null;
+            HtmlElement clickedElement = mPrimaryWebBrowser.Document.GetElementFromPoint(e.MousePosition);
+            if (clickedElement == null)
+                return;
+            else if (clickedElement.TagName.ToLower() == "a")
+                link = clickedElement.GetAttribute("href");
+            else if (clickedElement.Parent != null)
             {
-                string link = null;
-                HtmlElement clickedElement = mPrimaryWebBrowser.Document.GetElementFromPoint(e.MousePosition);
-
-                if (clickedElement.TagName.ToLower() == "a")
-                    link = clickedElement.GetAttribute("href");
-                else if (clickedElement.Parent != null)
-                {
-                    if (clickedElement.Parent.TagName.ToLower() == "a")
-                        link = clickedElement.Parent.GetAttribute("href");
-                }
-
-                if (String.IsNullOrEmpty(link))
-                    return;
-
-                var matchSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
-                var matchUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)");
-                var matchAnchor = Regex.Match(link, @"about:blank#res_.+");
-                var matchAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
-                if (matchSend.Success)
-                {
-                    var monaSendForm = new MonaSendForm(this, mSettings.Options, mApi, mTopic, int.Parse(matchSend.Groups["Id"].Value));
-                    monaSendForm.LoadSettings(mSettings.MonaSendFormSettings);
-                    monaSendForm.ShowDialog();
-                    mSettings.MonaSendFormSettings = monaSendForm.SaveSettings();
-                }
-                else if (matchAskMona.Success)
-                {
-                    // COMException 回避
-                    var result = UpdateResponse(int.Parse(matchAskMona.Groups["Id"].Value));
-                }
-                else if (matchUser.Success)
-                {
-                    var profileViewForm = new ProfileViewForm(mSettings.Options, mApi, int.Parse(matchUser.Groups["Id"].Value));
-                    profileViewForm.LoadSettings(mSettings.ProfileViewFormSettings);
-                    profileViewForm.ShowDialog();
-                    mSettings.ProfileViewFormSettings = profileViewForm.SaveSettings();
-                }
-                else if (matchAnchor.Success) { }
-                else
-                    System.Diagnostics.Process.Start(link);
-                e.ReturnValue = false;
+                if (clickedElement.Parent.TagName.ToLower() == "a")
+                    link = clickedElement.Parent.GetAttribute("href");
             }
-            catch (NullReferenceException) { }
+
+            if (String.IsNullOrEmpty(link))
+                return;
+            else
+                e.ReturnValue = false;
+
+            var matchSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
+            var matchUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)");
+            var matchAnchor = Regex.Match(link, @"about:blank#res_.+");
+            var matchAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
+            if (matchSend.Success)
+            {
+                var monaSendForm = new MonaSendForm(this, mSettings.Options, mApi, mTopic, int.Parse(matchSend.Groups["Id"].Value));
+                monaSendForm.LoadSettings(mSettings.MonaSendFormSettings);
+                monaSendForm.ShowDialog();
+                mSettings.MonaSendFormSettings = monaSendForm.SaveSettings();
+            }
+            else if (matchAskMona.Success)
+            {
+                var topicId = int.Parse(matchAskMona.Groups["Id"].Value);
+                UpdateConnectionStatus("通信中");
+                toolStripComboBox1.Text = "https://askmona.org/" + topicId;
+                if (!(await UpdateResponse(topicId)))
+                    UpdateConnectionStatus("受信失敗");
+            }
+            else if (matchUser.Success)
+            {
+                var profileViewForm = new ProfileViewForm(mSettings.Options, mApi, int.Parse(matchUser.Groups["Id"].Value));
+                profileViewForm.LoadSettings(mSettings.ProfileViewFormSettings);
+                profileViewForm.ShowDialog();
+                mSettings.ProfileViewFormSettings = profileViewForm.SaveSettings();
+            }
+            else if (matchAnchor.Success) { }
+            else
+                System.Diagnostics.Process.Start(link);
         }
 
         private async void listView2_SelectedIndexChanged(object sender, EventArgs e)
@@ -652,7 +649,7 @@ namespace AskMonaViewer
                 mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
 
             mHasDocumentLoaded = true;
-            toolStripStatusLabel1.Text = "受信完了";
+            UpdateConnectionStatus("受信完了");
         }
 
         private void Document_ContextMenuShowing(object sender, HtmlElementEventArgs e)
@@ -792,7 +789,9 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            await UpdateResponse(mTopic.Id);
+            UpdateConnectionStatus("通信中");
+            if (!(await UpdateResponse(mTopic.Id)))
+                UpdateConnectionStatus("受信失敗");
         }
 
         private async void toolStripButton10_Click(object sender, EventArgs e)
@@ -803,7 +802,11 @@ namespace AskMonaViewer
             var res = MessageBox.Show("トピックのキャッシュを削除して再度読み込みます\nよろしいですか？", "確認",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
             if (res == DialogResult.Yes)
-                await ReloadResponse();
+            {
+                UpdateConnectionStatus("通信中");
+                if (!(await ReloadResponse()))
+                    UpdateConnectionStatus("受信失敗");
+            }
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
@@ -881,7 +884,11 @@ namespace AskMonaViewer
                 return;
 
             if (e.KeyCode == Keys.F5)
-                await UpdateResponse(mTopic.Id);
+            {
+                UpdateConnectionStatus("通信中");
+                if (!(await UpdateResponse(mTopic.Id)))
+                    UpdateConnectionStatus("受信失敗");
+            }
         }
 
         private void Option_ToolStripMenuItem_Click(object sender, EventArgs e)

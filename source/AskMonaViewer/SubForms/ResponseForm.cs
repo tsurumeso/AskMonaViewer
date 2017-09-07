@@ -39,7 +39,11 @@ namespace AskMonaViewer.SubForms
                 if (result.Status == 0)
                     MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
-                    await mParent.ReloadResponse();
+                {
+                    mParent.UpdateConnectionStatus("通信中");
+                    if (!(await mParent.ReloadResponse()))
+                        mParent.UpdateConnectionStatus("受信失敗");
+                }
             }
             else
                 MessageBox.Show("レスの投稿に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);

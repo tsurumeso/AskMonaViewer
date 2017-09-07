@@ -17,7 +17,7 @@
         public ApplicationSettings()
         {
             Account = new Account();
-            MainFormSettings = null;
+            MainFormSettings = new MainFormSettings();
             TransactionViewFormSettings = new TransactionViewFormSettings();
             MonaSendFormSettings = new FormSettings();
             ResponseFormSettings = new FormSettings();

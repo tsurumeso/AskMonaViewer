@@ -107,7 +107,9 @@ namespace AskMonaViewer.SubForms
             if (flag)
             {
                 MessageBox.Show("送金に成功しました", "通知", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await mParent.ReloadResponse();
+                mParent.UpdateConnectionStatus("通信中");
+                if (!(await mParent.ReloadResponse()))
+                    mParent.UpdateConnectionStatus("受信失敗");
             }
 
             this.Close();
