@@ -201,5 +201,12 @@ namespace AskMonaViewer.Api
 
             return await CallAuthAsync<TransactionDetail>(mApiBaseUrl + "account/txdetail", prms);
         }
+
+        public async Task<ApiResult> VerifySecretKey()
+        {
+            var prms = new Dictionary<string, string>();
+
+            return await CallAuthAsync<ApiResult>(mApiBaseUrl + "auth/verify", prms);
+        }
     }
 }

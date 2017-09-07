@@ -446,7 +446,7 @@ namespace AskMonaViewer
             mHtmlHeader += "</head>\n<body>\n";
         }
 
-        private bool LoadSettings()
+        private void LoadSettings()
         {
             if (File.Exists("AskMonaViewer.xml"))
             {
@@ -469,12 +469,7 @@ namespace AskMonaViewer
                     mCategoryId = mSettings.MainFormSettings.CategoryId;
                 }
                 catch { }
-
-                if (String.IsNullOrEmpty(mSettings.Account.SecretKey))
-                    return false;
             }
-            else
-                return false;
 
             if (File.Exists("ResponseCache.xml"))
             {
@@ -482,8 +477,6 @@ namespace AskMonaViewer
                 using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
                     mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
             }
-
-            return true;
         }
 
         private void SaveSettings()
@@ -522,13 +515,16 @@ namespace AskMonaViewer
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            if (!LoadSettings())
+            LoadSettings();
+            LoadHtmlHeader();
+
+            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
+            if (await mApi.VerifySecretKey() == null)
             {
                 var signUpForm = new SignUpForm(this, mSettings.Account);
                 signUpForm.ShowDialog();
+                mApi = new AskMonaApi(mHttpClient, mSettings.Account);
             }
-            LoadHtmlHeader();
-            mApi = new AskMonaApi(mHttpClient, mSettings.Account);
 
             foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
             {
