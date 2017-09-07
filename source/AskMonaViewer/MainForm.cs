@@ -903,7 +903,7 @@ namespace AskMonaViewer
         private void CloseTab_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var index = tabControl1.SelectedIndex;
-            tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0].Dispose();
+            tabControl1.TabPages[index].Controls[0].Dispose();
             tabControl1.TabPages.RemoveAt(index);
 
             if (index == 0) { }
@@ -932,6 +932,36 @@ namespace AskMonaViewer
                     tabControl1.TabPages[i].Controls[0].Dispose();
                     tabControl1.TabPages.RemoveAt(i);
                 }
+            }
+        }
+
+        private void CloseLeft_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = tabControl1.SelectedIndex - 1; i >= 0; i--)
+            {
+                tabControl1.TabPages[i].Controls[0].Dispose();
+                tabControl1.TabPages.RemoveAt(i);
+            }
+        }
+
+        private void CloseRight_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = tabControl1.TabPages.Count - 1; i > tabControl1.SelectedIndex; i--)
+            {
+                tabControl1.TabPages[i].Controls[0].Dispose();
+                tabControl1.TabPages.RemoveAt(i);
+            }
+        }
+
+        private void tabControl1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            for (int i = 0; i < tabControl1.TabCount; i++)
+            {
+                if (tabControl1.GetTabRect(i).Contains(e.X, e.Y))
+                    tabControl1.SelectedIndex = i;
             }
         }
     }
