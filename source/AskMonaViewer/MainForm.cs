@@ -309,8 +309,6 @@ namespace AskMonaViewer
         private async Task<bool> UpdateResponse(int topicId)
         {
             var html = "";
-            mHasDocumentLoaded = false;
-
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
             if (idx == -1)
             {
@@ -342,11 +340,9 @@ namespace AskMonaViewer
                 }
             }
 
+            mHasDocumentLoaded = false;
             AddTabPage(html, mTopic);
             UpdateFavoriteToolStrip();
-
-            // WebBrowser 読み込み完了まで待機
-            await Task.Run(() => { while (!mHasDocumentLoaded) System.Threading.Thread.Sleep(100); });
 
             return true;
         }
@@ -354,8 +350,6 @@ namespace AskMonaViewer
         public async Task<bool> ReloadResponse()
         {
             var html = "";
-            mHasDocumentLoaded = false;
-
             var responseList = await mApi.FetchResponseListAsync(mTopic.Id, 1, 1000, 1);
             if (responseList == null)
                 return false;
@@ -373,11 +367,9 @@ namespace AskMonaViewer
             html = await BuildHtml(responseList);
             mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
 
+            mHasDocumentLoaded = false;
             mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
             UpdateFavoriteToolStrip();
-
-            // WebBrowser 読み込み完了まで待機
-            await Task.Run(() => { while (!mHasDocumentLoaded) System.Threading.Thread.Sleep(100); });
 
             return true;
         }
@@ -532,6 +524,8 @@ namespace AskMonaViewer
                 toolStripComboBox1.Text = "https://askmona.org/" + topicId;
                 if (!(await UpdateResponse(topicId)))
                     UpdateConnectionStatus("受信失敗");
+                else
+                    await Task.Run(() => { while (!mHasDocumentLoaded) System.Threading.Thread.Sleep(100); });
             }
 
             mTopicList.Clear();
@@ -558,7 +552,8 @@ namespace AskMonaViewer
             if (listView1.SelectedItems.Count == 0)
                 return;
 
-            var topic = (Topic)listView1.SelectedItems[0].Tag;
+            var idx = listView1.SelectedIndices[0];
+            var topic = (Topic)listView1.Items[idx].Tag;
             UpdateConnectionStatus("通信中");
             toolStripComboBox1.Text = "https://askmona.org/" + topic.Id;
             if (!(await UpdateResponse(topic.Id)))
@@ -566,8 +561,8 @@ namespace AskMonaViewer
 
             if (mResponseForm != null)
                 mResponseForm.UpdateTopic(topic);
-            listView1.SelectedItems[0].SubItems[4].Text = mTopic.Count.ToString();
-            listView1.SelectedItems[0].SubItems[5].Text = "";
+            listView1.Items[idx].SubItems[4].Text = mTopic.Count.ToString();
+            listView1.Items[idx].SubItems[5].Text = "";
         }
 
         private async void Document_Click(object sender, HtmlElementEventArgs e)
