@@ -25,7 +25,7 @@ namespace AskMonaViewer
         private bool mHasDocumentLoaded = true;
         private bool mIsTopicListUpdating = false;
         private string mHtmlHeader = "";
-        private const string mVersionString = "1.7.0";
+        private const string mVersionString = "1.7.1";
         private ApplicationSettings mSettings;
         private AskMonaApi mApi;
         private ZaifApi mZaifApi;
