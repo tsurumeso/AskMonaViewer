@@ -99,12 +99,8 @@ namespace AskMonaViewer
 
         private bool UpdateTopicList(TopicList topicList)
         {
-            toolStripStatusLabel1.Text = "通信中";
             if (topicList == null)
-            {
-                toolStripStatusLabel1.Text = "受信失敗";
                 return false;
-            }
 
             listView1.BeginUpdate();
             var time = Common.DateTimeToUnixTimeStamp(DateTime.Now);
@@ -129,7 +125,6 @@ namespace AskMonaViewer
             listView1.EndUpdate();
 
             mTopicList.AddRange(topicList.Topics);
-            toolStripStatusLabel1.Text = "受信完了";
 
             return true;
         }
@@ -528,9 +523,11 @@ namespace AskMonaViewer
                     await Task.Run(() => { while (!mHasDocumentLoaded) System.Threading.Thread.Sleep(100); });
             }
 
-            mTopicList.Clear();
-            listView1.Items.Clear();
-            UpdateTopicList(await FetchTopicListAsync(mCategoryId));
+            UpdateConnectionStatus("通信中");
+            if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
+                UpdateConnectionStatus("受信完了");
+            else
+                UpdateConnectionStatus("受信失敗");
 
             var topicList = await mApi.FetchFavoriteTopicListAsync();
             if (topicList != null)
@@ -622,7 +619,11 @@ namespace AskMonaViewer
                 mCategoryId = int.Parse(listView2.SelectedItems[0].Tag.ToString());
                 mTopicList.Clear();
                 listView1.Items.Clear();
-                UpdateTopicList(await FetchTopicListAsync(mCategoryId));
+                UpdateConnectionStatus("通信中");
+                if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
+                    UpdateConnectionStatus("受信完了");
+                else
+                    UpdateConnectionStatus("受信失敗");
             }
         }
 
@@ -668,7 +669,11 @@ namespace AskMonaViewer
         {
             mTopicList.Clear();
             listView1.Items.Clear();
-            UpdateTopicList(await FetchTopicListAsync(mCategoryId));
+            UpdateConnectionStatus("通信中");
+            if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
+                UpdateConnectionStatus("受信完了");
+            else
+                UpdateConnectionStatus("受信失敗");
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -771,7 +776,11 @@ namespace AskMonaViewer
 
             mTopicList.Clear();
             listView1.Items.Clear();
-            UpdateTopicList(await FetchTopicListAsync(mCategoryId));
+            UpdateConnectionStatus("通信中");
+            if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
+                UpdateConnectionStatus("受信完了");
+            else
+                UpdateConnectionStatus("受信失敗");
             UpdateFavoriteToolStrip();
         }
 
@@ -862,7 +871,11 @@ namespace AskMonaViewer
             if (mTopIndex != 0 && mTopIndex == listView1.TopItem.Index)
             {
                 mIsTopicListUpdating = true;
-                UpdateTopicList(await FetchTopicListAsync(mCategoryId, listView1.Items.Count));
+                UpdateConnectionStatus("通信中");
+                if (UpdateTopicList(await FetchTopicListAsync(mCategoryId, listView1.Items.Count)))
+                    UpdateConnectionStatus("受信完了");
+                else
+                    UpdateConnectionStatus("受信失敗");
                 mIsTopicListUpdating = false;
             }
             mTopIndex = listView1.TopItem.Index;
