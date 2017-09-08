@@ -188,31 +188,32 @@ namespace AskMonaViewer
 
         private static string ConvertResponse(Response response, int topicId)
         {
-            response.Text = System.Security.SecurityElement.Escape(response.Text).Replace("\n", "<br>");
-            response.Text = Regex.Replace(response.Text,
+            var res = System.Security.SecurityElement.Escape(response.Text);
+            res = Regex.Replace(res,
                 @"https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+",
                 "<a href=\"$&\">$&</a>");
-            response.Text = Regex.Replace(response.Text,
-                @"<a href=.+>(?<Imgur>https?://(i.)?imgur.com/[a-zA-Z0-9]+)\.(?<Ext>[a-zA-Z]+)</a>",
+            res = Regex.Replace(res,
+                @"<a href=.+?>(?<Imgur>https?://(i.)?imgur.com/[a-zA-Z0-9]+)\.(?<Ext>[a-zA-Z]+)</a>",
                 "<a class=\"thumbnail\" href=\"${Imgur}.${Ext}\"><img src=\"${Imgur}m.${Ext}\"></a>");
-            response.Text = Regex.Replace(response.Text,
-                @"<a href=.+>https?://(youtu.be/|(www.|m.)youtube.com/watch\?v=)(?<Id>[a-zA-Z0-9\-_]+)([\?\&].+)?</a>",
+            res = Regex.Replace(res,
+                @"<a href=.+?>https?://(youtu.be/|(www.|m.)youtube.com/watch\?v=)(?<Id>[a-zA-Z0-9\-_]+)([\?\&].+)?</a>",
                 "<a class=\"youtube\" name=\"${Id}\" href=\"javascript:void(0);\">" +
                 "<img src=\"http://img.youtube.com/vi/${Id}/mqdefault.jpg\" width=\"480\" height=\"270\">サムネイルをクリックして動画を見る</a>");
-            response.Text = Regex.Replace(response.Text,
+            res = Regex.Replace(res,
                 "&gt;&gt;(?<Id>[0-9]+)",
                 String.Format("<a class=\"popup\" href=\"#res_{0}", topicId) + "_${Id}\">&gt;&gt;${Id}</a>");
+            res = res.Replace("\n", "<br>");
 
             if (response.Level < 2)
-                return String.Format("    <p class=\"res_lv1\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+                return String.Format("    <p class=\"res_lv1\" style=\"padding-left: 32px;\">{0}</p>\n", res);
             else if (response.Level < 4)
-                return String.Format("    <p class=\"res_lv2\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+                return String.Format("    <p class=\"res_lv2\" style=\"padding-left: 32px;\">{0}</p>\n", res);
             else if (response.Level < 5)
-                return String.Format("    <p class=\"res_lv3\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+                return String.Format("    <p class=\"res_lv3\" style=\"padding-left: 32px;\">{0}</p>\n", res);
             else if (response.Level < 7)
-                return String.Format("    <p class=\"res_lv4\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+                return String.Format("    <p class=\"res_lv4\" style=\"padding-left: 32px;\">{0}</p>\n", res);
             else
-                return String.Format("    <p class=\"res_lv5\" style=\"padding-left: 32px;\">{0}</p>\n", response.Text);
+                return String.Format("    <p class=\"res_lv5\" style=\"padding-left: 32px;\">{0}</p>\n", res);
         }
 
         private async Task<string> BuildHtml(ResponseList responseList, bool showSupplyment = true)
