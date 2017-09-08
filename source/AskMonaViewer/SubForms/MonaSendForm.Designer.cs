@@ -303,6 +303,7 @@
             this.Name = "MonaSendForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "送る";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MonaSendForm_FormClosed);
             this.Load += new System.EventHandler(this.MonaRequestForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);

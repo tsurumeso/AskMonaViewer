@@ -155,6 +155,7 @@
             this.Name = "MonaWithdrawForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "出金依頼";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MonaWithdrawForm_FormClosed);
             this.Load += new System.EventHandler(this.MonaWithdrawForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);

@@ -505,6 +505,7 @@
             this.Name = "MonaScatterForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "一括ばらまき";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MonaScatterForm_FormClosed);
             this.Load += new System.EventHandler(this.MonaScatterForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox1.ResumeLayout(false);

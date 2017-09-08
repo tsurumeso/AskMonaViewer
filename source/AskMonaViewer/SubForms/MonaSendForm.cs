@@ -110,5 +110,10 @@ namespace AskMonaViewer.SubForms
         {
             numericUpDown1.Value = 0;
         }
+
+        private void MonaSendForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            timer1.Enabled = false;
+        }
     }
 }

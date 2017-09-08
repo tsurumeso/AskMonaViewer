@@ -111,5 +111,10 @@ namespace AskMonaViewer.SubForms
         {
             numericUpDown1.Value = 0;
         }
+
+        private void ProfileViewForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            timer1.Enabled = false;
+        }
     }
 }

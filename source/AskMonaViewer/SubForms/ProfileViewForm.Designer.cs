@@ -333,6 +333,7 @@
             this.Name = "ProfileViewForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "プロフィール";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProfileViewForm_FormClosed);
             this.Load += new System.EventHandler(this.ProfileViewForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);

@@ -202,5 +202,10 @@ namespace AskMonaViewer.SubForms
             numericUpDown1.Enabled = !checkBox5.Checked;
             groupBox1.Enabled = !checkBox5.Checked;
         }
+
+        private void MonaScatterForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            timer1.Enabled = false;
+        }
     }
 }

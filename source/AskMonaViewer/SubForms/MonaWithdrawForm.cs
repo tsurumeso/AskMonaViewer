@@ -58,5 +58,10 @@ namespace AskMonaViewer.SubForms
             double.TryParse(textBox4.Text, out balance);
             button1.Enabled = value > 0 && balance >= value;
         }
+
+        private void MonaWithdrawForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            timer1.Enabled = false;
+        }
     }
 }
