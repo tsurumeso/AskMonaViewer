@@ -8,6 +8,7 @@ namespace AskMonaViewer.Settings
         public int VSplitterDistance { get; set; }
         public int HSplitterDistance { get; set; }
         public int CategoryId { get; set; }
+        public int SelectedTabIndex { get; set; }
         public List<int> TabTopicList { get; set; }
 
         public MainFormSettings()

@@ -484,6 +484,7 @@ namespace AskMonaViewer
             mSettings.MainFormSettings.VSplitterDistance = this.splitContainer1.SplitterDistance;
             mSettings.MainFormSettings.HSplitterDistance = this.splitContainer2.SplitterDistance;
             mSettings.MainFormSettings.CategoryId = mCategoryId;
+            mSettings.MainFormSettings.SelectedTabIndex = tabControl1.SelectedIndex;
             mSettings.MainFormSettings.TabTopicList.Clear();
 
             foreach (TabPage tabPage in tabControl1.TabPages)
@@ -523,6 +524,7 @@ namespace AskMonaViewer
                 else
                     await Task.Run(() => { while (!mHasDocumentLoaded) System.Threading.Thread.Sleep(100); });
             }
+            tabControl1.SelectedIndex = mSettings.MainFormSettings.SelectedTabIndex;
 
             UpdateConnectionStatus("通信中");
             if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
