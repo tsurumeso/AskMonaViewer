@@ -40,6 +40,7 @@ namespace AskMonaViewer.SubForms
                 ListViewItemComparer.ComparerMode.DateTime,
                 ListViewItemComparer.ComparerMode.String,
                 ListViewItemComparer.ComparerMode.String,
+                ListViewItemComparer.ComparerMode.String,
                 ListViewItemComparer.ComparerMode.Double
             };
         }
