@@ -515,6 +515,10 @@ namespace AskMonaViewer
                 mApi = new AskMonaApi(mHttpClient, mSettings.Account);
             }
 
+            var topicList = await mApi.FetchFavoriteTopicListAsync();
+            if (topicList != null)
+                mFavoriteTopicList = topicList.Topics;
+
             foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
             {
                 UpdateConnectionStatus("通信中");
@@ -531,10 +535,6 @@ namespace AskMonaViewer
                 UpdateConnectionStatus("受信完了");
             else
                 UpdateConnectionStatus("受信失敗");
-
-            var topicList = await mApi.FetchFavoriteTopicListAsync();
-            if (topicList != null)
-                mFavoriteTopicList = topicList.Topics;
 
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
@@ -916,6 +916,7 @@ namespace AskMonaViewer
             if (mResponseForm != null)
                 mResponseForm.UpdateTopic(mTopic);
             mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0];
+            UpdateFavoriteToolStrip();
         }
 
         private void CloseTab_ToolStripMenuItem_Click(object sender, EventArgs e)
