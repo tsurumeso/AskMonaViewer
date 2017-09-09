@@ -539,7 +539,9 @@ namespace AskMonaViewer
             var rate = await mZaifApi.FetchRate("mona_jpy");
             if (rate != null)
                 toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
+
             timer1.Enabled = true;
+            listView2.Enabled = true;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
