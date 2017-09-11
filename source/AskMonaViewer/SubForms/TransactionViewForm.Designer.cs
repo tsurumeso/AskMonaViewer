@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TransactionViewForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.listViewEx1 = new AskMonaViewer.Utilities.ListViewEx();
@@ -183,6 +184,7 @@
             this.ClientSize = new System.Drawing.Size(574, 391);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(590, 430);
             this.Name = "TransactionViewForm";

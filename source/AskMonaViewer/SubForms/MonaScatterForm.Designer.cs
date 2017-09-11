@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MonaScatterForm));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button7 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -549,6 +550,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox2);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(465, 458);
             this.Name = "MonaScatterForm";
