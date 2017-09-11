@@ -850,7 +850,7 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var topicEditForm = new TopicEditForm(mApi, mTopic);
+            var topicEditForm = new TopicEditForm(this, mApi, mTopic);
             topicEditForm.LoadSettings(mSettings.TopicEditFormSettings);
             topicEditForm.ShowDialog();
             mSettings.TopicEditFormSettings = topicEditForm.SaveSettings();

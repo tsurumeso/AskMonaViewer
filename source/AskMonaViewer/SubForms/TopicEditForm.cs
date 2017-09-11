@@ -9,12 +9,14 @@ namespace AskMonaViewer.SubForms
 {
     public partial class TopicEditForm : FormEx
     {
+        private MainForm mParent;
         private AskMonaApi mApi;
         private Topic mTopic;
 
-        public TopicEditForm(AskMonaApi api, Topic topic)
+        public TopicEditForm(MainForm parent, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
+            mParent = parent;
             mApi = api;
             mTopic = topic;
             this.Text = "『" + topic.Title + "』の編集";
@@ -44,6 +46,12 @@ namespace AskMonaViewer.SubForms
             {
                 if (result.Status == 0)
                     MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    mParent.UpdateConnectionStatus("通信中");
+                    if (!(await mParent.ReloadResponse()))
+                        mParent.UpdateConnectionStatus("受信失敗");
+                }
             }
             else
                 MessageBox.Show("トピックの編集に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
