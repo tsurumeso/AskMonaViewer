@@ -25,10 +25,10 @@ namespace AskMonaViewer.SubForms
             mOptions = options;
             mApi = api;
             mTopic = topic;
-            button5.Text = Common.Digits(options.FirstButtonMona) + " MONA";
-            button3.Text = Common.Digits(options.SecondButtonMona) + " MONA";
-            button4.Text = Common.Digits(options.ThirdButtonMona) + " MONA";
-            button6.Text = Common.Digits(options.ForthButtonMona) + " MONA";
+            button5.Text = "+ " + Common.Digits(options.FirstButtonMona) + " MONA";
+            button3.Text = "+ " + Common.Digits(options.SecondButtonMona) + " MONA";
+            button4.Text = "+ " + Common.Digits(options.ThirdButtonMona) + " MONA";
+            button6.Text = "+ " + Common.Digits(options.ForthButtonMona) + " MONA";
             checkBox1.Checked = options.AlwaysSage;
             checkBox2.Checked = !options.AlwaysNonAnonymous;
             this.Text = "『" + topic.Title + "』にばらまく";
@@ -58,10 +58,14 @@ namespace AskMonaViewer.SubForms
         private IEnumerable<Response> FilterResponseList(List<Response> responseList)
         {
             var filteredResponseList = responseList.Where(x => x.UserId != mApi.UserId);
-            if (checkBox3.Enabled && checkBox3.Checked)
+            if (checkBox7.Checked)
+                filteredResponseList = filteredResponseList.Where(x => x.Id >= numericUpDown6.Value && x.Id <= numericUpDown7.Value);
+            if (checkBox3.Checked)
                 filteredResponseList = filteredResponseList.Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value);
-            if (checkBox4.Enabled && checkBox4.Checked)
-                filteredResponseList = filteredResponseList.Where(x => IntegerUserTimes(x.UserTimes) <= (double)numericUpDown2.Value);
+            if (checkBox6.Checked)
+                filteredResponseList = filteredResponseList.GroupBy(x => x.UserId)
+                    .Where(g => g.Count() > 1)
+                    .Select(g => g.FirstOrDefault());
             return filteredResponseList;
         }
 
@@ -200,12 +204,16 @@ namespace AskMonaViewer.SubForms
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
             numericUpDown1.Enabled = !checkBox5.Checked;
-            groupBox1.Enabled = !checkBox5.Checked;
         }
 
         private void MonaScatterForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             timer1.Enabled = false;
+        }
+
+        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
+        {
+            numericUpDown7.Value = numericUpDown6.Value;
         }
     }
 }
