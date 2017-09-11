@@ -202,18 +202,7 @@ namespace AskMonaViewer
             res = Regex.Replace(res,
                 "&gt;&gt;(?<Id>[0-9]+)",
                 String.Format("<a class=\"popup\" href=\"#res_{0}", topicId) + "_${Id}\">&gt;&gt;${Id}</a>");
-            res = res.Replace("\n", "<br>");
-
-            if (response.Level < 2)
-                return String.Format("    <p class=\"res_lv1\" style=\"padding-left: 32px;\">{0}</p>\n", res);
-            else if (response.Level < 4)
-                return String.Format("    <p class=\"res_lv2\" style=\"padding-left: 32px;\">{0}</p>\n", res);
-            else if (response.Level < 5)
-                return String.Format("    <p class=\"res_lv3\" style=\"padding-left: 32px;\">{0}</p>\n", res);
-            else if (response.Level < 7)
-                return String.Format("    <p class=\"res_lv4\" style=\"padding-left: 32px;\">{0}</p>\n", res);
-            else
-                return String.Format("    <p class=\"res_lv5\" style=\"padding-left: 32px;\">{0}</p>\n", res);
+            return res.Replace("\n", "<br>");
         }
 
         private async Task<string> BuildHtml(ResponseList responseList, bool showSupplyment = true)
@@ -223,7 +212,11 @@ namespace AskMonaViewer
             await Task.Run(() =>
             {
                 if (showSupplyment && !String.IsNullOrEmpty(mTopic.Supplyment))
-                    html.Append(String.Format("<p class=\"subtxt\">{0}</p>", mTopic.Supplyment.Replace("\n", "<br>")));
+                {
+                    var response = new Response();
+                    response.Text = mTopic.Supplyment;
+                    html.Append("<p class=\"subtxt\">" + ConvertResponse(response, responseList.Topic.Id) + "</p>");
+                }
 
                 foreach (var response in responseList.Responses)
                 {
@@ -232,7 +225,17 @@ namespace AskMonaViewer
                         response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
                         Common.UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId,
                         response.UserTimes, Common.Digits(Double.Parse(response.Receive) / 100000000), response.ReceivedCount, response.Id));
-                    html.Append(ConvertResponse(response, responseList.Topic.Id));
+
+                    if (response.Level < 2)
+                        html.Append(String.Format("    <p class=\"res_lv1\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                    else if (response.Level < 4)
+                        html.Append(String.Format("    <p class=\"res_lv2\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                    else if (response.Level < 5)
+                        html.Append(String.Format("    <p class=\"res_lv3\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                    else if (response.Level < 7)
+                        html.Append(String.Format("    <p class=\"res_lv4\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                    else
+                        html.Append(String.Format("    <p class=\"res_lv5\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
                 }
             });
 
