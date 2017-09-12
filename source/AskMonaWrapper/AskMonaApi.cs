@@ -11,8 +11,8 @@ namespace AskMonaWrapper
         private const string mApiBaseUrl = "http://askmona.org/v1/";
         private static HttpClient mHttpClient;
         private static SHA256CryptoServiceProvider mSHA256Provider;
-        private const string mApplicationId = "3738";
-        private const string mApplicationSecretKey = "AgGu661B9pe9SL49soov7tZNYRzdF4n8TUjsqNUTOTu0=";
+        private string mApplicationId;
+        private string mApplicationSecretKey;
         private const string mValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         private Account mAccount;
 
@@ -24,11 +24,13 @@ namespace AskMonaWrapper
             }
         }
 
-        public AskMonaApi(HttpClient client, Account account)
+        public AskMonaApi(HttpClient client, string appId, string appSecretKey, Account account)
         {
             mHttpClient = client;
             mSHA256Provider = new SHA256CryptoServiceProvider();
             mAccount = account;
+            mApplicationId = appId;
+            mApplicationSecretKey = appSecretKey;
         }
 
         internal async Task<SecretKey> FetchSecretKey(string addr, string pass)
