@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace AskMonaViewer.Api
-{
+namespace AskMonaWrapper
+{ 
     [DataContract]
     public class ApiResult
     {

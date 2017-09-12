@@ -1,4 +1,4 @@
-﻿using AskMonaViewer.Api;
+﻿using AskMonaWrapper;
 
 namespace AskMonaViewer.Settings
 {

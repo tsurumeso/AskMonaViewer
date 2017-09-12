@@ -1,4 +1,6 @@
-﻿namespace AskMonaViewer.Settings
+﻿using AskMonaWrapper;
+
+namespace AskMonaViewer.Settings
 {
     public class ApplicationSettings
     {

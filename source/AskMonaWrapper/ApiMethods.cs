@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 
-using AskMonaViewer.Utilities;
-
-namespace AskMonaViewer.Api
+namespace AskMonaWrapper
 {
     public partial class AskMonaApi
     {
@@ -73,12 +71,17 @@ namespace AskMonaViewer.Api
             while (authKey.Contains("+"))
             {
                 nonce = GenerateNonce(32);
-                time = Common.DateTimeToUnixTimeStamp(DateTime.Now).ToString();
+                time = DateTimeToUnixTimeStamp(DateTime.Now).ToString();
                 var byteValues = Encoding.UTF8.GetBytes(mApplicationSecretKey + nonce + time + mAccount.SecretKey);
                 authKey = Convert.ToBase64String(mSHA256Provider.ComputeHash(byteValues));
             }
 
             return new AuthorizationKey(authKey, nonce, time);
+        }
+
+        private static int DateTimeToUnixTimeStamp(DateTime dateTime)
+        {
+            return (int)(dateTime - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime()).TotalSeconds;
         }
     }
 }

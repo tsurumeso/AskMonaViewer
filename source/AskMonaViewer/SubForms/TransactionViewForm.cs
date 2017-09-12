@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using AskMonaViewer.Api;
+using AskMonaWrapper;
 using AskMonaViewer.Utilities;
 using AskMonaViewer.Settings;
 

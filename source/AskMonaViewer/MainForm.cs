@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Xml.Serialization;
 using System.Threading.Tasks;
 
-using AskMonaViewer.Api;
+using AskMonaWrapper;
 using AskMonaViewer.Utilities;
 using AskMonaViewer.SubForms;
 using AskMonaViewer.Settings;

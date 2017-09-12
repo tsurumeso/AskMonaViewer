@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 
-using AskMonaViewer.Settings;
+using AskMonaWrapper;
 
 namespace AskMonaViewer.SubForms
 {

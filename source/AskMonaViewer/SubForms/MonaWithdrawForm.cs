@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using AskMonaViewer.Api;
+using AskMonaWrapper;
 
 namespace AskMonaViewer.SubForms
 {

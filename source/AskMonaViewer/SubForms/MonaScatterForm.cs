@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
-using AskMonaViewer.Api;
+using AskMonaWrapper;
 using AskMonaViewer.Utilities;
 using AskMonaViewer.Settings;
 

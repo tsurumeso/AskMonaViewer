@@ -52,6 +52,9 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AskMonaWrapper">
+      <HintPath>..\AskMonaWrapper\bin\Release\AskMonaWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -70,11 +73,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\AskMonaApi.cs" />
-    <Compile Include="Api\AskMonaApiResults.cs" />
-    <Compile Include="Api\AuthorizationKey.cs" />
-    <Compile Include="Settings\Account.cs" />
-    <Compile Include="Api\AskMonaApiMethods.cs" />
     <Compile Include="Settings\MainFormSettings.cs" />
     <Compile Include="Settings\Options.cs" />
     <Compile Include="Settings\TransactionViewFormSettings.cs" />
@@ -169,7 +167,7 @@
     <Compile Include="SubForms\TransactionViewForm.Designer.cs">
       <DependentUpon>TransactionViewForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Api\ZaifApi.cs" />
+    <Compile Include="Utilities\ZaifApi.cs" />
     <EmbeddedResource Include="SubForms\MessageViewForm.resx">
       <DependentUpon>MessageViewForm.cs</DependentUpon>
     </EmbeddedResource>

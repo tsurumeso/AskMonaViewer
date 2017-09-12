@@ -1,4 +1,4 @@
-﻿namespace AskMonaViewer.Api
+﻿namespace AskMonaWrapper
 {
     public class AuthorizationKey
     {
