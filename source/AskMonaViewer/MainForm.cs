@@ -24,7 +24,7 @@ namespace AskMonaViewer
         private int mWheelDelta = 0;
         private bool mIsTopicListUpdating = false;
         private string mHtmlHeader = "";
-        private const string mVersionString = "1.7.3";
+        private const string mVersionString = "1.8.0";
         private ApplicationSettings mSettings;
         private AskMonaApi mAskMonaApi;
         private ZaifApi mZaifApi;
