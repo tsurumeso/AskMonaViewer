@@ -1012,22 +1012,24 @@ namespace AskMonaViewer
 
         private void CloseTab_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var index = tabControl1.SelectedIndex;
-            tabControl1.TabPages[index].Controls[0].Dispose();
-            tabControl1.TabPages.RemoveAt(index);
+            var idx = tabControl1.SelectedIndex;
+            if (tabControl1.TabPages[idx].Controls.Count > 0)
+                tabControl1.TabPages[idx].Controls[0].Dispose();
+            tabControl1.TabPages.RemoveAt(idx);
 
-            if (index == 0) { }
-            else if (index == tabControl1.TabPages.Count)
-                tabControl1.SelectedIndex = index - 1;
+            if (idx == 0) { }
+            else if (idx == tabControl1.TabPages.Count)
+                tabControl1.SelectedIndex = idx - 1;
             else
-                tabControl1.SelectedIndex = index;
+                tabControl1.SelectedIndex = idx;
         }
 
         private void CloseAllTab_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             for (int i = tabControl1.TabPages.Count - 1; i >= 0; i--)
             {
-                tabControl1.TabPages[i].Controls[0].Dispose();
+                if (tabControl1.TabPages[i].Controls.Count > 0)
+                    tabControl1.TabPages[i].Controls[0].Dispose();
                 tabControl1.TabPages.RemoveAt(i);
             }
         }
@@ -1039,7 +1041,8 @@ namespace AskMonaViewer
                 var topic = (Topic)tabControl1.TabPages[i].Tag;
                 if (topic.Id != mTopic.Id)
                 {
-                    tabControl1.TabPages[i].Controls[0].Dispose();
+                    if (tabControl1.TabPages[i].Controls.Count > 0)
+                        tabControl1.TabPages[i].Controls[0].Dispose();
                     tabControl1.TabPages.RemoveAt(i);
                 }
             }
@@ -1049,7 +1052,8 @@ namespace AskMonaViewer
         {
             for (int i = tabControl1.SelectedIndex - 1; i >= 0; i--)
             {
-                tabControl1.TabPages[i].Controls[0].Dispose();
+                if (tabControl1.TabPages[i].Controls.Count > 0)
+                    tabControl1.TabPages[i].Controls[0].Dispose();
                 tabControl1.TabPages.RemoveAt(i);
             }
         }
@@ -1058,7 +1062,8 @@ namespace AskMonaViewer
         {
             for (int i = tabControl1.TabPages.Count - 1; i > tabControl1.SelectedIndex; i--)
             {
-                tabControl1.TabPages[i].Controls[0].Dispose();
+                if (tabControl1.TabPages[i].Controls.Count > 0)
+                    tabControl1.TabPages[i].Controls[0].Dispose();
                 tabControl1.TabPages.RemoveAt(i);
             }
         }
