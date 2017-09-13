@@ -343,6 +343,7 @@
             // 
             // contextMenuStrip2
             // 
+            this.contextMenuStrip2.Enabled = false;
             this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CloseTab_ToolStripMenuItem,
             this.CloseTheOthers_ToolStripMenuItem,
@@ -350,10 +351,11 @@
             this.CloseLeft_ToolStripMenuItem,
             this.CloseRight_ToolStripMenuItem});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(183, 114);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(183, 136);
             // 
             // CloseTab_ToolStripMenuItem
             // 
+            this.CloseTab_ToolStripMenuItem.Enabled = false;
             this.CloseTab_ToolStripMenuItem.Name = "CloseTab_ToolStripMenuItem";
             this.CloseTab_ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.CloseTab_ToolStripMenuItem.Text = "閉じる";
@@ -361,6 +363,7 @@
             // 
             // CloseTheOthers_ToolStripMenuItem
             // 
+            this.CloseTheOthers_ToolStripMenuItem.Enabled = false;
             this.CloseTheOthers_ToolStripMenuItem.Name = "CloseTheOthers_ToolStripMenuItem";
             this.CloseTheOthers_ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.CloseTheOthers_ToolStripMenuItem.Text = "他のタブをすべて閉じる";
@@ -368,6 +371,7 @@
             // 
             // CloseAllTab_ToolStripMenuItem
             // 
+            this.CloseAllTab_ToolStripMenuItem.Enabled = false;
             this.CloseAllTab_ToolStripMenuItem.Name = "CloseAllTab_ToolStripMenuItem";
             this.CloseAllTab_ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.CloseAllTab_ToolStripMenuItem.Text = "すべてのタブを閉じる";
@@ -375,6 +379,7 @@
             // 
             // CloseLeft_ToolStripMenuItem
             // 
+            this.CloseLeft_ToolStripMenuItem.Enabled = false;
             this.CloseLeft_ToolStripMenuItem.Name = "CloseLeft_ToolStripMenuItem";
             this.CloseLeft_ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.CloseLeft_ToolStripMenuItem.Text = "左をすべて閉じる";
@@ -382,6 +387,7 @@
             // 
             // CloseRight_ToolStripMenuItem
             // 
+            this.CloseRight_ToolStripMenuItem.Enabled = false;
             this.CloseRight_ToolStripMenuItem.Name = "CloseRight_ToolStripMenuItem";
             this.CloseRight_ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.CloseRight_ToolStripMenuItem.Text = "右をすべて閉じる";

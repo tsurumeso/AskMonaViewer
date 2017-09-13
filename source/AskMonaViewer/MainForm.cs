@@ -413,6 +413,18 @@ namespace AskMonaViewer
             toolStripStatusLabel1.Text = label;
         }
 
+        private void EnableControls()
+        {
+            timer1.Enabled = true;
+            listView2.Enabled = true;
+            contextMenuStrip2.Enabled = true;
+            CloseTab_ToolStripMenuItem.Enabled = true;
+            CloseAllTab_ToolStripMenuItem.Enabled = true;
+            CloseTheOthers_ToolStripMenuItem.Enabled = true;
+            CloseLeft_ToolStripMenuItem.Enabled = true;
+            CloseRight_ToolStripMenuItem.Enabled = true;
+        }
+
         private void LoadHtmlHeader()
         {
             mHtmlHeader = "<html lang=\"ja\">\n<head>\n" +
@@ -541,8 +553,7 @@ namespace AskMonaViewer
             if (rate != null)
                 toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
 
-            timer1.Enabled = true;
-            listView2.Enabled = true;
+            EnableControls();
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
