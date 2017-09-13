@@ -413,6 +413,21 @@ namespace AskMonaViewer
             toolStripStatusLabel1.Text = label;
         }
 
+        private async Task<bool> UpdateCurrenciesRate()
+        {
+            var rate = await mZaifApi.FetchRate("mona_jpy");
+            if (rate == null)
+                return false;
+            toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
+
+            rate = await mZaifApi.FetchRate("btc_jpy");
+            if (rate == null)
+                return false;
+            toolStripStatusLabel3.Text = "BTC/JPY " + rate.Last.ToString("F0");
+
+            return true;
+        }
+
         private void EnableControls()
         {
             timer1.Enabled = true;
@@ -549,10 +564,7 @@ namespace AskMonaViewer
             else
                 UpdateConnectionStatus("受信失敗");
 
-            var rate = await mZaifApi.FetchRate("mona_jpy");
-            if (rate != null)
-                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
-
+            await UpdateCurrenciesRate();
             EnableControls();
         }
 
@@ -722,9 +734,7 @@ namespace AskMonaViewer
 
         private async void timer1_Tick(object sender, EventArgs e)
         {
-            var rate = await mZaifApi.FetchRate("mona_jpy");
-            if (rate != null)
-                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
+            await UpdateCurrenciesRate();
         }
 
         private void toolStripButton6_Click(object sender, EventArgs e)
