@@ -22,7 +22,6 @@ namespace AskMonaViewer
         private int mCategoryId = 0;
         private int mTopIndex = 0;
         private int mWheelDelta = 0;
-        private bool mHasDocumentLoaded = true;
         private bool mIsTopicListUpdating = false;
         private string mHtmlHeader = "";
         private const string mVersionString = "1.7.3";
@@ -260,19 +259,8 @@ namespace AskMonaViewer
             }
         }
 
-        private void AddTabPage(string html, Topic topic)
+        private WebBrowser CreateWebBrowser(string html)
         {
-            for (int i = 0; i < tabControl1.TabPages.Count; i++)
-            {
-                if (((Topic)tabControl1.TabPages[i].Tag).Id == topic.Id)
-                {
-                    mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[i].Controls[0];
-                    mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
-                    tabControl1.SelectedIndex = i;
-                    return;
-                }
-            }
-
             var webBrowser = new WebBrowser();
             webBrowser.Dock = DockStyle.Fill;
             webBrowser.PreviewKeyDown += new PreviewKeyDownEventHandler(webBrowser_PreviewKeyDown);
@@ -280,15 +268,48 @@ namespace AskMonaViewer
             webBrowser.IsWebBrowserContextMenuEnabled = false;
             webBrowser.ContextMenuStrip = contextMenuStrip1;
             webBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
-            mPrimaryWebBrowser = webBrowser;
+            return webBrowser;
+        }
 
+        private void AddTabPage(string html, Topic topic)
+        {
+            WebBrowser webBrowser;
+            for (int i = 0; i < tabControl1.TabPages.Count; i++)
+            {
+                if (((Topic)tabControl1.TabPages[i].Tag).Id == topic.Id)
+                {
+                    if (tabControl1.TabPages[i].Controls.Count > 0)
+                    {
+                        mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[i].Controls[0];
+                        mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
+                    }
+                    else
+                    {
+                        webBrowser = CreateWebBrowser(html);
+                        tabControl1.TabPages[i].Controls.Add(webBrowser);
+                        mPrimaryWebBrowser = webBrowser;
+                    }
+                    tabControl1.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            webBrowser = CreateWebBrowser(html);
+            mPrimaryWebBrowser = webBrowser;
+            AddTabPage(topic, webBrowser);
+            tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
+        }
+
+        private void AddTabPage(Topic topic, WebBrowser webBrowser = null)
+        {
             var tabPage = new TabPage();
             tabPage.Padding = new Padding(3, 3, 3, 3);
             tabPage.BorderStyle = BorderStyle.FixedSingle;
             tabPage.UseVisualStyleBackColor = true;
-            tabPage.Controls.Add(webBrowser);
             tabPage.Tag = topic;
             tabPage.ToolTipText = topic.Title;
+            if (webBrowser != null)
+                tabPage.Controls.Add(webBrowser);
 
             try
             {
@@ -300,7 +321,6 @@ namespace AskMonaViewer
             }
 
             tabControl1.TabPages.Add(tabPage);
-            tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
         }
 
         private async Task<bool> UpdateResponse(int topicId)
@@ -337,9 +357,40 @@ namespace AskMonaViewer
                 }
             }
 
-            mHasDocumentLoaded = false;
             AddTabPage(html, mTopic);
             UpdateFavoriteToolStrip();
+
+            return true;
+        }
+
+        private async Task<bool> InitializeResponse(int topicId)
+        {
+            Topic topic;
+            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
+            if (idx == -1)
+            {
+                var responseList = await mAskMonaApi.FetchResponseListAsync(topicId, topic_detail: 1);
+                if (responseList == null)
+                    return false;
+                topic = responseList.Topic;
+            }
+            else
+            {
+                var cache = mResponseCacheList[idx];
+                var responseList = await mAskMonaApi.FetchResponseListAsync(topicId, 1, 1000, 1, cache.Topic.Modified);
+                if (responseList == null)
+                    return false;
+                else if (responseList.Status == 2)
+                    topic = cache.Topic;
+                else
+                {
+                    topic = responseList.Topic;
+                    topic.Scrolled = cache.Topic.Scrolled;
+                    mResponseCacheList.RemoveAt(idx);
+                }
+            }
+
+            AddTabPage(topic);
 
             return true;
         }
@@ -364,7 +415,6 @@ namespace AskMonaViewer
             html = await BuildHtml(responseList);
             mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
 
-            mHasDocumentLoaded = false;
             mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
             UpdateFavoriteToolStrip();
 
@@ -551,18 +601,21 @@ namespace AskMonaViewer
             {
                 UpdateConnectionStatus("通信中");
                 toolStripComboBox1.Text = "https://askmona.org/" + topicId;
-                if (!(await UpdateResponse(topicId)))
-                    UpdateConnectionStatus("受信失敗");
+                if (await InitializeResponse(topicId))
+                    UpdateConnectionStatus("受信完了");
                 else
-                    await Task.Run(() => { while (!mHasDocumentLoaded) System.Threading.Thread.Sleep(100); });
+                    UpdateConnectionStatus("受信失敗");
             }
-            tabControl1.SelectedIndex = mSettings.MainFormSettings.SelectedTabIndex;
 
             UpdateConnectionStatus("通信中");
             if (await UpdateTopicList(mCategoryId))
                 UpdateConnectionStatus("受信完了");
             else
                 UpdateConnectionStatus("受信失敗");
+
+            tabControl1.SelectedIndex = mSettings.MainFormSettings.SelectedTabIndex;
+            if (tabControl1.SelectedIndex == 0)
+                tabControl1_SelectedIndexChanged(this, new EventArgs());
 
             await UpdateCurrenciesRate();
             EnableControls();
@@ -671,10 +724,8 @@ namespace AskMonaViewer
             mPrimaryWebBrowser.Document.Click += new HtmlElementEventHandler(Document_Click);
             mPrimaryWebBrowser.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
             mPrimaryWebBrowser.Document.Window.AttachEventHandler("onscroll", OnScrollEventHandler);
-            if (!mHasDocumentLoaded)
-                mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
 
-            mHasDocumentLoaded = true;
+            mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
             UpdateConnectionStatus("受信完了");
         }
 
@@ -933,16 +984,29 @@ namespace AskMonaViewer
             optionForm.ShowDialog();
         }
 
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl1.TabPages.Count <= 0)
                 return;
 
             mTopic = (Topic)tabControl1.TabPages[tabControl1.SelectedIndex].Tag;
             toolStripComboBox1.Text = "https://askmona.org/" + mTopic.Id;
+
             if (mResponseForm != null)
                 mResponseForm.UpdateTopic(mTopic);
-            mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0];
+
+            if (tabControl1.TabPages[tabControl1.SelectedIndex].Controls.Count > 0)
+            {
+                mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0];
+                mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
+            }
+            else
+            {
+                UpdateConnectionStatus("通信中");
+                if (!(await UpdateResponse(mTopic.Id)))
+                    UpdateConnectionStatus("受信失敗");
+            }
+
             UpdateFavoriteToolStrip();
         }
 
