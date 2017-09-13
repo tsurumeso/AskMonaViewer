@@ -24,6 +24,14 @@ namespace AskMonaWrapper
             }
         }
 
+        public Account Account
+        {
+            set
+            {
+                mAccount = value;
+            }
+        }
+
         public AskMonaApi(HttpClient client, string appId, string appSecretKey, Account account)
         {
             mHttpClient = client;

@@ -89,16 +89,14 @@ namespace AskMonaViewer
             return lvi;
         }
 
-        private async Task<TopicList> FetchTopicListAsync(int cat_id, int offset = 0)
+        private async Task<bool> UpdateTopicList(int cat_id, int offset = 0)
         {
+            TopicList topicList;
             if (cat_id == -1)
-                return await mAskMonaApi.FetchFavoriteTopicListAsync();
+                topicList = await mAskMonaApi.FetchFavoriteTopicListAsync();
             else
-                return await mAskMonaApi.FetchTopicListAsync(cat_id, 50, offset);
-        }
+                topicList = await mAskMonaApi.FetchTopicListAsync(cat_id, 50, offset);
 
-        private bool UpdateTopicList(TopicList topicList)
-        {
             if (topicList == null)
                 return false;
 
@@ -515,7 +513,7 @@ namespace AskMonaViewer
             {
                 var signUpForm = new SignUpForm(this, mSettings.Account);
                 signUpForm.ShowDialog();
-                mAskMonaApi = new AskMonaApi(mHttpClient, "3738", "AgGu661B9pe9SL49soov7tZNYRzdF4n8TUjsqNUTOTu0=", mSettings.Account);
+                mAskMonaApi.Account = mSettings.Account;
             }
 
             var topicList = await mAskMonaApi.FetchFavoriteTopicListAsync();
@@ -534,7 +532,7 @@ namespace AskMonaViewer
             tabControl1.SelectedIndex = mSettings.MainFormSettings.SelectedTabIndex;
 
             UpdateConnectionStatus("通信中");
-            if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
+            if (await UpdateTopicList(mCategoryId))
                 UpdateConnectionStatus("受信完了");
             else
                 UpdateConnectionStatus("受信失敗");
@@ -628,7 +626,7 @@ namespace AskMonaViewer
                 mTopicList.Clear();
                 listView1.Items.Clear();
                 UpdateConnectionStatus("通信中");
-                if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
+                if (await UpdateTopicList(mCategoryId))
                     UpdateConnectionStatus("受信完了");
                 else
                     UpdateConnectionStatus("受信失敗");
@@ -678,7 +676,7 @@ namespace AskMonaViewer
             mTopicList.Clear();
             listView1.Items.Clear();
             UpdateConnectionStatus("通信中");
-            if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
+            if (await UpdateTopicList(mCategoryId))
                 UpdateConnectionStatus("受信完了");
             else
                 UpdateConnectionStatus("受信失敗");
@@ -785,7 +783,7 @@ namespace AskMonaViewer
             mTopicList.Clear();
             listView1.Items.Clear();
             UpdateConnectionStatus("通信中");
-            if (UpdateTopicList(await FetchTopicListAsync(mCategoryId)))
+            if (await UpdateTopicList(mCategoryId))
                 UpdateConnectionStatus("受信完了");
             else
                 UpdateConnectionStatus("受信失敗");
@@ -880,7 +878,7 @@ namespace AskMonaViewer
             {
                 mIsTopicListUpdating = true;
                 UpdateConnectionStatus("通信中");
-                if (UpdateTopicList(await FetchTopicListAsync(mCategoryId, listView1.Items.Count)))
+                if (await UpdateTopicList(mCategoryId, listView1.Items.Count))
                     UpdateConnectionStatus("受信完了");
                 else
                     UpdateConnectionStatus("受信失敗");
