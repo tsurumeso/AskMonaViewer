@@ -110,10 +110,10 @@ namespace AskMonaViewer
                 else
                     topic.Increased = topic.Count - oldTopic.Count;
 
-                var cachedTopic = mResponseCacheList.Find(x => x.Topic.Id == topic.Id);
                 topic.CachedCount = 0;
-                if (cachedTopic != null)
-                    topic.CachedCount = cachedTopic.Topic.Count;
+                var cache = mResponseCacheList.Find(x => x.Topic.Id == topic.Id);
+                if (cache != null)
+                    topic.CachedCount = cache.Topic.Count;
 
                 var lvi = CreateListViewItem(topic, time);
                 listView1.Items.Add(lvi);
@@ -555,8 +555,8 @@ namespace AskMonaViewer
             if (listView1.SelectedItems.Count == 0)
                 return;
 
-            var idx = listView1.SelectedIndices[0];
-            var topic = (Topic)listView1.Items[idx].Tag;
+            var itemIndex = listView1.SelectedIndices[0];
+            var topic = (Topic)listView1.Items[itemIndex].Tag;
             UpdateConnectionStatus("通信中");
             toolStripComboBox1.Text = "https://askmona.org/" + topic.Id;
             if (!(await UpdateResponse(topic.Id)))
@@ -564,8 +564,13 @@ namespace AskMonaViewer
 
             if (mResponseForm != null)
                 mResponseForm.UpdateTopic(topic);
-            listView1.Items[idx].SubItems[4].Text = mTopic.Count.ToString();
-            listView1.Items[idx].SubItems[5].Text = "";
+
+            var topicIndex = mTopicList.FindIndex(x => x.Id == topic.Id);
+            if (topicIndex != -1)
+                mTopicList[topicIndex].CachedCount = mTopic.Count;
+
+            listView1.Items[itemIndex].SubItems[4].Text = mTopic.Count.ToString();
+            listView1.Items[itemIndex].SubItems[5].Text = "";
         }
 
         private async void Document_Click(object sender, HtmlElementEventArgs e)
