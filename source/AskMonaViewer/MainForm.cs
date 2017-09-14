@@ -273,6 +273,29 @@ namespace AskMonaViewer
             return webBrowser;
         }
 
+        private void AddTabPage(Topic topic, WebBrowser webBrowser = null)
+        {
+            var tabPage = new TabPage();
+            tabPage.Padding = new Padding(3, 3, 3, 3);
+            tabPage.BorderStyle = BorderStyle.FixedSingle;
+            tabPage.UseVisualStyleBackColor = true;
+            tabPage.Tag = topic;
+            tabPage.ToolTipText = topic.Title;
+            if (webBrowser != null)
+                tabPage.Controls.Add(webBrowser);
+
+            try
+            {
+                tabPage.Text = topic.Title.Substring(0, 15) + "...";
+            }
+            catch
+            {
+                tabPage.Text = topic.Title;
+            }
+
+            tabControl1.TabPages.Add(tabPage);
+        }
+
         private void AddTabPage(string html, Topic topic)
         {
             WebBrowser webBrowser;
@@ -302,27 +325,26 @@ namespace AskMonaViewer
             tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
         }
 
-        private void AddTabPage(Topic topic, WebBrowser webBrowser = null)
+        private async Task<bool> InitializeResponse(int topicId)
         {
-            var tabPage = new TabPage();
-            tabPage.Padding = new Padding(3, 3, 3, 3);
-            tabPage.BorderStyle = BorderStyle.FixedSingle;
-            tabPage.UseVisualStyleBackColor = true;
-            tabPage.Tag = topic;
-            tabPage.ToolTipText = topic.Title;
-            if (webBrowser != null)
-                tabPage.Controls.Add(webBrowser);
-
-            try
+            Topic topic;
+            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
+            if (idx == -1)
             {
-                tabPage.Text = topic.Title.Substring(0, 15) + "...";
+                var responseList = await mAskMonaApi.FetchResponseListAsync(topicId, 1, 1, 1);
+                if (responseList == null)
+                    return false;
+                topic = responseList.Topic;
             }
-            catch
+            else
             {
-                tabPage.Text = topic.Title;
+                var cache = mResponseCacheList[idx];
+                topic = cache.Topic;
             }
 
-            tabControl1.TabPages.Add(tabPage);
+            AddTabPage(topic);
+
+            return true;
         }
 
         private async Task<bool> UpdateResponse(int topicId)
@@ -361,38 +383,6 @@ namespace AskMonaViewer
 
             mIsDocumentLoading = true;
             AddTabPage(html, mTopic);
-
-            return true;
-        }
-
-        private async Task<bool> InitializeResponse(int topicId)
-        {
-            Topic topic;
-            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
-            if (idx == -1)
-            {
-                var responseList = await mAskMonaApi.FetchResponseListAsync(topicId, topic_detail: 1);
-                if (responseList == null)
-                    return false;
-                topic = responseList.Topic;
-            }
-            else
-            {
-                var cache = mResponseCacheList[idx];
-                var responseList = await mAskMonaApi.FetchResponseListAsync(topicId, 1, 1000, 1, cache.Topic.Modified);
-                if (responseList == null)
-                    return false;
-                else if (responseList.Status == 2)
-                    topic = cache.Topic;
-                else
-                {
-                    topic = responseList.Topic;
-                    topic.Scrolled = cache.Topic.Scrolled;
-                    mResponseCacheList.RemoveAt(idx);
-                }
-            }
-
-            AddTabPage(topic);
 
             return true;
         }
