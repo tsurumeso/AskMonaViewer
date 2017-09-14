@@ -24,6 +24,8 @@ namespace AskMonaViewer
         private int mWheelDelta = 0;
         private bool mIsTopicListUpdating = false;
         private string mHtmlHeader = "";
+        private bool mIsTabClosing = false;
+        private bool mIsDocumentLoading = false;
         private const string mVersionString = "1.8.0";
         private ApplicationSettings mSettings;
         private AskMonaApi mAskMonaApi;
@@ -357,8 +359,8 @@ namespace AskMonaViewer
                 }
             }
 
+            mIsDocumentLoading = true;
             AddTabPage(html, mTopic);
-            UpdateFavoriteToolStrip();
 
             return true;
         }
@@ -415,8 +417,8 @@ namespace AskMonaViewer
             html = await BuildHtml(responseList);
             mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
 
+            mIsDocumentLoading = true;
             mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
-            UpdateFavoriteToolStrip();
 
             return true;
         }
@@ -647,6 +649,7 @@ namespace AskMonaViewer
 
             listView1.Items[itemIndex].SubItems[4].Text = mTopic.Count.ToString();
             listView1.Items[itemIndex].SubItems[5].Text = "";
+            UpdateFavoriteToolStrip();
         }
 
         private async void Document_Click(object sender, HtmlElementEventArgs e)
@@ -725,7 +728,10 @@ namespace AskMonaViewer
             mPrimaryWebBrowser.Document.ContextMenuShowing += new HtmlElementEventHandler(Document_ContextMenuShowing);
             mPrimaryWebBrowser.Document.Window.AttachEventHandler("onscroll", OnScrollEventHandler);
 
-            mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
+            if (mIsDocumentLoading)
+                mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
+
+            mIsDocumentLoading = false;
             UpdateConnectionStatus("受信完了");
         }
 
@@ -986,7 +992,7 @@ namespace AskMonaViewer
 
         private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.TabPages.Count <= 0)
+            if (tabControl1.TabPages.Count <= 0 || mIsTabClosing)
                 return;
 
             mTopic = (Topic)tabControl1.TabPages[tabControl1.SelectedIndex].Tag;
@@ -996,10 +1002,7 @@ namespace AskMonaViewer
                 mResponseForm.UpdateTopic(mTopic);
 
             if (tabControl1.TabPages[tabControl1.SelectedIndex].Controls.Count > 0)
-            {
                 mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0];
-                mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
-            }
             else
             {
                 UpdateConnectionStatus("通信中");
@@ -1012,10 +1015,14 @@ namespace AskMonaViewer
 
         private void CloseTab_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mIsTabClosing = true;
+
             var idx = tabControl1.SelectedIndex;
             if (tabControl1.TabPages[idx].Controls.Count > 0)
                 tabControl1.TabPages[idx].Controls[0].Dispose();
             tabControl1.TabPages.RemoveAt(idx);
+
+            mIsTabClosing = false;
 
             if (idx == 0) { }
             else if (idx == tabControl1.TabPages.Count)
@@ -1026,16 +1033,22 @@ namespace AskMonaViewer
 
         private void CloseAllTab_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mIsTabClosing = true;
+
             for (int i = tabControl1.TabPages.Count - 1; i >= 0; i--)
             {
                 if (tabControl1.TabPages[i].Controls.Count > 0)
                     tabControl1.TabPages[i].Controls[0].Dispose();
                 tabControl1.TabPages.RemoveAt(i);
             }
+
+            mIsTabClosing = false;
         }
 
         private void CloseTheOthers_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mIsTabClosing = true;
+
             for (int i = tabControl1.TabPages.Count - 1; i >= 0; i--)
             {
                 var topic = (Topic)tabControl1.TabPages[i].Tag;
@@ -1046,26 +1059,36 @@ namespace AskMonaViewer
                     tabControl1.TabPages.RemoveAt(i);
                 }
             }
+
+            mIsTabClosing = false;
         }
 
         private void CloseLeft_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mIsTabClosing = true;
+
             for (int i = tabControl1.SelectedIndex - 1; i >= 0; i--)
             {
                 if (tabControl1.TabPages[i].Controls.Count > 0)
                     tabControl1.TabPages[i].Controls[0].Dispose();
                 tabControl1.TabPages.RemoveAt(i);
             }
+
+            mIsTabClosing = false;
         }
 
         private void CloseRight_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mIsTabClosing = true;
+
             for (int i = tabControl1.TabPages.Count - 1; i > tabControl1.SelectedIndex; i--)
             {
                 if (tabControl1.TabPages[i].Controls.Count > 0)
                     tabControl1.TabPages[i].Controls[0].Dispose();
                 tabControl1.TabPages.RemoveAt(i);
             }
+
+            mIsTabClosing = false;
         }
 
         private void tabControl1_MouseDown(object sender, MouseEventArgs e)
