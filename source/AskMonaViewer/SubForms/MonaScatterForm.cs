@@ -29,6 +29,7 @@ namespace AskMonaViewer.SubForms
             button3.Text = "+ " + Common.Digits(options.SecondButtonMona) + " MONA";
             button4.Text = "+ " + Common.Digits(options.ThirdButtonMona) + " MONA";
             button6.Text = "+ " + Common.Digits(options.ForthButtonMona) + " MONA";
+            checkBox4.Enabled = topic.ShowHost != 0;
             checkBox1.Checked = options.AlwaysSage;
             checkBox2.Checked = !options.AlwaysNonAnonymous;
             this.Text = "『" + topic.Title + "』にばらまく";
@@ -64,7 +65,11 @@ namespace AskMonaViewer.SubForms
                 filteredResponseList = filteredResponseList.Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value);
             if (checkBox6.Checked)
                 filteredResponseList = filteredResponseList.GroupBy(x => x.UserId)
-                    .Where(g => g.Count() > 1)
+                    .Where(g => g.Count() > 0)
+                    .Select(g => g.FirstOrDefault());
+            if (checkBox4.Checked)
+                filteredResponseList = filteredResponseList.GroupBy(x => x.Host)
+                    .Where(g => g.Count() > 0)
                     .Select(g => g.FirstOrDefault());
             return filteredResponseList;
         }
