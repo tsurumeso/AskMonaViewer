@@ -296,7 +296,7 @@ namespace AskMonaViewer
             tabControl1.TabPages.Add(tabPage);
         }
 
-        private void AddTabPage(string html, Topic topic)
+        private void AddTabPage(Topic topic, string html)
         {
             WebBrowser webBrowser;
             for (int i = 0; i < tabControl1.TabPages.Count; i++)
@@ -314,6 +314,7 @@ namespace AskMonaViewer
                         tabControl1.TabPages[i].Controls.Add(webBrowser);
                         mPrimaryWebBrowser = webBrowser;
                     }
+                    tabControl1.TabPages[i].Tag = topic;
                     tabControl1.SelectedIndex = i;
                     return;
                 }
@@ -382,7 +383,7 @@ namespace AskMonaViewer
             }
 
             mIsDocumentLoading = true;
-            AddTabPage(html, mTopic);
+            AddTabPage(mTopic, html);
 
             return true;
         }
