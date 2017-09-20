@@ -219,22 +219,28 @@ namespace AskMonaViewer
 
                 foreach (var response in responseList.Responses)
                 {
-                    html.Append(String.Format("    <a href=\"javascript:void(0);\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> " +
-                        "投稿日：{3} <font color={4}>ID：</font>{5} [{6}] <b>+{7}MONA/{8}人</b> <a href=\"#send?r_id={9}\" class=\"send\">←送る</a>\n",
-                        response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
+                    html.Append(String.Format(
+                        "<a href=\"javascript:void(0);\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> ",
+                        response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan)));
+
+                    if (mTopic.ShowHost > 0)
+                        html.Append(String.Format("({0}) ", response.Host));
+
+                    html.Append(String.Format(
+                        "投稿日：{0} <font color={1}>ID：</font>{2} [{3}] <b>+{4}MONA/{5}人</b> <a href=\"#send?r_id={6}\" class=\"send\">←送る</a>\n",
                         Common.UnixTimeStampToDateTime(response.Created).ToString(), GetIdColorString(response.UserTimes), response.UserId,
                         response.UserTimes, Common.Digits(Double.Parse(response.Receive) / 100000000), response.ReceivedCount, response.Id));
 
                     if (response.Level < 2)
-                        html.Append(String.Format("    <p class=\"res_lv1\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                        html.Append(String.Format("<p class=\"res_lv1\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
                     else if (response.Level < 4)
-                        html.Append(String.Format("    <p class=\"res_lv2\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                        html.Append(String.Format("<p class=\"res_lv2\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
                     else if (response.Level < 5)
-                        html.Append(String.Format("    <p class=\"res_lv3\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                        html.Append(String.Format("<p class=\"res_lv3\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
                     else if (response.Level < 7)
-                        html.Append(String.Format("    <p class=\"res_lv4\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                        html.Append(String.Format("<p class=\"res_lv4\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
                     else
-                        html.Append(String.Format("    <p class=\"res_lv5\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
+                        html.Append(String.Format("<p class=\"res_lv5\">{0}</p>\n", ConvertResponse(response, responseList.Topic.Id)));
                 }
             });
 
@@ -498,7 +504,8 @@ namespace AskMonaViewer
             if (File.Exists("common/script.js"))
             {
                 var js = new StreamReader("common/script.js", Encoding.GetEncoding("UTF-8")).ReadToEnd();
-                mHtmlHeader += String.Format("<script type=\"text/javascript\" src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
+                mHtmlHeader += String.Format(
+                    "<script type=\"text/javascript\" src=\"https://code.jquery.com/jquery-2.2.4.min.js\"></script>\n" +
                     "<script type=\"text/javascript\">\n{0}\n</script>\n", js);
             }
 
@@ -896,7 +903,8 @@ namespace AskMonaViewer
 
         private void About_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var text = String.Format("プログラム名:\n    AskMonaViewer {0}\nホームページ:\n    https://github.com/tsurumeso/AskMonaViewer",
+            var text = String.Format(
+                "プログラム名:\n    AskMonaViewer {0}\nホームページ:\n    https://github.com/tsurumeso/AskMonaViewer",
                 mVersionString);
             MessageBox.Show(text, "AskMonaViewerについて", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

@@ -207,7 +207,7 @@ namespace AskMonaWrapper
         public int Editable { get; set; }
 
         [DataMember(Name = "sh_host")]
-        public int IsHost { get; set; }
+        public int ShowHost { get; set; }
 
         public Topic()
         {
