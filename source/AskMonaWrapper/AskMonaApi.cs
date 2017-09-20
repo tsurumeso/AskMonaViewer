@@ -121,14 +121,19 @@ namespace AskMonaWrapper
             return await CallAuthAsync<ApiResult>(mApiBaseUrl + "topics/new", prms);
         }
 
-        public async Task<ApiResult> EditTopicAsync(int t_id, int cat_id, string tags, string lead, string ps)
+        public async Task<ApiResult> EditTopicAsync(Topic topic)
         {
             var prms = new Dictionary<string, string>();
-            prms.Add("t_id", t_id.ToString());
-            prms.Add("cat_id", cat_id.ToString());
-            prms.Add("tags", tags);
-            prms.Add("lead", lead);
-            prms.Add("ps", ps);
+            prms.Add("t_id", topic.Id.ToString());
+            prms.Add("tags", topic.Tags);
+            prms.Add("lead", topic.Lead);
+            prms.Add("ps", topic.Supplyment);
+            if (topic.CategoryId != -1)
+                prms.Add("cat_id", topic.CategoryId.ToString());
+            if (topic.Editable != -1)
+                prms.Add("editable", topic.Editable.ToString());
+            if (topic.ShowHost != -1)
+                prms.Add("sh_host", topic.ShowHost.ToString());
 
             return await CallAuthAsync<ApiResult>(mApiBaseUrl + "topics/edit", prms);
         }
@@ -188,13 +193,11 @@ namespace AskMonaWrapper
             return await CallAsync<UserProfile>(mApiBaseUrl + "users/profile", prms);
         }
 
-        public async Task<UserProfile> EditUserProfileAsync(string u_name=null, string profile=null)
+        public async Task<UserProfile> EditUserProfileAsync(string u_name = null, string profile = null)
         {
             var prms = new Dictionary<string, string>();
-            if (!String.IsNullOrEmpty(u_name))
-                prms.Add("u_name", u_name);
-            if (!String.IsNullOrEmpty(profile))
-                prms.Add("profile", profile);
+            prms.Add("u_name", u_name);
+            prms.Add("profile", profile);
 
             return await CallAuthAsync<UserProfile>(mApiBaseUrl + "users/myprofile", prms);
         }

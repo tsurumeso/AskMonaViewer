@@ -20,6 +20,20 @@ namespace AskMonaViewer.SubForms
             mApi = api;
             mTopic = topic;
             this.Text = "『" + topic.Title + "』の編集";
+
+            if (topic.UserId != api.UserId)
+            {
+                textBox2.ReadOnly = true;
+                textBox3.ReadOnly = true;
+                checkBox1.Enabled = false;
+                comboBox2.Enabled = false;
+
+                if (topic.Editable == 0)
+                {
+                    textBox4.ReadOnly = true;
+                    comboBox1.Enabled = false;
+                }
+            }
         }
 
         private void TopicEditForm_Load(object sender, EventArgs e)
@@ -29,7 +43,28 @@ namespace AskMonaViewer.SubForms
             if (mTopic.Supplyment != null)
                 textBox3.Text = mTopic.Supplyment.Replace("\n", "\r\n");
             textBox4.Text = mTopic.Tags;
+            checkBox1.Checked = mTopic.Editable == 1;
             comboBox1.SelectedIndex = mTopic.CategoryId;
+            comboBox2.SelectedIndex = mTopic.ShowHost;
+        }
+
+        private Topic EditTopic(Topic src)
+        {
+            var topic = new Topic();
+
+            topic.Id = src.Id;
+            topic.CategoryId = comboBox1.SelectedIndex == src.CategoryId ? -1 : comboBox1.SelectedIndex;
+            topic.Tags = src.UserId != mApi.UserId ? (src.Editable == 0 ? null : textBox4.Text) : textBox4.Text;
+            topic.Editable = src.UserId != mApi.UserId ? -1 : (checkBox1.Checked ? 1 : 0);
+            topic.ShowHost = comboBox2.SelectedIndex == src.ShowHost ? -1 : comboBox2.SelectedIndex;
+            topic.Lead = src.Lead;
+            if (topic.Lead != null)
+                topic.Lead = textBox2.Text == src.Lead.Replace("\n", "\r\n") ? null : textBox2.Text;
+            topic.Supplyment = src.Supplyment;
+            if (topic.Supplyment != null)
+                topic.Supplyment = textBox3.Text == src.Supplyment.Replace("\n", "\r\n") ? null : textBox3.Text;
+
+            return topic;
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -41,7 +76,7 @@ namespace AskMonaViewer.SubForms
                 return;
             }
 
-            var result = await mApi.EditTopicAsync(mTopic.Id, comboBox1.SelectedIndex, textBox4.Text, textBox2.Text, textBox3.Text);
+            var result = await mApi.EditTopicAsync(EditTopic(mTopic));
             if (result != null)
             {
                 if (result.Status == 0)

@@ -12,7 +12,10 @@ namespace AskMonaWrapper
         {
             var sb = new StringBuilder();
             foreach (var prm in prms)
-                sb.Append(String.Format("{0}={1}&", prm.Key, System.Net.WebUtility.UrlEncode(prm.Value)));
+            {
+                if (prm.Value != null)
+                    sb.Append(String.Format("{0}={1}&", prm.Key, System.Net.WebUtility.UrlEncode(prm.Value)));
+            }
 
             try
             {
