@@ -7,7 +7,7 @@ using AskMonaViewer.Settings;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class MonaSendForm : FormEx
+    public partial class SendMonaDialog : FormEx
     {
         private MainForm mParent;
         private Options mOptions;
@@ -15,7 +15,7 @@ namespace AskMonaViewer.SubForms
         private Topic mTopic;
         private int mResponseId;
 
-        public MonaSendForm(MainForm parent, Options options, AskMonaApi api, Topic topic, int r_id)
+        public SendMonaDialog(MainForm parent, Options options, AskMonaApi api, Topic topic, int r_id)
         {
             InitializeComponent();
             mParent = parent;
@@ -33,7 +33,7 @@ namespace AskMonaViewer.SubForms
             textBox2.Text = r_id.ToString();
         }
 
-        private async void MonaRequestForm_Load(object sender, System.EventArgs e)
+        private async void SendMonaDialog_Load(object sender, System.EventArgs e)
         {
             var balance = await mApi.FetchBlanceAsync(0);
             if (balance != null)

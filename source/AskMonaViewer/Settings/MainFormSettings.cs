@@ -2,7 +2,7 @@
 
 namespace AskMonaViewer.Settings
 {
-    public class MainFormSettings : FormSettings
+    public class MainFormSettings : DialogSettings
     {
         public bool IsHorizontal { get; set; }
         public int VSplitterDistance { get; set; }

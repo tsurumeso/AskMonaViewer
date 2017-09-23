@@ -1,6 +1,6 @@
 ﻿namespace AskMonaViewer.SubForms
 {
-    partial class MonaScatterForm
+    partial class ScatterMonaDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MonaScatterForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScatterMonaDialog));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button7 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -569,7 +569,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "一括ばらまき";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MonaScatterForm_FormClosed);
-            this.Load += new System.EventHandler(this.MonaScatterForm_Load);
+            this.Load += new System.EventHandler(this.ScatterMonaDialog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

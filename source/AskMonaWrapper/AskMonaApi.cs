@@ -212,7 +212,7 @@ namespace AskMonaWrapper
             return await CallAuthAsync<TransactionDetail>(mApiBaseUrl + "account/txdetail", prms);
         }
 
-        public async Task<ApiResult> VerifySecretKey()
+        public async Task<ApiResult> VerifySecretKeyAsync()
         {
             var prms = new Dictionary<string, string>();
 

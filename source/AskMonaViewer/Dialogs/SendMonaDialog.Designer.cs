@@ -1,6 +1,6 @@
 ﻿namespace AskMonaViewer.SubForms
 {
-    partial class MonaSendForm
+    partial class SendMonaDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MonaSendForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SendMonaDialog));
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -306,7 +306,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "送る";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MonaSendForm_FormClosed);
-            this.Load += new System.EventHandler(this.MonaRequestForm_Load);
+            this.Load += new System.EventHandler(this.SendMonaDialog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -5,17 +5,17 @@ using AskMonaWrapper;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class MonaWithdrawForm : Form
+    public partial class WithdrawMonaDialog : Form
     {
         private AskMonaApi mApi;
 
-        public MonaWithdrawForm(AskMonaApi api)
+        public WithdrawMonaDialog(AskMonaApi api)
         {
             InitializeComponent();
             mApi = api;
         }
 
-        private async void MonaWithdrawForm_Load(object sender, EventArgs e)
+        private async void WithdrawMonaDialog_Load(object sender, EventArgs e)
         {
             var balance = await mApi.FetchBlanceAsync(0);
             if (balance != null)

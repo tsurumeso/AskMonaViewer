@@ -1,6 +1,6 @@
 ﻿namespace AskMonaViewer.SubForms
 {
-    partial class ProfileEditForm
+    partial class EditProfileDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProfileEditForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditProfileDialog));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -120,7 +120,7 @@
             this.Name = "ProfileEditForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "マイプロフィールの編集";
-            this.Load += new System.EventHandler(this.ProfileEditForm_Load);
+            this.Load += new System.EventHandler(this.EditProfileDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

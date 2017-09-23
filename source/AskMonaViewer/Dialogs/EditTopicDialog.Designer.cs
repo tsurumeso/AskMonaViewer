@@ -1,6 +1,6 @@
 ﻿namespace AskMonaViewer.SubForms
 {
-    partial class TopicEditForm
+    partial class EditTopicDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TopicEditForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTopicDialog));
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -221,7 +221,7 @@
             this.Name = "TopicEditForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "トピックの編集";
-            this.Load += new System.EventHandler(this.TopicEditForm_Load);
+            this.Load += new System.EventHandler(this.EditTopicDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

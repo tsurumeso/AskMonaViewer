@@ -6,11 +6,11 @@ using AskMonaWrapper;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class SignUpForm : Form
+    public partial class SignUpDialog : Form
     {
         MainForm mParentForm;
 
-        public SignUpForm(MainForm parent, Account account)
+        public SignUpDialog(MainForm parent, Account account)
         {
             InitializeComponent();
             mParentForm = parent;

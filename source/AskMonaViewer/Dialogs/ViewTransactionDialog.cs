@@ -10,21 +10,21 @@ using AskMonaViewer.Settings;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class TransactionViewForm : Form
+    public partial class ViewTransactionDialog : Form
     {
         private MainForm mParent;
         private AskMonaApi mApi;
         private ListViewItemComparer mListViewItemSorterDW;
         private ListViewItemComparer mListViewItemSorterRS;
-        private TransactionViewFormSettings mSettings;
-        private MessageViewForm mMessageViewForm = null;
+        private ViewTransactionDialogSettings mSettings;
+        private ViewMessageDialog mViewMessageDialog = null;
 
-        public TransactionViewForm(MainForm parent, AskMonaApi api)
+        public ViewTransactionDialog(MainForm parent, AskMonaApi api)
         {
             InitializeComponent();
             mParent = parent;
             mApi = api;
-            mSettings = new TransactionViewFormSettings();
+            mSettings = new ViewTransactionDialogSettings();
             mListViewItemSorterDW = new ListViewItemComparer();
             mListViewItemSorterDW.ColumnModes = new ListViewItemComparer.ComparerMode[]
             {
@@ -45,7 +45,7 @@ namespace AskMonaViewer.SubForms
             };
         }
 
-        private async void TransactionViewForm_Load(object sender, EventArgs e)
+        private async void ViewTransactionDialog_Load(object sender, EventArgs e)
         {
             var deposit = await mApi.FetchTransactionAsync("deposit");
             var withdraw = await mApi.FetchTransactionAsync("withdraw");
@@ -128,26 +128,26 @@ namespace AskMonaViewer.SubForms
 
             var responseList = await mApi.FetchResponseListAsync(tx.TopicId, tx.ResponceId, tx.ResponceId, 1);
             var html = await mParent.BuildWebBrowserDocument(responseList);
-            if (mMessageViewForm == null)
+            if (mViewMessageDialog == null)
             {
-                mMessageViewForm = new MessageViewForm(html, tx.Message, responseList.Topic.Title);
-                mMessageViewForm.LoadSettings(mSettings.MessageViewFormSettings);
-                mMessageViewForm.FormClosed += OnMessageViewFormClosed;
-                mMessageViewForm.Show();
+                mViewMessageDialog = new ViewMessageDialog(html, tx.Message, responseList.Topic.Title);
+                mViewMessageDialog.LoadSettings(mSettings.ViewMessageDialogSettings);
+                mViewMessageDialog.FormClosed += OnMessageViewFormClosed;
+                mViewMessageDialog.Show();
             }
             else
             {
-                mMessageViewForm.UpdateMessage(html, tx.Message, responseList.Topic.Title);
+                mViewMessageDialog.UpdateMessage(html, tx.Message, responseList.Topic.Title);
             }
         }
 
         private void OnMessageViewFormClosed(object sender, EventArgs e)
         {
-            mSettings.MessageViewFormSettings = mMessageViewForm.SaveSettings();
-            mMessageViewForm = null;
+            mSettings.ViewMessageDialogSettings = mViewMessageDialog.SaveSettings();
+            mViewMessageDialog = null;
         }
 
-        public TransactionViewFormSettings SaveSettings()
+        public ViewTransactionDialogSettings SaveSettings()
         {
             if (this.WindowState == FormWindowState.Normal)
             {
@@ -163,7 +163,7 @@ namespace AskMonaViewer.SubForms
             return mSettings;
         }
 
-        public void LoadSettings(TransactionViewFormSettings settings)
+        public void LoadSettings(ViewTransactionDialogSettings settings)
         {
             this.Size = settings.Size;
             this.Location = settings.Location;
@@ -173,10 +173,10 @@ namespace AskMonaViewer.SubForms
 
         private void TransactionViewForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (mMessageViewForm == null)
+            if (mViewMessageDialog == null)
                 return;
 
-            mMessageViewForm.Close();
+            mViewMessageDialog.Close();
         }
     }
 }
