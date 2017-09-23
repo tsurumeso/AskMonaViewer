@@ -7,14 +7,14 @@ using AskMonaViewer.Settings;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class ResponseForm : FormEx
+    public partial class PostResponseDialog : FormEx
     {
         private MainForm mParent;
         private AskMonaApi mApi;
         private Topic mTopic;
         private bool mHasCompleted = false;
 
-        public ResponseForm(MainForm parent, Options options, AskMonaApi api, Topic topic)
+        public PostResponseDialog(MainForm parent, Options options, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
             mParent = parent;

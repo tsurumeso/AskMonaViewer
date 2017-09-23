@@ -10,7 +10,7 @@ using AskMonaViewer.Settings;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class MonaScatterForm : FormEx
+    public partial class ScatterMonaDialog : FormEx
     {
         private MainForm mParent;
         private Options mOptions;
@@ -18,7 +18,7 @@ namespace AskMonaViewer.SubForms
         private Topic mTopic;
         private ResponseList mResponseList;
 
-        public MonaScatterForm(MainForm parent, Options options, AskMonaApi api, Topic topic)
+        public ScatterMonaDialog(MainForm parent, Options options, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
             mParent = parent;
@@ -35,7 +35,7 @@ namespace AskMonaViewer.SubForms
             this.Text = "『" + topic.Title + "』にばらまく";
         }
 
-        private async void MonaScatterForm_Load(object sender, EventArgs e)
+        private async void ScatterMonaDialog_Load(object sender, EventArgs e)
         {
             mResponseList = await mApi.FetchResponseListAsync(mTopic.Id);
             textBox2.Text = FilterResponseList(mResponseList.Responses).Count().ToString();

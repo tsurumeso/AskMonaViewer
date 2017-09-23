@@ -7,13 +7,13 @@ using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class TopicEditForm : FormEx
+    public partial class EditTopicDialog : FormEx
     {
         private MainForm mParent;
         private AskMonaApi mApi;
         private Topic mTopic;
 
-        public TopicEditForm(MainForm parent, AskMonaApi api, Topic topic)
+        public EditTopicDialog(MainForm parent, AskMonaApi api, Topic topic)
         {
             InitializeComponent();
             mParent = parent;
@@ -36,7 +36,7 @@ namespace AskMonaViewer.SubForms
             }
         }
 
-        private void TopicEditForm_Load(object sender, EventArgs e)
+        private void EditTopicDialog_Load(object sender, EventArgs e)
         {
             if (mTopic.Lead != null)
                 textBox2.Text = mTopic.Lead.Replace("\n", "\r\n");

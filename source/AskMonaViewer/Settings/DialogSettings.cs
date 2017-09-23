@@ -3,13 +3,13 @@ using System.Windows.Forms;
 
 namespace AskMonaViewer.Settings
 {
-    public class FormSettings
+    public class DialogSettings
     {
         public Size Size { get; set; }
         public Point Location { get; set; }
         public FormWindowState WindowState { get; set; }
 
-        public FormSettings()
+        public DialogSettings()
         {
             Size = new Size(0, 0);
             Location = new Point(0, 0);

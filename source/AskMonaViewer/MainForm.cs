@@ -36,7 +36,7 @@ namespace AskMonaViewer
         private List<Topic> mTopicList;
         private List<Topic> mFavoriteTopicList;
         private List<ResponseCache> mResponseCacheList;
-        private ResponseForm mResponseForm = null;
+        private PostResponseDialog mPostResponseDialog = null;
         private WebBrowser mPrimaryWebBrowser;
 
         public MainForm()
@@ -438,8 +438,8 @@ namespace AskMonaViewer
 
         private void OnResponseFormClosed(object sender, EventArgs e)
         {
-            mSettings.ResponseFormSettings = mResponseForm.SaveSettings();
-            mResponseForm = null;
+            mSettings.PostResponseDialogSettings = mPostResponseDialog.SaveSettings();
+            mPostResponseDialog = null;
         }
 
         public void SetAccount(string addr, string pass)
@@ -586,10 +586,10 @@ namespace AskMonaViewer
             LoadHtmlHeader();
 
             mAskMonaApi = new AskMonaApi(mHttpClient, "3738", "AgGu661B9pe9SL49soov7tZNYRzdF4n8TUjsqNUTOTu0=", mSettings.Account);
-            if (await mAskMonaApi.VerifySecretKey() == null)
+            if (await mAskMonaApi.VerifySecretKeyAsync() == null)
             {
-                var signUpForm = new SignUpForm(this, mSettings.Account);
-                signUpForm.ShowDialog();
+                var signUpDialog = new SignUpDialog(this, mSettings.Account);
+                signUpDialog.ShowDialog();
                 mAskMonaApi.Account = mSettings.Account;
             }
 
@@ -638,8 +638,8 @@ namespace AskMonaViewer
             if (!(await UpdateResponse(topic.Id)))
                 UpdateConnectionStatus("受信失敗");
 
-            if (mResponseForm != null)
-                mResponseForm.UpdateTopic(topic);
+            if (mPostResponseDialog != null)
+                mPostResponseDialog.UpdateTopic(topic);
 
             var topicIndex = mTopicList.FindIndex(x => x.Id == topic.Id);
             if (topicIndex != -1)
@@ -675,10 +675,10 @@ namespace AskMonaViewer
             var matchAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
             if (matchSend.Success)
             {
-                var monaSendForm = new MonaSendForm(this, mSettings.Options, mAskMonaApi, mTopic, int.Parse(matchSend.Groups["Id"].Value));
-                monaSendForm.LoadSettings(mSettings.MonaSendFormSettings);
-                monaSendForm.ShowDialog();
-                mSettings.MonaSendFormSettings = monaSendForm.SaveSettings();
+                var sendMonaDialog = new SendMonaDialog(this, mSettings.Options, mAskMonaApi, mTopic, int.Parse(matchSend.Groups["Id"].Value));
+                sendMonaDialog.LoadSettings(mSettings.SendMonaDialogSettings);
+                sendMonaDialog.ShowDialog();
+                mSettings.SendMonaDialogSettings = sendMonaDialog.SaveSettings();
             }
             else if (matchAskMona.Success)
             {
@@ -690,10 +690,10 @@ namespace AskMonaViewer
             }
             else if (matchUser.Success)
             {
-                var profileViewForm = new ProfileViewForm(mSettings.Options, mAskMonaApi, int.Parse(matchUser.Groups["Id"].Value));
-                profileViewForm.LoadSettings(mSettings.ProfileViewFormSettings);
-                profileViewForm.ShowDialog();
-                mSettings.ProfileViewFormSettings = profileViewForm.SaveSettings();
+                var viewProfileDialog = new ViewProfileDialog(mSettings.Options, mAskMonaApi, int.Parse(matchUser.Groups["Id"].Value));
+                viewProfileDialog.LoadSettings(mSettings.ViewProfileDialogSettings);
+                viewProfileDialog.ShowDialog();
+                mSettings.ViewProfileDialogSettings = viewProfileDialog.SaveSettings();
             }
             else if (matchAnchor.Success) { }
             else
@@ -797,27 +797,27 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            if (mResponseForm == null)
+            if (mPostResponseDialog == null)
             {
-                mResponseForm = new ResponseForm(this, mSettings.Options, mAskMonaApi, mTopic);
-                mResponseForm.LoadSettings(mSettings.ResponseFormSettings);
-                mResponseForm.FormClosed += OnResponseFormClosed;
+                mPostResponseDialog = new PostResponseDialog(this, mSettings.Options, mAskMonaApi, mTopic);
+                mPostResponseDialog.LoadSettings(mSettings.PostResponseDialogSettings);
+                mPostResponseDialog.FormClosed += OnResponseFormClosed;
             }
-            mResponseForm.Show();
+            mPostResponseDialog.Show();
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            var topicCreateForm = new TopicCreateForm(mAskMonaApi);
-            topicCreateForm.LoadSettings(mSettings.TopicCreateFormSettings);
-            topicCreateForm.ShowDialog();
-            mSettings.TopicCreateFormSettings = topicCreateForm.SaveSettings();
+            var createTopicDialog = new CreateTopicDialog(mAskMonaApi);
+            createTopicDialog.LoadSettings(mSettings.CreateTopicDialogSettings);
+            createTopicDialog.ShowDialog();
+            mSettings.CreateTopicDialogSettings = createTopicDialog.SaveSettings();
         }
 
         private void toolStripButton8_Click(object sender, EventArgs e)
         {
-            var monaWithdrawForm = new MonaWithdrawForm(mAskMonaApi);
-            monaWithdrawForm.ShowDialog();
+            var withdrawMonaDialog = new WithdrawMonaDialog(mAskMonaApi);
+            withdrawMonaDialog.ShowDialog();
         }
 
         private async void toolStripButton7_Click(object sender, EventArgs e)
@@ -911,18 +911,18 @@ namespace AskMonaViewer
 
         private void toolStripButton11_Click(object sender, EventArgs e)
         {
-            var transactionViewFrom = new TransactionViewForm(this, mAskMonaApi);
-            transactionViewFrom.LoadSettings(mSettings.TransactionViewFormSettings);
-            transactionViewFrom.ShowDialog();
-            mSettings.TransactionViewFormSettings = transactionViewFrom.SaveSettings();
+            var viewTransactionDialog = new ViewTransactionDialog(this, mAskMonaApi);
+            viewTransactionDialog.LoadSettings(mSettings.ViewTransactionDialogSettings);
+            viewTransactionDialog.ShowDialog();
+            mSettings.ViewTransactionDialogSettings = viewTransactionDialog.SaveSettings();
         }
 
         private void toolStripButton12_Click(object sender, EventArgs e)
         {
-            var profileEditForm = new ProfileEditForm(mAskMonaApi);
-            profileEditForm.LoadSettings(mSettings.ProfileEditFormSettings);
-            profileEditForm.ShowDialog();
-            mSettings.ProfileEditFormSettings = profileEditForm.SaveSettings();
+            var editProfileDialog = new EditProfileDialog(mAskMonaApi);
+            editProfileDialog.LoadSettings(mSettings.EditProfileDialogSettings);
+            editProfileDialog.ShowDialog();
+            mSettings.EditProfileDialogSettings = editProfileDialog.SaveSettings();
         }
 
         private void toolStripButton13_Click(object sender, EventArgs e)
@@ -930,10 +930,10 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var topicEditForm = new TopicEditForm(this, mAskMonaApi, mTopic);
-            topicEditForm.LoadSettings(mSettings.TopicEditFormSettings);
-            topicEditForm.ShowDialog();
-            mSettings.TopicEditFormSettings = topicEditForm.SaveSettings();
+            var editTopicDialog = new EditTopicDialog(this, mAskMonaApi, mTopic);
+            editTopicDialog.LoadSettings(mSettings.EditTopicDialogSettings);
+            editTopicDialog.ShowDialog();
+            mSettings.EditTopicDialogSettings = editTopicDialog.SaveSettings();
         }
 
         private void toolStripButton14_Click(object sender, EventArgs e)
@@ -941,10 +941,10 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var monaScatterForm = new MonaScatterForm(this, mSettings.Options, mAskMonaApi, mTopic);
-            monaScatterForm.LoadSettings(mSettings.MonaScatterFormSettings);
-            monaScatterForm.ShowDialog();
-            mSettings.MonaScatterFormSettings = monaScatterForm.SaveSettings();
+            var scatterMonaDialog = new ScatterMonaDialog(this, mSettings.Options, mAskMonaApi, mTopic);
+            scatterMonaDialog.LoadSettings(mSettings.ScatterMonaDialogSettings);
+            scatterMonaDialog.ShowDialog();
+            mSettings.ScatterMonaDialogSettings = scatterMonaDialog.SaveSettings();
         }
 
         private async void listView1_Scroll(object sender, ScrollEventArgs e)
@@ -985,8 +985,8 @@ namespace AskMonaViewer
 
         private void Option_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var optionForm = new OptionForm(this, mSettings.Options);
-            optionForm.ShowDialog();
+            var setOptionDialog = new SetOptionDialog(this, mSettings.Options);
+            setOptionDialog.ShowDialog();
         }
 
         private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -997,8 +997,8 @@ namespace AskMonaViewer
             mTopic = (Topic)tabControl1.TabPages[tabControl1.SelectedIndex].Tag;
             toolStripComboBox1.Text = "https://askmona.org/" + mTopic.Id;
 
-            if (mResponseForm != null)
-                mResponseForm.UpdateTopic(mTopic);
+            if (mPostResponseDialog != null)
+                mPostResponseDialog.UpdateTopic(mTopic);
 
             if (tabControl1.TabPages[tabControl1.SelectedIndex].Controls.Count > 0)
                 mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0];

@@ -5,11 +5,11 @@ using AskMonaViewer.Settings;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class OptionForm : Form
+    public partial class SetOptionDialog : Form
     {
         private MainForm mParent;
 
-        public OptionForm(MainForm parent, Options options)
+        public SetOptionDialog(MainForm parent, Options options)
         {
             InitializeComponent();
             mParent = parent;

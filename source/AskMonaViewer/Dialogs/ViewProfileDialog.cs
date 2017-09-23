@@ -7,13 +7,13 @@ using AskMonaViewer.Settings;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class ProfileViewForm : FormEx
+    public partial class ViewProfileDialog : FormEx
     {
         private Options mOptions;
         private AskMonaApi mApi;
         private int mUserId;
 
-        public ProfileViewForm(Options options, AskMonaApi api, int u_id)
+        public ViewProfileDialog(Options options, AskMonaApi api, int u_id)
         {
             InitializeComponent();
             mOptions = options;
@@ -27,7 +27,7 @@ namespace AskMonaViewer.SubForms
             checkBox2.Checked = !options.AlwaysNonAnonymous;
         }
 
-        private async void ProfileViewForm_Load(object sender, System.EventArgs e)
+        private async void ViewProfileDialog_Load(object sender, System.EventArgs e)
         {
             var profile = await mApi.FetchUserProfileAsync(mUserId);
             if (profile != null)

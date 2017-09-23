@@ -7,11 +7,11 @@ using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class TopicCreateForm : FormEx
+    public partial class CreateTopicDialog : FormEx
     {
         private AskMonaApi mApi;
 
-        public TopicCreateForm(AskMonaApi api)
+        public CreateTopicDialog(AskMonaApi api)
         {
             InitializeComponent();
             mApi = api;

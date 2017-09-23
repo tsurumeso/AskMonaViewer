@@ -6,17 +6,17 @@ using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class ProfileEditForm : FormEx
+    public partial class EditProfileDialog : FormEx
     {
         private AskMonaApi mApi;
 
-        public ProfileEditForm(AskMonaApi api)
+        public EditProfileDialog(AskMonaApi api)
         {
             InitializeComponent();
             mApi = api;
         }
 
-        private async void ProfileEditForm_Load(object sender, EventArgs e)
+        private async void EditProfileDialog_Load(object sender, EventArgs e)
         {
             var profile = await mApi.EditUserProfileAsync();
             if (profile == null)

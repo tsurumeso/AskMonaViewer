@@ -6,9 +6,9 @@ namespace AskMonaViewer.Utilities
 {
     public class FormEx : Form
     {
-        public FormSettings SaveSettings()
+        public DialogSettings SaveSettings()
         {
-            var settings = new FormSettings();
+            var settings = new DialogSettings();
             if (this.WindowState == FormWindowState.Normal)
             {
                 settings.Size = this.Bounds.Size;
@@ -23,7 +23,7 @@ namespace AskMonaViewer.Utilities
             return settings;
         }
 
-        public void LoadSettings(FormSettings settings)
+        public void LoadSettings(DialogSettings settings)
         {
             this.Size = settings.Size;
             this.Location = settings.Location;
