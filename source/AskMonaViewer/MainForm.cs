@@ -26,7 +26,7 @@ namespace AskMonaViewer
         private string mHtmlHeader = "";
         private bool mIsTabClosing = false;
         private bool mIsDocumentLoading = false;
-        private const string mVersionString = "1.8.0";
+        private const string mVersionString = "1.8.1";
         private ApplicationSettings mSettings;
         private AskMonaApi mAskMonaApi;
         private ZaifApi mZaifApi;
