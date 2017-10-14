@@ -38,6 +38,7 @@ namespace AskMonaViewer
         private List<ResponseCache> mResponseCacheList;
         private PostResponseDialog mPostResponseDialog = null;
         private WebBrowser mPrimaryWebBrowser;
+        private ListViewItem mLastListViewItem = null;
 
         public MainForm()
         {
@@ -86,6 +87,7 @@ namespace AskMonaViewer
                 }
             );
             lvi.Tag = topic;
+            lvi.ToolTipText = topic.Lead;
 
             return lvi;
         }
@@ -1099,6 +1101,19 @@ namespace AskMonaViewer
             {
                 if (tabControl1.GetTabRect(i).Contains(e.X, e.Y))
                     tabControl1.SelectedIndex = i;
+            }
+        }
+
+        private void listView1_MouseMove(object sender, MouseEventArgs e)
+        {
+            ListViewItem lvi = listView1.GetItemAt(e.X, e.Y);
+
+            if (lvi != mLastListViewItem)
+            {
+                var toolTip = new ToolTip();
+                if (lvi != null)
+                    toolTip.SetToolTip(listView1, lvi.ToolTipText);
+                mLastListViewItem = lvi;
             }
         }
     }
