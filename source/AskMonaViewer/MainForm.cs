@@ -672,10 +672,9 @@ namespace AskMonaViewer
                 e.ReturnValue = false;
 
             var matchSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
-            var matchUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)");
+            var matchUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)|https?://askmona.org/user/(?<Id>[0-9]+)");
             var matchAnchor = Regex.Match(link, @"about:blank#res_.+");
             var matchAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
-            var matchProfile = Regex.Match(link, @"https?://askmona.org/user/(?<Id>[0-9]+)");
             if (matchSend.Success)
             {
                 var sendMonaDialog = new SendMonaDialog(this, mSettings.Options, mAskMonaApi, mTopic, int.Parse(matchSend.Groups["Id"].Value));
@@ -691,15 +690,9 @@ namespace AskMonaViewer
                 if (!(await UpdateResponse(topicId)))
                     UpdateConnectionStatus("受信失敗");
             }
-            else if (matchUser.Success || matchProfile.Success)
+            else if (matchUser.Success)
             {
-                int userId = 0;
-                if (matchUser.Success)
-                    userId = int.Parse(matchUser.Groups["Id"].Value);
-                else if (matchProfile.Success)
-                    userId = int.Parse(matchProfile.Groups["Id"].Value);
-
-                var viewProfileDialog = new ViewProfileDialog(mSettings.Options, mAskMonaApi, userId);
+                var viewProfileDialog = new ViewProfileDialog(mSettings.Options, mAskMonaApi, int.Parse(matchUser.Groups["Id"].Value));
                 viewProfileDialog.LoadSettings(mSettings.ViewProfileDialogSettings);
                 viewProfileDialog.ShowDialog();
                 mSettings.ViewProfileDialogSettings = viewProfileDialog.SaveSettings();
