@@ -59,10 +59,6 @@ namespace AskMonaViewer.SubForms
         private IEnumerable<Response> FilterResponseList(List<Response> responseList)
         {
             var filteredResponseList = responseList.Where(x => x.UserId != mApi.UserId);
-            if (checkBox7.Checked)
-                filteredResponseList = filteredResponseList.Where(x => x.Id >= numericUpDown6.Value && x.Id <= numericUpDown7.Value);
-            if (checkBox3.Checked)
-                filteredResponseList = filteredResponseList.Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value);
             if (checkBox6.Checked)
                 filteredResponseList = filteredResponseList.GroupBy(x => x.UserId)
                     .Where(g => g.Count() > 0)
@@ -71,6 +67,10 @@ namespace AskMonaViewer.SubForms
                 filteredResponseList = filteredResponseList.GroupBy(x => x.Host)
                     .Where(g => g.Count() > 0)
                     .Select(g => g.FirstOrDefault());
+            if (checkBox7.Checked)
+                filteredResponseList = filteredResponseList.Where(x => x.Id >= numericUpDown6.Value && x.Id <= numericUpDown7.Value);
+            if (checkBox3.Checked)
+                filteredResponseList = filteredResponseList.Where(x => double.Parse(x.Receive) / 100000000 <= (double)numericUpDown3.Value);
             return filteredResponseList;
         }
 
