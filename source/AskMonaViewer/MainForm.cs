@@ -30,6 +30,7 @@ namespace AskMonaViewer
         private ApplicationSettings mSettings;
         private AskMonaApi mAskMonaApi;
         private ZaifApi mZaifApi;
+        private ImgurApi mImgurApi;
         private HttpClient mHttpClient;
         private ListViewItemComparer mListViewItemSorter;
         private Topic mTopic;
@@ -65,6 +66,7 @@ namespace AskMonaViewer
             mHttpClient = new HttpClient();
             mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
             mZaifApi = new ZaifApi(mHttpClient);
+            mImgurApi = new ImgurApi("");
         }
 
         private ListViewItem CreateListViewItem(Topic topic, long time)
