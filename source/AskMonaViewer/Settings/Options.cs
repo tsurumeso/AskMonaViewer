@@ -8,6 +8,8 @@
         public double ForthButtonMona { get; set; }
         public bool AlwaysSage { get; set; }
         public bool AlwaysNonAnonymous { get; set; }
+        public bool VisibleMonaJpy { get; set; }
+        public bool VisibleBtcJpy { get; set; }
 
         public Options()
         {
@@ -17,6 +19,8 @@
             ForthButtonMona = 0.00114114;
             AlwaysSage = false;
             AlwaysNonAnonymous = false;
+            VisibleMonaJpy = true;
+            VisibleBtcJpy = true;
         }
     }
 }

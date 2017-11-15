@@ -468,15 +468,25 @@ namespace AskMonaViewer
 
         private async Task<bool> UpdateCurrenciesRate()
         {
-            var rate = await mZaifApi.FetchRate("mona_jpy");
-            if (rate == null)
-                return false;
-            toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
+            if (mSettings.Options.VisibleMonaJpy)
+            {
+                var rate = await mZaifApi.FetchRate("mona_jpy");
+                if (rate == null)
+                    return false;
+                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
+            }
+            else
+                toolStripStatusLabel2.Text = "";
 
-            rate = await mZaifApi.FetchRate("btc_jpy");
-            if (rate == null)
-                return false;
-            toolStripStatusLabel3.Text = "BTC/JPY " + rate.Last.ToString("F0");
+            if (mSettings.Options.VisibleBtcJpy)
+            {
+                var rate = await mZaifApi.FetchRate("btc_jpy");
+                if (rate == null)
+                    return false;
+                toolStripStatusLabel3.Text = "BTC/JPY " + rate.Last.ToString("F0");
+            }
+            else
+                toolStripStatusLabel3.Text = "";
 
             return true;
         }
@@ -987,10 +997,11 @@ namespace AskMonaViewer
             }
         }
 
-        private void Option_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void Option_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var setOptionDialog = new SetOptionDialog(this, mSettings.Options);
             setOptionDialog.ShowDialog();
+            await UpdateCurrenciesRate();
         }
 
         private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)

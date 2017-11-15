@@ -19,6 +19,8 @@ namespace AskMonaViewer.SubForms
             numericUpDown4.Value = (decimal)options.ForthButtonMona;
             checkBox1.Checked = options.AlwaysSage;
             checkBox2.Checked = options.AlwaysNonAnonymous;
+            checkBox4.Checked = options.VisibleMonaJpy;
+            checkBox3.Checked = options.VisibleBtcJpy;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -28,14 +30,16 @@ namespace AskMonaViewer.SubForms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var option = new Options();
-            option.FirstButtonMona = (double)numericUpDown1.Value;
-            option.SecondButtonMona = (double)numericUpDown2.Value;
-            option.ThirdButtonMona = (double)numericUpDown3.Value;
-            option.ForthButtonMona = (double)numericUpDown4.Value;
-            option.AlwaysSage = checkBox1.Checked;
-            option.AlwaysNonAnonymous = checkBox2.Checked;
-            mParent.SetOption(option);
+            var options = new Options();
+            options.FirstButtonMona = (double)numericUpDown1.Value;
+            options.SecondButtonMona = (double)numericUpDown2.Value;
+            options.ThirdButtonMona = (double)numericUpDown3.Value;
+            options.ForthButtonMona = (double)numericUpDown4.Value;
+            options.AlwaysSage = checkBox1.Checked;
+            options.AlwaysNonAnonymous = checkBox2.Checked;
+            options.VisibleMonaJpy = checkBox4.Checked;
+            options.VisibleBtcJpy = checkBox3.Checked;
+            mParent.SetOption(options);
             this.Close();
         }
     }
