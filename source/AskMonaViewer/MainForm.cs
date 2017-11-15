@@ -196,8 +196,8 @@ namespace AskMonaViewer
                 @"https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+",
                 "<a href=\"$&\">$&</a>");
             res = Regex.Replace(res,
-                @"<a href=.+?>(?<Imgur>https?://(i.)?imgur.com/[a-zA-Z0-9]+)\.(?<Ext>[a-zA-Z]+)</a>",
-                "<a class=\"thumbnail\" href=\"${Imgur}.${Ext}\"><img src=\"${Imgur}m.${Ext}\"></a>");
+                @"(<a href=.+?>https?://)?(?<Imgur>(i.)?imgur.com/[a-zA-Z0-9]+)\.(?<Ext>[a-zA-Z]+)(</a>)?",
+                "<a class=\"thumbnail\" href=\"https://${Imgur}.${Ext}\"><img src=\"https://${Imgur}m.${Ext}\"></a>");
             res = Regex.Replace(res,
                 @"<a href=.+?>https?://(youtu.be/|(www.|m.)youtube.com/watch\?v=)(?<Id>[a-zA-Z0-9\-_]+)([\?\&].+)?</a>",
                 "<a class=\"youtube\" name=\"${Id}\" href=\"javascript:void(0);\">" +
