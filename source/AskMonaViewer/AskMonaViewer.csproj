@@ -168,9 +168,6 @@
     <Compile Include="Dialogs\ViewTransactionDialog.Designer.cs">
       <DependentUpon>ViewTransactionDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\WebClientWithTimeout.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Utilities\ZaifApi.cs" />
     <EmbeddedResource Include="Dialogs\ViewMessageDialog.resx">
       <DependentUpon>ViewMessageDialog.cs</DependentUpon>

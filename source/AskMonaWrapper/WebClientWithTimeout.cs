@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
 
-namespace AskMonaViewer.Utilities
+namespace AskMonaWrapper
 {
-    class WebClientWithTimeout : WebClient
+    public class WebClientWithTimeout : WebClient
     {
         public int Timeout { get; set; } = 10 * 1000;
 

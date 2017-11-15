@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Json;
@@ -21,9 +22,10 @@ namespace AskMonaWrapper
             {
                 var ub = new UriBuilder(url);
                 ub.Query = sb.ToString().TrimEnd('&');
+                var wc = new WebClientWithTimeout();
+                var res = await wc.DownloadDataTaskAsync(ub.Uri);
                 var serializer = new DataContractJsonSerializer(typeof(T));
-                var stream = await mHttpClient.GetStreamAsync(ub.Uri);
-                return (T)serializer.ReadObject(stream);
+                return (T)serializer.ReadObject(new MemoryStream(res));
             }
             catch { }
 

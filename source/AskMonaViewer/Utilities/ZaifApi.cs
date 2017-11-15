@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
@@ -10,19 +9,14 @@ namespace AskMonaViewer.Utilities
     public class ZaifApi
     {
         private const string mApiBaseUrl = "https://api.zaif.jp/api/1/";
-        private static HttpClient mHttpClient;
-
-        public ZaifApi(HttpClient client)
-        {
-            mHttpClient = client;
-        }
 
         private async Task<Stream> FetchResponseStreamAsync(string url)
         {
             try
             {
-                var stream = await mHttpClient.GetStreamAsync(url);
-                return stream;
+                var wc = new AskMonaWrapper.WebClientWithTimeout();
+                var res = await wc.DownloadDataTaskAsync(url);
+                return new MemoryStream(res);
             }
             catch { }
             return null;
