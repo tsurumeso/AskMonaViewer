@@ -596,7 +596,7 @@ namespace AskMonaViewer
             LoadSettings();
             LoadHtmlHeader();
 
-            mAskMonaApi = new AskMonaApi("3738", "AgGu661B9pe9SL49soov7tZNYRzdF4n8TUjsqNUTOTu0=", mSettings.Account);
+            mAskMonaApi = new AskMonaApi("3738", "", mSettings.Account);
             if (await mAskMonaApi.VerifySecretKeyAsync() == null)
             {
                 var signUpDialog = new SignUpDialog(this, mSettings.Account);
