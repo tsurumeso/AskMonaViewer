@@ -8,7 +8,6 @@ namespace AskMonaWrapper
     public partial class AskMonaApi
     {
         private const string mApiBaseUrl = "http://askmona.org/v1/";
-        private static HttpClient mHttpClient;
         private static SHA256CryptoServiceProvider mSHA256Provider;
         private string mApplicationId;
         private string mApplicationSecretKey;
@@ -31,9 +30,8 @@ namespace AskMonaWrapper
             }
         }
 
-        public AskMonaApi(HttpClient client, string appId, string appSecretKey, Account account)
+        public AskMonaApi(string appId, string appSecretKey, Account account)
         {
-            mHttpClient = client;
             mSHA256Provider = new SHA256CryptoServiceProvider();
             mAccount = account;
             mApplicationId = appId;

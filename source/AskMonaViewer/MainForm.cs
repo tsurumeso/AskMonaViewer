@@ -31,7 +31,6 @@ namespace AskMonaViewer
         private AskMonaApi mAskMonaApi;
         private ZaifApi mZaifApi;
         private ImgurApi mImgurApi;
-        private HttpClient mHttpClient;
         private ListViewItemComparer mListViewItemSorter;
         private Topic mTopic;
         private List<Topic> mTopicList;
@@ -63,9 +62,7 @@ namespace AskMonaViewer
             mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
             mSettings = new ApplicationSettings();
-            mHttpClient = new HttpClient();
-            mHttpClient.Timeout = TimeSpan.FromSeconds(10.0);
-            mZaifApi = new ZaifApi(mHttpClient);
+            mZaifApi = new ZaifApi();
             mImgurApi = new ImgurApi("");
         }
 
@@ -599,7 +596,7 @@ namespace AskMonaViewer
             LoadSettings();
             LoadHtmlHeader();
 
-            mAskMonaApi = new AskMonaApi(mHttpClient, "3738", "AgGu661B9pe9SL49soov7tZNYRzdF4n8TUjsqNUTOTu0=", mSettings.Account);
+            mAskMonaApi = new AskMonaApi("3738", "AgGu661B9pe9SL49soov7tZNYRzdF4n8TUjsqNUTOTu0=", mSettings.Account);
             if (await mAskMonaApi.VerifySecretKeyAsync() == null)
             {
                 var signUpDialog = new SignUpDialog(this, mSettings.Account);

@@ -39,7 +39,7 @@ namespace AskMonaViewer.Utilities
             {
                 await Task.Run(() =>
                 {
-                    var client = new WebClientWithTimeout();
+                    var client = new AskMonaWrapper.WebClientWithTimeout();
                     client.Headers.Add("Authorization", "Client-ID " + mClientId);
                     res = client.UploadValues(new Uri(mApiBaseUrl + "image"), values);
                 });
