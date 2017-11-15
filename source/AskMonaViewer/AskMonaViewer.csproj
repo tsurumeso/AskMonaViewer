@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="Utilities\Common.cs" />
     <Compile Include="Settings\DialogSettings.cs" />
+    <Compile Include="Utilities\ImgurApi.cs" />
     <Compile Include="Utilities\ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -166,6 +167,9 @@
     </Compile>
     <Compile Include="Dialogs\ViewTransactionDialog.Designer.cs">
       <DependentUpon>ViewTransactionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\WebClientWithTimeout.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Utilities\ZaifApi.cs" />
     <EmbeddedResource Include="Dialogs\ViewMessageDialog.resx">
