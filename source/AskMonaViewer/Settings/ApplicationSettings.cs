@@ -14,6 +14,7 @@ namespace AskMonaViewer.Settings
         public DialogSettings ScatterMonaDialogSettings { get; set; }
         public DialogSettings CreateTopicDialogSettings { get; set; }
         public DialogSettings EditTopicDialogSettings { get; set; }
+        public DialogSettings ViewimgurDialogSettings { get; set; }
         public Options Options { get; set; }
 
         public ApplicationSettings()
@@ -28,6 +29,7 @@ namespace AskMonaViewer.Settings
             ScatterMonaDialogSettings = new DialogSettings();
             CreateTopicDialogSettings = new DialogSettings();
             EditTopicDialogSettings = new DialogSettings();
+            ViewimgurDialogSettings = new DialogSettings();
             Options = new Options();
         }
     }

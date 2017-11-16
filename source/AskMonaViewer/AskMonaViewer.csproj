@@ -73,6 +73,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dialogs\UploadConfirmationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\UploadConfirmationDialog.Designer.cs">
+      <DependentUpon>UploadConfirmationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ViewImgurDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ViewImgurDialog.Designer.cs">
+      <DependentUpon>ViewImgurDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\MainFormSettings.cs" />
     <Compile Include="Settings\Options.cs" />
     <Compile Include="Settings\ViewTransactionDialogSettings.cs" />
@@ -169,6 +181,12 @@
       <DependentUpon>ViewTransactionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ZaifApi.cs" />
+    <EmbeddedResource Include="Dialogs\UploadConfirmationDialog.resx">
+      <DependentUpon>UploadConfirmationDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\ViewImgurDialog.resx">
+      <DependentUpon>ViewImgurDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ViewMessageDialog.resx">
       <DependentUpon>ViewMessageDialog.cs</DependentUpon>
     </EmbeddedResource>
