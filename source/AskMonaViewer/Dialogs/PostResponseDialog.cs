@@ -15,7 +15,6 @@ namespace AskMonaViewer.SubForms
         private Topic mTopic;
         private ImgurApi mImgurApi;
         private bool mHasCompleted = false;
-        public ImgurImage ImgurImage { get; set; }
 
         public PostResponseDialog(MainForm parent, Options options, AskMonaApi api, ImgurApi imgurApi, Topic topic)
         {
@@ -104,19 +103,20 @@ namespace AskMonaViewer.SubForms
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                ImgurImage = null;
                 try
                 {
                     var image = Image.FromFile(ofd.FileName);
-                    var uploadConfirmationDialog = new UploadConfirmationDialog(this, mImgurApi, image);
+                    var uploadConfirmationDialog = new UploadConfirmationDialog(mImgurApi, image);
                     uploadConfirmationDialog.ShowDialog();
+
+                    var imgurImage = uploadConfirmationDialog.ImgurImage;
+                    if (imgurImage == null)
+                        return;
+
+                    textBox1.Text += "\r\n" + imgurImage.Link;
+                    mParent.AddImgurImage(imgurImage);
                 }
                 catch { }
-                if (ImgurImage != null)
-                {
-                    textBox1.Text += "\r\n" + ImgurImage.Link;
-                    mParent.AddImgurImage(ImgurImage);
-                }
             }
         }
     }

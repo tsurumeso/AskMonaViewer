@@ -6,7 +6,8 @@ namespace AskMonaViewer.Settings
     {
         public Account Account { get; set; }
         public MainFormSettings MainFormSettings { get; set; }
-        public ViewTransactionDialogSettings ViewTransactionDialogSettings { get; set; }
+        public DialogSettings ViewTransactionDialogSettings { get; set; }
+        public DialogSettings ViewMessageDialogSettings { get; set; }
         public DialogSettings SendMonaDialogSettings { get; set; }
         public DialogSettings PostResponseDialogSettings { get; set; }
         public DialogSettings ViewProfileDialogSettings { get; set; }
@@ -21,7 +22,8 @@ namespace AskMonaViewer.Settings
         {
             Account = new Account();
             MainFormSettings = new MainFormSettings();
-            ViewTransactionDialogSettings = new ViewTransactionDialogSettings();
+            ViewTransactionDialogSettings = new DialogSettings();
+            ViewMessageDialogSettings = new DialogSettings();
             SendMonaDialogSettings = new DialogSettings();
             PostResponseDialogSettings = new DialogSettings();
             ViewProfileDialogSettings = new DialogSettings();

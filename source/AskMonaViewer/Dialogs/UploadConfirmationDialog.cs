@@ -9,12 +9,16 @@ namespace AskMonaViewer.SubForms
     public partial class UploadConfirmationDialog : Form
     {
         private ImgurApi mApi;
-        private PostResponseDialog mParent;
+        private ImgurImage mImgurImage;
 
-        public UploadConfirmationDialog(PostResponseDialog parent, ImgurApi api, Image image)
+        public ImgurImage ImgurImage
+        {
+            get { return mImgurImage; }
+        }
+
+        public UploadConfirmationDialog(ImgurApi api, Image image)
         {
             InitializeComponent();
-            mParent = parent;
             mApi = api;
             pictureBox1.Image = image;
         }
@@ -29,7 +33,7 @@ namespace AskMonaViewer.SubForms
             button1.Enabled = false;
             button2.Enabled = false;
             var result = await mApi.UploadImage(pictureBox1.Image);
-            mParent.ImgurImage = result;
+            mImgurImage = result;
             this.Close();
         }
     }
