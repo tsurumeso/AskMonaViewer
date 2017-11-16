@@ -6,17 +6,15 @@ using System.Windows.Forms;
 
 using AskMonaWrapper;
 using AskMonaViewer.Utilities;
-using AskMonaViewer.Settings;
 
 namespace AskMonaViewer.SubForms
 {
-    public partial class ViewTransactionDialog : Form
+    public partial class ViewTransactionDialog : FormEx
     {
         private MainForm mParent;
         private AskMonaApi mApi;
         private ListViewItemComparer mListViewItemSorterDW;
         private ListViewItemComparer mListViewItemSorterRS;
-        private ViewTransactionDialogSettings mSettings;
         private ViewMessageDialog mViewMessageDialog = null;
 
         public ViewTransactionDialog(MainForm parent, AskMonaApi api)
@@ -24,7 +22,6 @@ namespace AskMonaViewer.SubForms
             InitializeComponent();
             mParent = parent;
             mApi = api;
-            mSettings = new ViewTransactionDialogSettings();
             mListViewItemSorterDW = new ListViewItemComparer();
             mListViewItemSorterDW.ColumnModes = new ListViewItemComparer.ComparerMode[]
             {
@@ -131,7 +128,7 @@ namespace AskMonaViewer.SubForms
             if (mViewMessageDialog == null)
             {
                 mViewMessageDialog = new ViewMessageDialog(html, tx.Message, responseList.Topic.Title);
-                mViewMessageDialog.LoadSettings(mSettings.ViewMessageDialogSettings);
+                mViewMessageDialog.LoadSettings(mParent.LoadViewMessageDialogSettings());
                 mViewMessageDialog.FormClosed += OnMessageViewFormClosed;
                 mViewMessageDialog.Show();
             }
@@ -143,32 +140,8 @@ namespace AskMonaViewer.SubForms
 
         private void OnMessageViewFormClosed(object sender, EventArgs e)
         {
-            mSettings.ViewMessageDialogSettings = mViewMessageDialog.SaveSettings();
+            mParent.SaveViewMessageDialogSettings(mViewMessageDialog.SaveSettings());
             mViewMessageDialog = null;
-        }
-
-        public ViewTransactionDialogSettings SaveSettings()
-        {
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                mSettings.Size = this.Bounds.Size;
-                mSettings.Location = this.Bounds.Location;
-            }
-            else
-            {
-                mSettings.Size = this.RestoreBounds.Size;
-                mSettings.Location = this.RestoreBounds.Location;
-            }
-            mSettings.WindowState = this.WindowState;
-            return mSettings;
-        }
-
-        public void LoadSettings(ViewTransactionDialogSettings settings)
-        {
-            this.Size = settings.Size;
-            this.Location = settings.Location;
-            this.WindowState = settings.WindowState;
-            this.mSettings = settings;
         }
 
         private void TransactionViewForm_FormClosed(object sender, FormClosedEventArgs e)

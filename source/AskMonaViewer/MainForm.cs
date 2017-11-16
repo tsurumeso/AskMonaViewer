@@ -444,21 +444,6 @@ namespace AskMonaViewer
             mPostResponseDialog = null;
         }
 
-        public void SetAccount(string addr, string pass)
-        {
-            mSettings.Account = new Account(addr, pass);
-        }
-
-        public void SetAccount(string authCode)
-        {
-            mSettings.Account = new Account().FromAuthCode(authCode);
-        }
-
-        public void SetOption(Options options)
-        {
-            mSettings.Options = options;
-        }
-
         public void AddImgurImage(ImgurImage imgurImage)
         {
             mImgurImageList.Add(imgurImage);
@@ -467,6 +452,16 @@ namespace AskMonaViewer
         public void UpdateConnectionStatus(string label)
         {
             toolStripStatusLabel1.Text = label;
+        }
+
+        public DialogSettings LoadViewMessageDialogSettings()
+        {
+            return mSettings.ViewMessageDialogSettings;
+        }
+
+        public void SaveViewMessageDialogSettings(DialogSettings settings)
+        {
+            mSettings.ViewMessageDialogSettings = settings;
         }
 
         private async Task<bool> UpdateCurrenciesRate()
@@ -616,9 +611,10 @@ namespace AskMonaViewer
             mAskMonaApi = new AskMonaApi("3738", "", mSettings.Account);
             if (await mAskMonaApi.VerifySecretKeyAsync() == null)
             {
-                var signUpDialog = new SignUpDialog(this, mSettings.Account);
+                var signUpDialog = new SignUpDialog(mSettings.Account);
                 signUpDialog.ShowDialog();
-                mAskMonaApi.Account = mSettings.Account;
+                mAskMonaApi.Account = signUpDialog.Account;
+                mSettings.Account = signUpDialog.Account;
             }
 
             var topicList = await mAskMonaApi.FetchFavoriteTopicListAsync();
@@ -1013,8 +1009,9 @@ namespace AskMonaViewer
 
         private async void Option_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var setOptionDialog = new SetOptionDialog(this, mSettings.Options);
+            var setOptionDialog = new SetOptionDialog(mSettings.Options);
             setOptionDialog.ShowDialog();
+            mSettings.Options = setOptionDialog.Options;
             await UpdateCurrenciesRate();
         }
 
