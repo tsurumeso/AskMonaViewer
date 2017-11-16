@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using AskMonaWrapper;
 using AskMonaViewer.Utilities;
 using AskMonaViewer.Settings;
+using System.Drawing;
 
 namespace AskMonaViewer.SubForms
 {
@@ -12,14 +13,17 @@ namespace AskMonaViewer.SubForms
         private MainForm mParent;
         private AskMonaApi mApi;
         private Topic mTopic;
+        private ImgurApi mImgurApi;
         private bool mHasCompleted = false;
+        public ImgurImage ImgurImage { get; set; }
 
-        public PostResponseDialog(MainForm parent, Options options, AskMonaApi api, Topic topic)
+        public PostResponseDialog(MainForm parent, Options options, AskMonaApi api, ImgurApi imgurApi, Topic topic)
         {
             InitializeComponent();
             mParent = parent;
             mApi = api;
             mTopic = topic;
+            mImgurApi = imgurApi;
             checkBox1.Checked = options.AlwaysSage;
             this.Text = "『" + topic.Title + "』にレス";
             button1.Enabled = false;
@@ -90,6 +94,30 @@ namespace AskMonaViewer.SubForms
             responseList.Responses.Add(response);
 
             webBrowser1.DocumentText = await mParent.BuildWebBrowserDocument(responseList);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "開くファイルを選択してください";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                ImgurImage = null;
+                try
+                {
+                    var image = Image.FromFile(ofd.FileName);
+                    var uploadConfirmationDialog = new UploadConfirmationDialog(this, mImgurApi, image);
+                    uploadConfirmationDialog.ShowDialog();
+                }
+                catch { }
+                if (ImgurImage != null)
+                {
+                    textBox1.Text += "\r\n" + ImgurImage.Link;
+                    mParent.AddImgurImage(ImgurImage);
+                }
+            }
         }
     }
 }

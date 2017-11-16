@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Xml.Serialization;
 using System.Threading.Tasks;
 
@@ -29,13 +28,14 @@ namespace AskMonaViewer
         private const string mVersionString = "1.8.2";
         private ApplicationSettings mSettings;
         private AskMonaApi mAskMonaApi;
-        private ZaifApi mZaifApi;
         private ImgurApi mImgurApi;
+        private ZaifApi mZaifApi;
         private ListViewItemComparer mListViewItemSorter;
         private Topic mTopic;
         private List<Topic> mTopicList;
         private List<Topic> mFavoriteTopicList;
         private List<ResponseCache> mResponseCacheList;
+        private List<ImgurImage> mImgurImageList;
         private PostResponseDialog mPostResponseDialog = null;
         private WebBrowser mPrimaryWebBrowser;
         private ListViewItem mLastListViewItem = null;
@@ -61,9 +61,10 @@ namespace AskMonaViewer
             mTopicList = new List<Topic>();
             mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
+            mImgurImageList = new List<ImgurImage>();
             mSettings = new ApplicationSettings();
-            mZaifApi = new ZaifApi();
             mImgurApi = new ImgurApi("");
+            mZaifApi = new ZaifApi();
         }
 
         private ListViewItem CreateListViewItem(Topic topic, long time)
@@ -458,6 +459,11 @@ namespace AskMonaViewer
             mSettings.Options = options;
         }
 
+        public void AddImgurImage(ImgurImage imgurImage)
+        {
+            mImgurImageList.Add(imgurImage);
+        }
+
         public void UpdateConnectionStatus(string label)
         {
             toolStripStatusLabel1.Text = label;
@@ -554,6 +560,13 @@ namespace AskMonaViewer
                 using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
                     mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
             }
+
+            if (File.Exists("ImgurImageList.xml"))
+            {
+                var xs = new XmlSerializer(typeof(List<ImgurImage>));
+                using (var sr = new StreamReader("ImgurImageList.xml", new UTF8Encoding(false)))
+                    mImgurImageList = xs.Deserialize(sr) as List<ImgurImage>;
+            }
         }
 
         private void SaveSettings()
@@ -589,6 +602,10 @@ namespace AskMonaViewer
             xs = new XmlSerializer(typeof(List<ResponseCache>));
             using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mResponseCacheList);
+
+            xs = new XmlSerializer(typeof(List<ImgurImage>));
+            using (var sw = new StreamWriter("ImgurImageList.xml", false, new UTF8Encoding(false)))
+                xs.Serialize(sw, mImgurImageList);
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -810,7 +827,7 @@ namespace AskMonaViewer
 
             if (mPostResponseDialog == null)
             {
-                mPostResponseDialog = new PostResponseDialog(this, mSettings.Options, mAskMonaApi, mTopic);
+                mPostResponseDialog = new PostResponseDialog(this, mSettings.Options, mAskMonaApi, mImgurApi, mTopic);
                 mPostResponseDialog.LoadSettings(mSettings.PostResponseDialogSettings);
                 mPostResponseDialog.FormClosed += OnResponseFormClosed;
             }
@@ -1125,6 +1142,15 @@ namespace AskMonaViewer
                     toolTip.SetToolTip(listView1, lvi.ToolTipText);
                 mLastListViewItem = lvi;
             }
+        }
+
+        private void toolStripButton16_Click(object sender, EventArgs e)
+        {
+            var viewImgurDialog = new ViewImgurDialog(mImgurApi, mImgurImageList);
+            viewImgurDialog.LoadSettings(mSettings.ViewimgurDialogSettings);
+            viewImgurDialog.ShowDialog();
+            mSettings.ViewimgurDialogSettings = viewImgurDialog.SaveSettings();
+            mImgurImageList = viewImgurDialog.ImgurImageList;
         }
     }
 }
