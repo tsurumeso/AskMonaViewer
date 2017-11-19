@@ -18,8 +18,8 @@ $(function() {
             }
             var response = data.responses[0].response
             response = response.replace(/\r?\n/g, "<br>");
-            response = response.replace(/(https?:\/\/(i.)?imgur.com\/[a-zA-Z0-9]+)\.([a-zA-Z]+)/gi,
-                "<a class=\"thumbnail\" href=\"$1.$3\"><img src=\"$1m.$3\"></a>");
+            response = response.replace(/(https?:\/\/)?((i.)?imgur.com\/[a-zA-Z0-9]+)\.([a-zA-Z]+)/gi,
+                "<a class=\"thumbnail\" href=\"https://$2.$4\"><img src=\"https://$2m.$4\"></a>");
             var $tooltip = $('<span class="tooltip">' + response + '</span>');
             $this.append($tooltip);
             var size = {
