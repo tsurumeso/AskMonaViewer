@@ -57,7 +57,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(440, 206);
+            this.tabControl1.Size = new System.Drawing.Size(440, 202);
             this.tabControl1.TabIndex = 13;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -67,7 +67,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(432, 178);
+            this.tabPage1.Size = new System.Drawing.Size(432, 174);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "レス";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -81,7 +81,7 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(426, 172);
+            this.textBox1.Size = new System.Drawing.Size(426, 168);
             this.textBox1.TabIndex = 3;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -147,9 +147,9 @@
             this.button3.Location = new System.Drawing.Point(12, 221);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(195, 23);
+            this.button3.Size = new System.Drawing.Size(109, 23);
             this.button3.TabIndex = 14;
-            this.button3.Text = "画像をアップロードして URL を挿入...";
+            this.button3.Text = "画像アップロード...";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
