@@ -100,7 +100,8 @@ namespace AskMonaViewer.SubForms
         private void button3_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Title = "開くファイルを選択してください";
+            ofd.Title = "アップロードするファイルを選択してください";
+            ofd.Filter = "すべてのファイル(*.*)|*.*";
             ofd.RestoreDirectory = true;
 
             if (ofd.ShowDialog() == DialogResult.OK)
