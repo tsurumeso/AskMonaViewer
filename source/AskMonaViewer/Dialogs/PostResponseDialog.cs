@@ -67,7 +67,9 @@ namespace AskMonaViewer.SubForms
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            button1.Enabled = !String.IsNullOrEmpty(textBox1.Text);
+            toolStripStatusLabel1.Text = String.Format("Length: {0}/1024", textBox1.Text.Length);
+            toolStripStatusLabel2.Text = String.Format("Lines: {0}/15", textBox1.Lines.Length);
+            button1.Enabled = !String.IsNullOrEmpty(textBox1.Text) && textBox1.Lines.Length <= 15;
         }
 
         private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
