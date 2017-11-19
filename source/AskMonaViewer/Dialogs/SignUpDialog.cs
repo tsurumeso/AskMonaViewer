@@ -18,6 +18,7 @@ namespace AskMonaViewer.SubForms
         public SignUpDialog(Account account)
         {
             InitializeComponent();
+            mAccount = account;
             textBox1.Text = account.Address;
             textBox2.Text = account.Password;
         }
