@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 using AskMonaViewer.Utilities;
 
-namespace AskMonaViewer.SubForms
+namespace AskMonaViewer.Dialogs
 {
     public partial class UploadConfirmationDialog : Form
     {

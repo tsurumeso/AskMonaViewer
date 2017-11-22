@@ -1,4 +1,4 @@
-﻿namespace AskMonaViewer.SubForms
+﻿namespace AskMonaViewer.Dialogs
 {
     partial class ViewProfileDialog
     {

@@ -6,7 +6,7 @@ using AskMonaViewer.Utilities;
 using AskMonaViewer.Settings;
 using System.Drawing;
 
-namespace AskMonaViewer.SubForms
+namespace AskMonaViewer.Dialogs
 {
     public partial class PostResponseDialog : FormEx
     {

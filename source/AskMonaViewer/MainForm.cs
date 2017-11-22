@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 using AskMonaWrapper;
 using AskMonaViewer.Utilities;
-using AskMonaViewer.SubForms;
+using AskMonaViewer.Dialogs;
 using AskMonaViewer.Settings;
 
 namespace AskMonaViewer
