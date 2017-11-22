@@ -827,7 +827,7 @@ namespace AskMonaViewer
                 mPostResponseDialog.LoadSettings(mSettings.PostResponseDialogSettings);
                 mPostResponseDialog.FormClosed += OnResponseFormClosed;
             }
-            mPostResponseDialog.Show();
+            mPostResponseDialog.Show(this);
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)

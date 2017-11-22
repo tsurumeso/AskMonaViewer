@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewImgurDialog));
             this.listViewEx1 = new AskMonaViewer.Utilities.ListViewEx();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -52,6 +53,7 @@
             this.listViewEx1.GridLines = true;
             this.listViewEx1.Location = new System.Drawing.Point(14, 13);
             this.listViewEx1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.listViewEx1.MultiSelect = false;
             this.listViewEx1.Name = "listViewEx1";
             this.listViewEx1.Size = new System.Drawing.Size(391, 372);
             this.listViewEx1.TabIndex = 0;
@@ -114,6 +116,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.listViewEx1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(695, 440);
             this.Name = "ViewImgurDialog";
