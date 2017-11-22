@@ -91,7 +91,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(432, 178);
+            this.tabPage2.Size = new System.Drawing.Size(432, 174);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "プレビュー";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -102,7 +102,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(426, 172);
+            this.webBrowser1.Size = new System.Drawing.Size(426, 168);
             this.webBrowser1.TabIndex = 0;
             this.webBrowser1.WebBrowserShortcutsEnabled = false;
             // 
@@ -200,7 +200,6 @@
             this.Name = "PostResponseDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "レス投稿";
-            this.TopMost = true;
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

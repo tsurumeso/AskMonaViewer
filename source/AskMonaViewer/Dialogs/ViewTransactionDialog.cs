@@ -130,7 +130,7 @@ namespace AskMonaViewer.Dialogs
                 mViewMessageDialog = new ViewMessageDialog(html, tx.Message, responseList.Topic.Title);
                 mViewMessageDialog.LoadSettings(mParent.LoadViewMessageDialogSettings());
                 mViewMessageDialog.FormClosed += OnMessageViewFormClosed;
-                mViewMessageDialog.Show();
+                mViewMessageDialog.Show(this);
             }
             else
             {
