@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 using AskMonaViewer.Settings;
 
-namespace AskMonaViewer.SubForms
+namespace AskMonaViewer.Dialogs
 {
     public partial class SetOptionDialog : Form
     {

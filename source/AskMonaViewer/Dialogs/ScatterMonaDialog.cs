@@ -8,7 +8,7 @@ using AskMonaWrapper;
 using AskMonaViewer.Utilities;
 using AskMonaViewer.Settings;
 
-namespace AskMonaViewer.SubForms
+namespace AskMonaViewer.Dialogs
 {
     public partial class ScatterMonaDialog : FormEx
     {

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 using AskMonaWrapper;
 
-namespace AskMonaViewer.SubForms
+namespace AskMonaViewer.Dialogs
 {
     public partial class SignUpDialog : Form
     {
