@@ -32,6 +32,7 @@ namespace AskMonaViewer
         private ZaifApi mZaifApi;
         private ListViewItemComparer mListViewItemSorter;
         private Topic mTopic;
+        private List<int> mNGUsers;
         private List<Topic> mTopicList;
         private List<Topic> mFavoriteTopicList;
         private List<ResponseCache> mResponseCacheList;
@@ -58,6 +59,7 @@ namespace AskMonaViewer
                 ListViewItemComparer.ComparerMode.Double,
                 ListViewItemComparer.ComparerMode.DateTime
             };
+            mNGUsers = new List<int>();
             mTopicList = new List<Topic>();
             mFavoriteTopicList = new List<Topic>();
             mResponseCacheList = new List<ResponseCache>();
@@ -221,6 +223,9 @@ namespace AskMonaViewer
 
                 foreach (var response in responseList.Responses)
                 {
+                    if (showSupplyment && mNGUsers.Contains(response.UserId))
+                        continue;
+
                     html.Append(String.Format(
                         "<a href=\"javascript:void(0);\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> ",
                         response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan)));
@@ -444,6 +449,16 @@ namespace AskMonaViewer
             mPostResponseDialog = null;
         }
 
+        public void AddNGUser(int userId)
+        {
+            mNGUsers.Add(userId);
+        }
+
+        public void DeleteNGUser(int userId)
+        {
+            mNGUsers.Remove(userId);
+        }
+
         public void AddImgurImage(ImgurImage imgurImage)
         {
             mImgurImageList.Add(imgurImage);
@@ -621,6 +636,10 @@ namespace AskMonaViewer
             if (topicList != null)
                 mFavoriteTopicList = topicList.Topics;
 
+            var ngUsers = await mAskMonaApi.FetchNGUsersAsync();
+            if (ngUsers != null)
+                mNGUsers = ngUsers.Users.Select(x => x.UserId).ToList<int>();
+
             foreach (var topicId in mSettings.MainFormSettings.TabTopicList)
             {
                 UpdateConnectionStatus("通信中");
@@ -714,7 +733,7 @@ namespace AskMonaViewer
             }
             else if (matchUser.Success)
             {
-                var viewProfileDialog = new ViewProfileDialog(mSettings.Options, mAskMonaApi, int.Parse(matchUser.Groups["Id"].Value));
+                var viewProfileDialog = new ViewProfileDialog(this, mSettings.Options, mAskMonaApi, int.Parse(matchUser.Groups["Id"].Value));
                 viewProfileDialog.LoadSettings(mSettings.ViewProfileDialogSettings);
                 viewProfileDialog.ShowDialog();
                 mSettings.ViewProfileDialogSettings = viewProfileDialog.SaveSettings();
@@ -1148,6 +1167,14 @@ namespace AskMonaViewer
             viewImgurDialog.ShowDialog();
             mSettings.ViewimgurDialogSettings = viewImgurDialog.SaveSettings();
             mImgurImageList = viewImgurDialog.ImgurImageList;
+        }
+
+        private void toolStripButton17_Click(object sender, EventArgs e)
+        {
+            var viewNGUsersDialog = new ViewNGUsersDialog(this, mAskMonaApi);
+            viewNGUsersDialog.LoadSettings(mSettings.ViewNGUsersDialogSettings);
+            viewNGUsersDialog.ShowDialog();
+            mSettings.ViewNGUsersDialogSettings = viewNGUsersDialog.SaveSettings();
         }
     }
 }
