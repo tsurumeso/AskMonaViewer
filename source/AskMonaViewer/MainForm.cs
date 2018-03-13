@@ -995,12 +995,12 @@ namespace AskMonaViewer
 
         private async void webBrowser_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            e.IsInputKey = true;
             if (mTopic == null)
                 return;
 
             if (e.KeyCode == Keys.F5)
             {
+                e.IsInputKey = true;
                 UpdateConnectionStatus("通信中");
                 if (!(await UpdateResponse(mTopic.Id)))
                     UpdateConnectionStatus("受信失敗");
