@@ -9,13 +9,15 @@ namespace AskMonaViewer.Dialogs
 {
     public partial class ViewProfileDialog : FormEx
     {
+        private MainForm mParent;
         private Options mOptions;
         private AskMonaApi mApi;
         private int mUserId;
 
-        public ViewProfileDialog(Options options, AskMonaApi api, int u_id)
+        public ViewProfileDialog(MainForm parent, Options options, AskMonaApi api, int u_id)
         {
             InitializeComponent();
+            mParent = parent;
             mOptions = options;
             mApi = api;
             mUserId = u_id;
@@ -29,6 +31,7 @@ namespace AskMonaViewer.Dialogs
 
         private async void ViewProfileDialog_Load(object sender, System.EventArgs e)
         {
+            button8.Enabled = mUserId != mApi.UserId;
             var profile = await mApi.FetchUserProfileAsync(mUserId);
             if (profile != null)
             {
@@ -36,7 +39,7 @@ namespace AskMonaViewer.Dialogs
                     MessageBox.Show("プロフィールの取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
-                    textBox1.Text = profile.UserName + profile.UserDan;
+                    this.Text = "『" + profile.UserName + profile.UserDan + "』のプロフィール";
                     if (!String.IsNullOrEmpty(profile.Text))
                         textBox2.Text = profile.Text.Replace("\n", "\r\n");
                 }
@@ -61,10 +64,36 @@ namespace AskMonaViewer.Dialogs
                 if (result.Status == 0)
                     MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
+                {
                     MessageBox.Show("送金に成功しました", "通知", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    mParent.UpdateConnectionStatus("通信中");
+                    if (!(await mParent.ReloadResponse()))
+                        mParent.UpdateConnectionStatus("受信失敗");
+                }
             }
             else
                 MessageBox.Show("送金に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            this.Close();
+        }
+
+        private async void button8_Click(object sender, EventArgs e)
+        {
+            var result = await mApi.AddNGUserAsync(mUserId);
+            if (result != null)
+            {
+                if (result.Status == 0)
+                    MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    mParent.AddNGUser(mUserId);
+                    mParent.UpdateConnectionStatus("通信中");
+                    if (!(await mParent.ReloadResponse()))
+                        mParent.UpdateConnectionStatus("受信失敗");
+                }
+            }
+            else
+                MessageBox.Show("NG ユーザーの追加に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             this.Close();
         }
