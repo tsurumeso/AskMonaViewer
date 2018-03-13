@@ -209,6 +209,29 @@ namespace AskMonaWrapper
             return await CallAuthAsync<TransactionDetail>(mApiBaseUrl + "account/txdetail", prms);
         }
 
+        public async Task<NGUsers> FetchNGUsersAsync()
+        {
+            var prms = new Dictionary<string, string>();
+
+            return await CallAuthAsync<NGUsers>(mApiBaseUrl + "ngusers/list", prms);
+        }
+
+        public async Task<ApiResult> AddNGUserAsync(int ng_u_id)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("ng_u_id", ng_u_id.ToString());
+
+            return await CallAuthAsync<ApiResult>(mApiBaseUrl + "ngusers/add", prms);
+        }
+
+        public async Task<ApiResult> DeleteNGUserAsync(int ng_u_id)
+        {
+            var prms = new Dictionary<string, string>();
+            prms.Add("ng_u_id", ng_u_id.ToString());
+
+            return await CallAuthAsync<ApiResult>(mApiBaseUrl + "ngusers/delete", prms);
+        }
+
         public async Task<ApiResult> VerifySecretKeyAsync()
         {
             var prms = new Dictionary<string, string>();

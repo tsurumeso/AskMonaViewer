@@ -67,6 +67,18 @@ namespace AskMonaWrapper
     }
 
     [DataContract]
+    public class NGUsers : ApiResult
+    {
+        [DataMember(Name = "users")]
+        public List<User> Users { get; set; }
+
+        public NGUsers()
+        {
+            Users = new List<User>();
+        }
+    }
+
+    [DataContract]
     public class SecretKey : ApiResult
     {
         [DataMember(Name = "u_id")]
