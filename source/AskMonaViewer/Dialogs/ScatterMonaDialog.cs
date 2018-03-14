@@ -16,15 +16,17 @@ namespace AskMonaViewer.Dialogs
         private Options mOptions;
         private AskMonaApi mApi;
         private Topic mTopic;
+        private List<int> mNGUsers;
         private ResponseList mResponseList;
 
-        public ScatterMonaDialog(MainForm parent, Options options, AskMonaApi api, Topic topic)
+        public ScatterMonaDialog(MainForm parent, Options options, AskMonaApi api, Topic topic, List<int> ngUsers)
         {
             InitializeComponent();
             mParent = parent;
             mOptions = options;
             mApi = api;
             mTopic = topic;
+            mNGUsers = ngUsers;
             button5.Text = "+ " + Common.Digits(options.FirstButtonMona) + " MONA";
             button3.Text = "+ " + Common.Digits(options.SecondButtonMona) + " MONA";
             button4.Text = "+ " + Common.Digits(options.ThirdButtonMona) + " MONA";
@@ -59,6 +61,8 @@ namespace AskMonaViewer.Dialogs
         private IEnumerable<Response> FilterResponseList(List<Response> responseList)
         {
             var filteredResponseList = responseList.Where(x => x.UserId != mApi.UserId);
+            if (checkBox8.Checked)
+                filteredResponseList = filteredResponseList.Where(x => !mNGUsers.Contains(x.UserId));
             if (checkBox6.Checked)
                 filteredResponseList = filteredResponseList.GroupBy(x => x.UserId)
                     .Where(g => g.Count() > 0)
