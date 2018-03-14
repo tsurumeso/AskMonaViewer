@@ -989,7 +989,7 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var scatterMonaDialog = new ScatterMonaDialog(this, mSettings.Options, mAskMonaApi, mTopic);
+            var scatterMonaDialog = new ScatterMonaDialog(this, mSettings.Options, mAskMonaApi, mTopic, mNGUsers);
             scatterMonaDialog.LoadSettings(mSettings.ScatterMonaDialogSettings);
             scatterMonaDialog.ShowDialog();
             mSettings.ScatterMonaDialogSettings = scatterMonaDialog.SaveSettings();
