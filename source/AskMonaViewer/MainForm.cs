@@ -439,7 +439,12 @@ namespace AskMonaViewer
             var doc3 = (mshtml.IHTMLDocument3)mPrimaryWebBrowser.Document.DomDocument;
             var elm = (mshtml.IHTMLElement2)doc3.documentElement;
             var scrolled = new Point(elm.scrollLeft, elm.scrollTop);
-            if (mResponseCacheList[idx].Topic.Scrolled.Y < scrolled.Y)
+            if (mSettings.Options.IsAlreadyReadPosition)
+            {
+                if (mResponseCacheList[idx].Topic.Scrolled.Y < scrolled.Y)
+                    mResponseCacheList[idx].Topic.Scrolled = scrolled;
+            }
+            else if (mSettings.Options.IsLastPosition)
                 mResponseCacheList[idx].Topic.Scrolled = scrolled;
         }
 

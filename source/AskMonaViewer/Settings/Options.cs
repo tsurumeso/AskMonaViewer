@@ -6,6 +6,8 @@
         public double SecondButtonMona { get; set; }
         public double ThirdButtonMona { get; set; }
         public double ForthButtonMona { get; set; }
+        public bool IsAlreadyReadPosition { get; set; }
+        public bool IsLastPosition { get; set; }
         public bool AlwaysSage { get; set; }
         public bool AlwaysNonAnonymous { get; set; }
         public bool VisibleMonaJpy { get; set; }
@@ -17,6 +19,8 @@
             SecondButtonMona = 0.003939;
             ThirdButtonMona = 0.114114;
             ForthButtonMona = 0.00114114;
+            IsAlreadyReadPosition = false;
+            IsLastPosition = true;
             AlwaysSage = false;
             AlwaysNonAnonymous = false;
             VisibleMonaJpy = true;

@@ -21,6 +21,8 @@ namespace AskMonaViewer.Dialogs
             numericUpDown2.Value = (decimal)options.SecondButtonMona;
             numericUpDown3.Value = (decimal)options.ThirdButtonMona;
             numericUpDown4.Value = (decimal)options.ForthButtonMona;
+            radioButton1.Checked = options.IsAlreadyReadPosition;
+            radioButton2.Checked = options.IsLastPosition;
             checkBox1.Checked = options.AlwaysSage;
             checkBox2.Checked = options.AlwaysNonAnonymous;
             checkBox4.Checked = options.VisibleMonaJpy;
@@ -39,10 +41,13 @@ namespace AskMonaViewer.Dialogs
             mOptions.SecondButtonMona = (double)numericUpDown2.Value;
             mOptions.ThirdButtonMona = (double)numericUpDown3.Value;
             mOptions.ForthButtonMona = (double)numericUpDown4.Value;
+            mOptions.IsAlreadyReadPosition = radioButton1.Checked;
+            mOptions.IsLastPosition = radioButton2.Checked;
             mOptions.AlwaysSage = checkBox1.Checked;
             mOptions.AlwaysNonAnonymous = checkBox2.Checked;
             mOptions.VisibleMonaJpy = checkBox4.Checked;
             mOptions.VisibleBtcJpy = checkBox3.Checked;
+
             this.Close();
         }
     }
