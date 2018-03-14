@@ -218,7 +218,7 @@ namespace AskMonaViewer
                 {
                     var response = new Response();
                     response.Text = mTopic.Supplyment;
-                    html.Append("<p class=\"subtxt\">" + ConvertResponse(response, responseList.Topic.Id) + "</p>");
+                    html.Append("<p class=\"subtxt\">" + ConvertResponse(response, responseList.Topic.Id) + "</p>\n");
                 }
 
                 foreach (var response in responseList.Responses)
@@ -274,7 +274,7 @@ namespace AskMonaViewer
             }
         }
 
-        private WebBrowser CreateWebBrowser(string html)
+        private WebBrowser InitializeWebBrowser(string html)
         {
             var webBrowser = new WebBrowser();
             webBrowser.Dock = DockStyle.Fill;
@@ -323,7 +323,7 @@ namespace AskMonaViewer
                     }
                     else
                     {
-                        webBrowser = CreateWebBrowser(html);
+                        webBrowser = InitializeWebBrowser(html);
                         tabControl1.TabPages[i].Controls.Add(webBrowser);
                         mPrimaryWebBrowser = webBrowser;
                     }
@@ -333,13 +333,13 @@ namespace AskMonaViewer
                 }
             }
 
-            webBrowser = CreateWebBrowser(html);
+            webBrowser = InitializeWebBrowser(html);
             mPrimaryWebBrowser = webBrowser;
             AddTabPage(topic, webBrowser);
             tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
         }
 
-        private async Task<bool> InitializeResponse(int topicId)
+        private async Task<bool> InitializeTabPage(int topicId)
         {
             Topic topic;
             var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
@@ -389,9 +389,9 @@ namespace AskMonaViewer
                 {
                     mTopic = responseList.Topic;
                     mTopic.Scrolled = cache.Topic.Scrolled;
-                    html = await BuildHtml(responseList);
+                    html = (await BuildHtml(responseList)).ToString();
                     mResponseCacheList.RemoveAt(idx);
-                    mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
+                    mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html)));
                 }
             }
 
@@ -644,7 +644,7 @@ namespace AskMonaViewer
             {
                 UpdateConnectionStatus("通信中");
                 toolStripComboBox1.Text = "https://askmona.org/" + topicId;
-                if (await InitializeResponse(topicId))
+                if (await InitializeTabPage(topicId))
                     UpdateConnectionStatus("受信完了");
                 else
                     UpdateConnectionStatus("受信失敗");

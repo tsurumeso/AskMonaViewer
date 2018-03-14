@@ -55,6 +55,9 @@ namespace AskMonaViewer.Dialogs
                 else
                 {
                     mParent.DeleteNGUser(ngUser.UserId);
+                    mParent.UpdateConnectionStatus("通信中");
+                    if (!(await mParent.ReloadResponse()))
+                        mParent.UpdateConnectionStatus("受信失敗");
                     listViewEx1.Items.RemoveAt(listViewEx1.SelectedIndices[0]);
                 }
             }
