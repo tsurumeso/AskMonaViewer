@@ -20,15 +20,15 @@ namespace AskMonaViewer.Dialogs
 
         private async void ViewNGUsersDialog_Load(object sender, EventArgs e)
         {
-            var ngUsers = await mApi.FetchNGUsersAsync();
-            if (ngUsers != null)
+            var result = await mApi.FetchNGUsersAsync();
+            if (result != null)
             {
-                if (ngUsers.Status == 0)
-                    MessageBox.Show("NG ユーザーの一覧の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (result.Status == 0)
+                    MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
                     listViewEx1.BeginUpdate();
-                    foreach (var ngUser in ngUsers.Users)
+                    foreach (var ngUser in result.Users)
                     {
                         var lvi = new ListViewItem(
                             new string[] {
@@ -42,6 +42,8 @@ namespace AskMonaViewer.Dialogs
                     listViewEx1.EndUpdate();
                 }
             }
+            else
+                MessageBox.Show("NG ユーザーの一覧の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private async void Delete_ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -66,6 +68,11 @@ namespace AskMonaViewer.Dialogs
             }
             else
                 MessageBox.Show("NG ユーザーの削除に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Delete_ToolStripMenuItem.Enabled = listViewEx1.SelectedItems.Count != 0;
         }
     }
 }

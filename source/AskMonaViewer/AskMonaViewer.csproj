@@ -108,11 +108,11 @@
     <Compile Include="Utilities\ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dialogs\ViewMessageDialog.cs">
+    <Compile Include="Dialogs\ViewMessagesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\ViewMessageDialog.Designer.cs">
-      <DependentUpon>ViewMessageDialog.cs</DependentUpon>
+    <Compile Include="Dialogs\ViewMessagesDialog.Designer.cs">
+      <DependentUpon>ViewMessagesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\WithdrawMonaDialog.cs">
       <SubType>Form</SubType>
@@ -179,11 +179,11 @@
     <Compile Include="Dialogs\EditTopicDialog.Designer.cs">
       <DependentUpon>EditTopicDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\ViewTransactionDialog.cs">
+    <Compile Include="Dialogs\ViewTransactionsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\ViewTransactionDialog.Designer.cs">
-      <DependentUpon>ViewTransactionDialog.cs</DependentUpon>
+    <Compile Include="Dialogs\ViewTransactionsDialog.Designer.cs">
+      <DependentUpon>ViewTransactionsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ZaifApi.cs" />
     <EmbeddedResource Include="Dialogs\UploadConfirmationDialog.resx">
@@ -192,8 +192,8 @@
     <EmbeddedResource Include="Dialogs\ViewImgurDialog.resx">
       <DependentUpon>ViewImgurDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ViewMessageDialog.resx">
-      <DependentUpon>ViewMessageDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\ViewMessagesDialog.resx">
+      <DependentUpon>ViewMessagesDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ViewNGUsersDialog.resx">
       <DependentUpon>ViewNGUsersDialog.cs</DependentUpon>
@@ -241,8 +241,8 @@
     <EmbeddedResource Include="Dialogs\EditTopicDialog.resx">
       <DependentUpon>EditTopicDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ViewTransactionDialog.resx">
-      <DependentUpon>ViewTransactionDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Dialogs\ViewTransactionsDialog.resx">
+      <DependentUpon>ViewTransactionsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">

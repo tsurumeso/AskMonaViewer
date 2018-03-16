@@ -106,20 +106,19 @@ namespace AskMonaViewer.Dialogs
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                try
+                var image = Image.FromFile(ofd.FileName);
+                var uploadConfirmationDialog = new UploadConfirmationDialog(mImgurApi, image);
+                uploadConfirmationDialog.ShowDialog();
+
+                var imgurImage = uploadConfirmationDialog.ImgurImage;
+                if (imgurImage == null)
                 {
-                    var image = Image.FromFile(ofd.FileName);
-                    var uploadConfirmationDialog = new UploadConfirmationDialog(mImgurApi, image);
-                    uploadConfirmationDialog.ShowDialog();
-
-                    var imgurImage = uploadConfirmationDialog.ImgurImage;
-                    if (imgurImage == null)
-                        return;
-
-                    textBox1.Text += "\r\n" + imgurImage.Link;
-                    mParent.AddImgurImage(imgurImage);
+                    MessageBox.Show("画像のアップロードに失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-                catch { }
+
+                textBox1.Text += "\r\n" + imgurImage.Link;
+                mParent.AddImgurImage(imgurImage);
             }
         }
     }

@@ -20,22 +20,22 @@ namespace AskMonaViewer.Utilities
 
         public async Task<ImgurImage> UploadImage(Image image)
         {
-            string base64Image = "";
-            using (var m = new MemoryStream())
-            {
-                image.Save(m, image.RawFormat);
-                byte[] imageBytes = m.ToArray();
-                base64Image = Convert.ToBase64String(imageBytes);
-            }
-
-            var values = new NameValueCollection
-            {
-                { "image", base64Image },
-                { "type", "base64"}
-            };
-
             try
             {
+                string base64Image = "";
+                using (var m = new MemoryStream())
+                {
+                    image.Save(m, image.RawFormat);
+                    byte[] imageBytes = m.ToArray();
+                    base64Image = Convert.ToBase64String(imageBytes);
+                }
+
+                var values = new NameValueCollection
+                {
+                    { "image", base64Image },
+                    { "type", "base64"}
+                };
+
                 byte[] res = null;
                 await Task.Run(() =>
                 {

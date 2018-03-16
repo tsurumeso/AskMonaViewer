@@ -72,12 +72,13 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Delete_ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(115, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // Delete_ToolStripMenuItem
             // 
             this.Delete_ToolStripMenuItem.Name = "Delete_ToolStripMenuItem";
-            this.Delete_ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.Delete_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.Delete_ToolStripMenuItem.Text = "削除(&D)";
             this.Delete_ToolStripMenuItem.Click += new System.EventHandler(this.Delete_ToolStripMenuItem_Click);
             // 

@@ -87,5 +87,12 @@ namespace AskMonaViewer.Dialogs
             }
             pictureBox1.LoadAsync(imgurImage.Link);
         }
+
+        private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var enabled = listViewEx1.SelectedItems.Count != 0;
+            Copy_ToolStripMenuItem.Enabled = enabled;
+            Delete_ToolStripMenuItem.Enabled = enabled;
+        }
     }
 }

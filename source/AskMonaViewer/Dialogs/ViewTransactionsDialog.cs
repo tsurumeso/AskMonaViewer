@@ -9,31 +9,31 @@ using AskMonaViewer.Utilities;
 
 namespace AskMonaViewer.Dialogs
 {
-    public partial class ViewTransactionDialog : FormEx
+    public partial class ViewTransactionsDialog : FormEx
     {
         private MainForm mParent;
         private AskMonaApi mApi;
         private ListViewItemComparer mListViewItemSorterDW;
         private ListViewItemComparer mListViewItemSorterRS;
-        private ViewMessageDialog mViewMessageDialog = null;
+        private ViewMessagesDialog mViewMessageDialog = null;
 
-        public ViewTransactionDialog(MainForm parent, AskMonaApi api)
+        public ViewTransactionsDialog(MainForm parent, AskMonaApi api)
         {
             InitializeComponent();
             mParent = parent;
             mApi = api;
             mListViewItemSorterDW = new ListViewItemComparer();
+            mListViewItemSorterDW.SortOrder = SortOrder.Descending;
             mListViewItemSorterDW.ColumnModes = new ListViewItemComparer.ComparerMode[]
             {
-                ListViewItemComparer.ComparerMode.Integer,
                 ListViewItemComparer.ComparerMode.DateTime,
                 ListViewItemComparer.ComparerMode.String,
                 ListViewItemComparer.ComparerMode.Double
             };
             mListViewItemSorterRS = new ListViewItemComparer();
+            mListViewItemSorterRS.SortOrder = SortOrder.Descending;
             mListViewItemSorterRS.ColumnModes = new ListViewItemComparer.ComparerMode[]
             {
-                ListViewItemComparer.ComparerMode.Integer,
                 ListViewItemComparer.ComparerMode.DateTime,
                 ListViewItemComparer.ComparerMode.String,
                 ListViewItemComparer.ComparerMode.String,
@@ -59,7 +59,6 @@ namespace AskMonaViewer.Dialogs
                 {
                     var lvi = new ListViewItem(
                         new string[] {
-                            (i + 1).ToString(),
                             Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
                             txs[i].Item == "deposit" ? "入金" : "出金",
                             (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
@@ -82,7 +81,6 @@ namespace AskMonaViewer.Dialogs
                 {
                     var lvi = new ListViewItem(
                         new string[] {
-                            (i + 1).ToString(),
                             Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
                             txs[i].Item == "receive" ? "受け取り " : "ばらまき ",
                             txs[i].ResponceId == 0 ? "ユーザー" : "レス",
@@ -104,8 +102,6 @@ namespace AskMonaViewer.Dialogs
             mListViewItemSorterDW.Column = e.Column;
             listViewEx1.Sort();
             Common.UpdateColumnColors(listViewEx1, Color.White, Color.Lavender);
-            for (int i = 0; i < listViewEx1.Items.Count; i++)
-                listViewEx1.Items[i].SubItems[0].Text = (i + 1).ToString();
         }
 
         private void listViewEx2_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -113,8 +109,6 @@ namespace AskMonaViewer.Dialogs
             mListViewItemSorterRS.Column = e.Column;
             listViewEx2.Sort();
             Common.UpdateColumnColors(listViewEx2, Color.White, Color.Lavender);
-            for (int i = 0; i < listViewEx2.Items.Count; i++)
-                listViewEx2.Items[i].SubItems[0].Text = (i + 1).ToString();
         }
 
         private async void listViewEx2_DoubleClick(object sender, EventArgs e)
@@ -127,15 +121,13 @@ namespace AskMonaViewer.Dialogs
             var html = await mParent.BuildWebBrowserDocument(responseList);
             if (mViewMessageDialog == null)
             {
-                mViewMessageDialog = new ViewMessageDialog(html, tx.Message, responseList.Topic.Title);
+                mViewMessageDialog = new ViewMessagesDialog(html, tx.Message, responseList.Topic.Title);
                 mViewMessageDialog.LoadSettings(mParent.LoadViewMessageDialogSettings());
                 mViewMessageDialog.FormClosed += OnMessageViewFormClosed;
                 mViewMessageDialog.Show(this);
             }
             else
-            {
                 mViewMessageDialog.UpdateMessage(html, tx.Message, responseList.Topic.Title);
-            }
         }
 
         private void OnMessageViewFormClosed(object sender, EventArgs e)

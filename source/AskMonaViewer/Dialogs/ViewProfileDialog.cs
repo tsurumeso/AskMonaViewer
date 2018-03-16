@@ -36,7 +36,7 @@ namespace AskMonaViewer.Dialogs
             if (profile != null)
             {
                 if (profile.Status == 0)
-                    MessageBox.Show("プロフィールの取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(profile.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
                     this.Text = "『" + profile.UserName + profile.UserDan + "』のプロフィール";
@@ -44,14 +44,18 @@ namespace AskMonaViewer.Dialogs
                         textBox2.Text = profile.Text.Replace("\n", "\r\n");
                 }
             }
+            else
+                MessageBox.Show("プロフィールの取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
             var balance = await mApi.FetchBlanceAsync(0);
             if (balance != null)
             {
                 if (balance.Status == 0)
-                    MessageBox.Show("残高の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(balance.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                     textBox4.Text = (double.Parse(balance.Value) / 100000000).ToString("F8");
             }
+            else
+                MessageBox.Show("残高の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private async void button1_Click(object sender, System.EventArgs e)

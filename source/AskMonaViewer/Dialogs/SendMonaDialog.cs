@@ -35,14 +35,16 @@ namespace AskMonaViewer.Dialogs
 
         private async void SendMonaDialog_Load(object sender, System.EventArgs e)
         {
-            var balance = await mApi.FetchBlanceAsync(0);
-            if (balance != null)
+            var result = await mApi.FetchBlanceAsync(0);
+            if (result != null)
             {
-                if (balance.Status == 0)
-                    MessageBox.Show("残高の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (result.Status == 0)
+                    MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
-                    textBox4.Text = (double.Parse(balance.Value) / 100000000).ToString("F8");
+                    textBox4.Text = (double.Parse(result.Value) / 100000000).ToString("F8");
             }
+            else
+                MessageBox.Show("残高の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private async void button1_Click(object sender, System.EventArgs e)
