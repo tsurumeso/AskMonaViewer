@@ -58,7 +58,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(490, 355);
+            this.tabControl1.Size = new System.Drawing.Size(500, 355);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -68,7 +68,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage1.Size = new System.Drawing.Size(482, 327);
+            this.tabPage1.Size = new System.Drawing.Size(492, 327);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "入出金";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -85,7 +85,7 @@
             this.listViewEx1.Location = new System.Drawing.Point(3, 4);
             this.listViewEx1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listViewEx1.Name = "listViewEx1";
-            this.listViewEx1.Size = new System.Drawing.Size(476, 319);
+            this.listViewEx1.Size = new System.Drawing.Size(486, 319);
             this.listViewEx1.TabIndex = 0;
             this.listViewEx1.UseCompatibleStateImageBehavior = false;
             this.listViewEx1.View = System.Windows.Forms.View.Details;
@@ -113,7 +113,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage2.Size = new System.Drawing.Size(482, 327);
+            this.tabPage2.Size = new System.Drawing.Size(492, 337);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "ばらまき・受け取り";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -132,7 +132,7 @@
             this.listViewEx2.Location = new System.Drawing.Point(3, 4);
             this.listViewEx2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listViewEx2.Name = "listViewEx2";
-            this.listViewEx2.Size = new System.Drawing.Size(476, 319);
+            this.listViewEx2.Size = new System.Drawing.Size(486, 329);
             this.listViewEx2.TabIndex = 0;
             this.listViewEx2.UseCompatibleStateImageBehavior = false;
             this.listViewEx2.View = System.Windows.Forms.View.Details;
@@ -167,12 +167,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(514, 381);
+            this.ClientSize = new System.Drawing.Size(524, 381);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MinimumSize = new System.Drawing.Size(530, 420);
+            this.MinimumSize = new System.Drawing.Size(540, 420);
             this.Name = "ViewTransactionsDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "取引明細";
