@@ -46,6 +46,9 @@ namespace AskMonaViewer.Dialogs
 
         private async void Delete_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (listViewEx1.SelectedItems.Count == 0)
+                return;
+
             var ngUser = (User)listViewEx1.SelectedItems[0].Tag;
             var result = await mApi.DeleteNGUserAsync(ngUser.UserId);
             if (result != null)
