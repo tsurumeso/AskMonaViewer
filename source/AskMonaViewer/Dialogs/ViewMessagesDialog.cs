@@ -2,9 +2,9 @@
 
 namespace AskMonaViewer.Dialogs
 {
-    public partial class ViewMessageDialog : FormEx
+    public partial class ViewMessagesDialog : FormEx
     {
-        public ViewMessageDialog(string html, string msg, string topicTitle)
+        public ViewMessagesDialog(string html, string msg, string topicTitle)
         {
             InitializeComponent();
             UpdateMessage(html, msg, topicTitle);

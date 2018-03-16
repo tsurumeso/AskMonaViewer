@@ -43,7 +43,7 @@
             // 
             // listViewEx1
             // 
-            this.listViewEx1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.listViewEx1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listViewEx1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
@@ -78,26 +78,27 @@
             this.Copy_ToolStripMenuItem,
             this.Delete_ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(115, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 70);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // Copy_ToolStripMenuItem
             // 
             this.Copy_ToolStripMenuItem.Name = "Copy_ToolStripMenuItem";
-            this.Copy_ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.Copy_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.Copy_ToolStripMenuItem.Text = "コピー(&C)";
             this.Copy_ToolStripMenuItem.Click += new System.EventHandler(this.Copy_ToolStripMenuItem_Click);
             // 
             // Delete_ToolStripMenuItem
             // 
             this.Delete_ToolStripMenuItem.Name = "Delete_ToolStripMenuItem";
-            this.Delete_ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.Delete_ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.Delete_ToolStripMenuItem.Text = "削除(&D)";
             this.Delete_ToolStripMenuItem.Click += new System.EventHandler(this.Delete_ToolStripMenuItem_Click);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;

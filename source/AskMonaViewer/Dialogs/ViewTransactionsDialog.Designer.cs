@@ -1,6 +1,6 @@
 ﻿namespace AskMonaViewer.Dialogs
 {
-    partial class ViewTransactionDialog
+    partial class ViewTransactionsDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,17 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewTransactionDialog));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewTransactionsDialog));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.listViewEx1 = new AskMonaViewer.Utilities.ListViewEx();
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.listViewEx2 = new AskMonaViewer.Utilities.ListViewEx();
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -60,7 +58,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(550, 365);
+            this.tabControl1.Size = new System.Drawing.Size(490, 355);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -70,7 +68,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage1.Size = new System.Drawing.Size(542, 337);
+            this.tabPage1.Size = new System.Drawing.Size(482, 327);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "入出金";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -78,7 +76,6 @@
             // listViewEx1
             // 
             this.listViewEx1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader8,
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
@@ -88,16 +85,11 @@
             this.listViewEx1.Location = new System.Drawing.Point(3, 4);
             this.listViewEx1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listViewEx1.Name = "listViewEx1";
-            this.listViewEx1.Size = new System.Drawing.Size(536, 329);
+            this.listViewEx1.Size = new System.Drawing.Size(476, 319);
             this.listViewEx1.TabIndex = 0;
             this.listViewEx1.UseCompatibleStateImageBehavior = false;
             this.listViewEx1.View = System.Windows.Forms.View.Details;
             this.listViewEx1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewEx1_ColumnClick);
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "番号";
-            this.columnHeader8.Width = 50;
             // 
             // columnHeader1
             // 
@@ -121,7 +113,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage2.Size = new System.Drawing.Size(542, 337);
+            this.tabPage2.Size = new System.Drawing.Size(482, 327);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "ばらまき・受け取り";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -129,7 +121,6 @@
             // listViewEx2
             // 
             this.listViewEx2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader9,
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader10,
@@ -141,17 +132,12 @@
             this.listViewEx2.Location = new System.Drawing.Point(3, 4);
             this.listViewEx2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listViewEx2.Name = "listViewEx2";
-            this.listViewEx2.Size = new System.Drawing.Size(536, 329);
+            this.listViewEx2.Size = new System.Drawing.Size(476, 319);
             this.listViewEx2.TabIndex = 0;
             this.listViewEx2.UseCompatibleStateImageBehavior = false;
             this.listViewEx2.View = System.Windows.Forms.View.Details;
             this.listViewEx2.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewEx2_ColumnClick);
             this.listViewEx2.DoubleClick += new System.EventHandler(this.listViewEx2_DoubleClick);
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "番号";
-            this.columnHeader9.Width = 50;
             // 
             // columnHeader4
             // 
@@ -177,17 +163,17 @@
             this.columnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.columnHeader7.Width = 90;
             // 
-            // TransactionViewForm
+            // ViewTransactionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(574, 391);
+            this.ClientSize = new System.Drawing.Size(514, 381);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MinimumSize = new System.Drawing.Size(590, 430);
-            this.Name = "TransactionViewForm";
+            this.MinimumSize = new System.Drawing.Size(530, 420);
+            this.Name = "ViewTransactionsDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "取引明細";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TransactionViewForm_FormClosed);
@@ -213,8 +199,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.ColumnHeader columnHeader8;
-        private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.ColumnHeader columnHeader10;
     }
 }
