@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using AskMonaWrapper;
 using AskMonaViewer.Utilities;
@@ -18,6 +19,7 @@ namespace AskMonaViewer.Dialogs
         private Topic mTopic;
         private List<int> mNGUsers;
         private ResponseList mResponseList;
+        private bool mIsScattering = false;
 
         public ScatterMonaDialog(MainForm parent, Options options, AskMonaApi api, Topic topic, List<int> ngUsers)
         {
@@ -84,22 +86,24 @@ namespace AskMonaViewer.Dialogs
             int sage = checkBox1.Checked ? 1 : 0;
             int anonymous = checkBox2.Checked ? 1 : 0;
             var responseList = FilterResponseList(mResponseList.Responses);
+            mIsScattering = true;
+            button1.Enabled = false;
+            toolStripProgressBar1.Maximum = responseList.Count();
 
             foreach (var response in responseList)
             {
-                ulong value = 0;
+                ulong value = (ulong)(numericUpDown1.Value * 100000000);
                 if (checkBox5.Checked)
                 {
                     var receive = double.Parse(response.Receive) / 100000000;
                     if (receive < (double)numericUpDown4.Value)
                         value = (ulong)(((double)numericUpDown4.Value - receive) * 100000000);
                 }
-                else
-                    value = (ulong)(numericUpDown1.Value * 100000000);
 
                 if (value == 0)
                     continue;
 
+                await Task.Run(() => System.Threading.Thread.Sleep(100));
                 var result = await mApi.SendMonaAsync(mTopic.Id, response.Id, value, anonymous, textBox3.Text, sage);
                 if (result != null)
                 {
@@ -109,6 +113,8 @@ namespace AskMonaViewer.Dialogs
                         flag = false;
                         break;
                     }
+                    else
+                        toolStripProgressBar1.Value++;
                 }
                 else
                 {
@@ -162,7 +168,7 @@ namespace AskMonaViewer.Dialogs
 
             textBox1.Text = sumValue.ToString("F8");
             textBox2.Text = count.ToString();
-            button1.Enabled = sumValue > 0 && balance >= sumValue;
+            button1.Enabled = sumValue > 0 && balance >= sumValue && !mIsScattering;
         }
 
         private void button5_Click(object sender, EventArgs e)

@@ -274,7 +274,7 @@
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
-            // MonaSendForm
+            // SendMonaDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -302,7 +302,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(465, 314);
-            this.Name = "MonaSendForm";
+            this.Name = "SendMonaDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "送る";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MonaSendForm_FormClosed);
