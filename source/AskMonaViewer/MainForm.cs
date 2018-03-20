@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Xml;
 using System.Text;
 using System.Linq;
 using System.Drawing;
@@ -7,6 +8,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 using AskMonaWrapper;
@@ -35,9 +37,10 @@ namespace AskMonaViewer
         private List<int> mNGUsers;
         private List<Topic> mTopicList;
         private List<Topic> mFavoriteTopicList;
-        private List<ResponseCache> mResponseCacheList;
+        private List<ResponseList> mResponseCache;
         private List<ImgurImage> mImgurImageList;
         private PostResponseDialog mPostResponseDialog = null;
+        private ScatterMonaDialog mScatterMonaDialog = null;
         private WebBrowser mPrimaryWebBrowser;
         private ListViewItem mLastListViewItem = null;
 
@@ -62,14 +65,14 @@ namespace AskMonaViewer
             mNGUsers = new List<int>();
             mTopicList = new List<Topic>();
             mFavoriteTopicList = new List<Topic>();
-            mResponseCacheList = new List<ResponseCache>();
+            mResponseCache = new List<ResponseList>();
             mImgurImageList = new List<ImgurImage>();
             mSettings = new ApplicationSettings();
             mImgurApi = new ImgurApi("");
             mZaifApi = new ZaifApi();
         }
 
-        private ListViewItem CreateListViewItem(Topic topic, long time)
+        private ListViewItem InitializeListViewItem(Topic topic, long time)
         {
             int newArrivals = topic.CachedCount == 0 ? 0 : topic.Count - topic.CachedCount;
 
@@ -116,11 +119,11 @@ namespace AskMonaViewer
                     topic.Increased = topic.Count - oldTopic.Count;
 
                 topic.CachedCount = 0;
-                var cache = mResponseCacheList.Find(x => x.Topic.Id == topic.Id);
+                var cache = mResponseCache.Find(x => x.Topic.Id == topic.Id);
                 if (cache != null)
                     topic.CachedCount = cache.Topic.Count;
 
-                var lvi = CreateListViewItem(topic, time);
+                var lvi = InitializeListViewItem(topic, time);
                 listView1.Items.Add(lvi);
             }
             listView1.ListViewItemSorter = mListViewItemSorter;
@@ -139,7 +142,7 @@ namespace AskMonaViewer
             var time = Common.DateTimeToUnixTimeStamp(DateTime.Now);
             foreach (var topic in topicList)
             {
-                var lvi = CreateListViewItem(topic, time);
+                var lvi = InitializeListViewItem(topic, time);
                 listView1.Items.Add(lvi);
             }
             listView1.ListViewItemSorter = mListViewItemSorter;
@@ -165,7 +168,7 @@ namespace AskMonaViewer
             {
                 if (topic.Title.ToLower().Contains(key.ToLower()))
                 {
-                    var lvi = CreateListViewItem(topic, time);
+                    var lvi = InitializeListViewItem(topic, time);
                     listView1.Items.Add(lvi);
                 }
             }
@@ -342,7 +345,7 @@ namespace AskMonaViewer
         private async Task<bool> InitializeTabPage(int topicId)
         {
             Topic topic;
-            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
+            var idx = mResponseCache.FindIndex(x => x.Topic.Id == topicId);
             if (idx == -1)
             {
                 var responseList = await mAskMonaApi.FetchResponseListAsync(topicId, 1, 1, 1);
@@ -352,7 +355,7 @@ namespace AskMonaViewer
             }
             else
             {
-                var cache = mResponseCacheList[idx];
+                var cache = mResponseCache[idx];
                 topic = cache.Topic;
             }
 
@@ -364,7 +367,7 @@ namespace AskMonaViewer
         private async Task<bool> UpdateResponse(int topicId)
         {
             var html = "";
-            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == topicId);
+            var idx = mResponseCache.FindIndex(x => x.Topic.Id == topicId);
             if (idx == -1)
             {
                 var responseList = await mAskMonaApi.FetchResponseListAsync(topicId, topic_detail: 1);
@@ -372,26 +375,26 @@ namespace AskMonaViewer
                     return false;
                 mTopic = responseList.Topic;
                 html = await BuildHtml(responseList);
-                mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
+                mResponseCache.Add(responseList);
             }
             else
             {
-                var cache = mResponseCacheList[idx];
+                var cache = mResponseCache[idx];
                 var responseList = await mAskMonaApi.FetchResponseListAsync(topicId, 1, 1000, 1, cache.Topic.Modified);
                 if (responseList == null)
                     return false;
                 else if (responseList.Status == 2)
                 {
                     mTopic = cache.Topic;
-                    html = Common.DecompressString(cache.Html);
+                    html = await BuildHtml(cache);
                 }
                 else
                 {
                     mTopic = responseList.Topic;
                     mTopic.Scrolled = cache.Topic.Scrolled;
-                    html = (await BuildHtml(responseList)).ToString();
-                    mResponseCacheList.RemoveAt(idx);
-                    mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html)));
+                    html = await BuildHtml(responseList);
+                    mResponseCache.RemoveAt(idx);
+                    mResponseCache.Add(responseList);
                 }
             }
 
@@ -408,18 +411,18 @@ namespace AskMonaViewer
             if (responseList == null)
                 return false;
 
-            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
-            var scrolled = new Point(0, 0);
+            var idx = mResponseCache.FindIndex(x => x.Topic.Id == mTopic.Id);
+            var scrolled = 0;
             if (idx != -1)
             {
-                scrolled = mResponseCacheList[idx].Topic.Scrolled;
-                mResponseCacheList.RemoveAt(idx);
+                scrolled = mResponseCache[idx].Topic.Scrolled;
+                mResponseCache.RemoveAt(idx);
             }
 
             mTopic = responseList.Topic;
             mTopic.Scrolled = scrolled;
             html = await BuildHtml(responseList);
-            mResponseCacheList.Add(new ResponseCache(mTopic, Common.CompressString(html.ToString())));
+            mResponseCache.Add(responseList);
 
             mIsDocumentLoading = true;
             mPrimaryWebBrowser.DocumentText = mHtmlHeader + html + "</body>\n</html>";
@@ -432,26 +435,32 @@ namespace AskMonaViewer
             if (mTopic == null)
                 return;
 
-            var idx = mResponseCacheList.FindIndex(x => x.Topic.Id == mTopic.Id);
+            var idx = mResponseCache.FindIndex(x => x.Topic.Id == mTopic.Id);
             if (idx == -1)
                 return;
 
             var doc3 = (mshtml.IHTMLDocument3)mPrimaryWebBrowser.Document.DomDocument;
             var elm = (mshtml.IHTMLElement2)doc3.documentElement;
-            var scrolled = new Point(elm.scrollLeft, elm.scrollTop);
+            var scrolled = elm.scrollTop;
             if (mSettings.Options.IsAlreadyReadPosition)
             {
-                if (mResponseCacheList[idx].Topic.Scrolled.Y < scrolled.Y)
-                    mResponseCacheList[idx].Topic.Scrolled = scrolled;
+                if (mResponseCache[idx].Topic.Scrolled < scrolled)
+                    mResponseCache[idx].Topic.Scrolled = scrolled;
             }
             else if (mSettings.Options.IsLastPosition)
-                mResponseCacheList[idx].Topic.Scrolled = scrolled;
+                mResponseCache[idx].Topic.Scrolled = scrolled;
         }
 
-        private void OnResponseFormClosed(object sender, EventArgs e)
+        private void OnPostResponseDialogClosed(object sender, EventArgs e)
         {
             mSettings.PostResponseDialogSettings = mPostResponseDialog.SaveSettings();
             mPostResponseDialog = null;
+        }
+
+        private void OnScatterMonaDialogClosed(object sender, EventArgs e)
+        {
+            mSettings.ScatterMonaDialogSettings = mScatterMonaDialog.SaveSettings();
+            mScatterMonaDialog = null;
         }
 
         public void AddNGUser(int userId)
@@ -559,11 +568,12 @@ namespace AskMonaViewer
                 catch { }
             }
 
-            if (File.Exists("ResponseCache.xml"))
+            if (File.Exists("ResponseCache.bin"))
             {
-                var xs = new XmlSerializer(typeof(List<ResponseCache>));
-                using (var sr = new StreamReader("ResponseCache.xml", new UTF8Encoding(false)))
-                    mResponseCacheList = xs.Deserialize(sr) as List<ResponseCache>;
+                var serializer = new DataContractSerializer(typeof(List<ResponseList>));
+                using (var fs = new FileStream("ResponseCache.bin", FileMode.Open, FileAccess.Read))
+                using (var binaryReader = XmlDictionaryReader.CreateBinaryReader(fs, new XmlDictionaryReaderQuotas()))
+                    mResponseCache = serializer.ReadObject(binaryReader) as List<ResponseList>;
             }
 
             if (File.Exists("ImgurImageList.xml"))
@@ -604,9 +614,10 @@ namespace AskMonaViewer
             using (var sw = new StreamWriter("AskMonaViewer.xml", false, new UTF8Encoding(false)))
                 xs.Serialize(sw, mSettings);
 
-            xs = new XmlSerializer(typeof(List<ResponseCache>));
-            using (var sw = new StreamWriter("ResponseCache.xml", false, new UTF8Encoding(false)))
-                xs.Serialize(sw, mResponseCacheList);
+            var serializer = new DataContractSerializer(typeof(List<ResponseList>));
+            using (var fs = new FileStream("ResponseCache.bin", FileMode.Create, FileAccess.Write))
+            using (var binaeyWriter = XmlDictionaryWriter.CreateBinaryWriter(fs))
+                serializer.WriteObject(binaeyWriter, mResponseCache);
 
             xs = new XmlSerializer(typeof(List<ImgurImage>));
             using (var sw = new StreamWriter("ImgurImageList.xml", false, new UTF8Encoding(false)))
@@ -678,6 +689,13 @@ namespace AskMonaViewer
 
             if (mPostResponseDialog != null)
                 mPostResponseDialog.UpdateTopic(topic);
+            if (mScatterMonaDialog != null)
+            {
+                var idx = mResponseCache.FindIndex(x => x.Topic.Id == mTopic.Id);
+                if (idx == -1)
+                    return;
+                mScatterMonaDialog.UpdateTopic(mResponseCache[idx]);
+            }
 
             var topicIndex = mTopicList.FindIndex(x => x.Id == topic.Id);
             if (topicIndex != -1)
@@ -765,7 +783,7 @@ namespace AskMonaViewer
             mPrimaryWebBrowser.Document.Window.AttachEventHandler("onscroll", OnScrollEventHandler);
 
             if (mIsDocumentLoading)
-                mPrimaryWebBrowser.Document.Window.ScrollTo(mTopic.Scrolled);
+                mPrimaryWebBrowser.Document.Window.ScrollTo(new Point(0, mTopic.Scrolled));
 
             mIsDocumentLoading = false;
             UpdateConnectionStatus("受信完了");
@@ -832,15 +850,12 @@ namespace AskMonaViewer
 
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
-            if (mTopic == null)
+            if (mTopic == null || mPostResponseDialog != null)
                 return;
 
-            if (mPostResponseDialog == null)
-            {
-                mPostResponseDialog = new PostResponseDialog(this, mSettings.Options, mAskMonaApi, mImgurApi, mTopic);
-                mPostResponseDialog.LoadSettings(mSettings.PostResponseDialogSettings);
-                mPostResponseDialog.FormClosed += OnResponseFormClosed;
-            }
+            mPostResponseDialog = new PostResponseDialog(this, mSettings.Options, mAskMonaApi, mImgurApi, mTopic);
+            mPostResponseDialog.LoadSettings(mSettings.PostResponseDialogSettings);
+            mPostResponseDialog.FormClosed += OnPostResponseDialogClosed;
             mPostResponseDialog.Show(this);
         }
 
@@ -977,13 +992,17 @@ namespace AskMonaViewer
 
         private void toolStripButton14_Click(object sender, EventArgs e)
         {
-            if (mTopic == null)
+            if (mTopic == null || mScatterMonaDialog != null)
                 return;
 
-            var scatterMonaDialog = new ScatterMonaDialog(this, mSettings.Options, mAskMonaApi, mTopic, mNGUsers);
-            scatterMonaDialog.LoadSettings(mSettings.ScatterMonaDialogSettings);
-            scatterMonaDialog.ShowDialog();
-            mSettings.ScatterMonaDialogSettings = scatterMonaDialog.SaveSettings();
+            var idx = mResponseCache.FindIndex(x => x.Topic.Id == mTopic.Id);
+            if (idx == -1)
+                return;
+
+            mScatterMonaDialog = new ScatterMonaDialog(this, mSettings.Options, mAskMonaApi, mResponseCache[idx], mNGUsers);
+            mScatterMonaDialog.LoadSettings(mSettings.ScatterMonaDialogSettings);
+            mScatterMonaDialog.FormClosed += OnScatterMonaDialogClosed;
+            mScatterMonaDialog.Show(this);
         }
 
         private async void listView1_Scroll(object sender, ScrollEventArgs e)
@@ -1040,6 +1059,13 @@ namespace AskMonaViewer
 
             if (mPostResponseDialog != null)
                 mPostResponseDialog.UpdateTopic(mTopic);
+            if (mScatterMonaDialog != null)
+            {
+                var idx = mResponseCache.FindIndex(x => x.Topic.Id == mTopic.Id);
+                if (idx == -1)
+                    return;
+                mScatterMonaDialog.UpdateTopic(mResponseCache[idx]);
+            }
 
             if (tabControl1.TabPages[tabControl1.SelectedIndex].Controls.Count > 0)
                 mPrimaryWebBrowser = (WebBrowser)tabControl1.TabPages[tabControl1.SelectedIndex].Controls[0];

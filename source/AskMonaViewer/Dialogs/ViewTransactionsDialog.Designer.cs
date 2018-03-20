@@ -176,7 +176,7 @@
             this.Name = "ViewTransactionsDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "取引明細";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TransactionViewForm_FormClosed);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ViewTransactionsDialog_FormClosed);
             this.Load += new System.EventHandler(this.ViewTransactionDialog_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

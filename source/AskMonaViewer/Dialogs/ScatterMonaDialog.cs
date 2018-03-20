@@ -21,27 +21,61 @@ namespace AskMonaViewer.Dialogs
         private ResponseList mResponseList;
         private bool mIsScattering = false;
 
-        public ScatterMonaDialog(MainForm parent, Options options, AskMonaApi api, Topic topic, List<int> ngUsers)
+        public ScatterMonaDialog(MainForm parent, Options options, AskMonaApi api, ResponseList responseList, List<int> ngUsers)
         {
             InitializeComponent();
             mParent = parent;
             mOptions = options;
             mApi = api;
-            mTopic = topic;
+            mResponseList = responseList;
+            mTopic = responseList.Topic;
             mNGUsers = ngUsers;
             button5.Text = "+ " + Common.Digits(options.FirstButtonMona) + " MONA";
             button3.Text = "+ " + Common.Digits(options.SecondButtonMona) + " MONA";
             button4.Text = "+ " + Common.Digits(options.ThirdButtonMona) + " MONA";
             button6.Text = "+ " + Common.Digits(options.ForthButtonMona) + " MONA";
-            checkBox4.Enabled = topic.ShowHost != 0;
+            checkBox4.Enabled = mTopic.ShowHost != 0;
             checkBox1.Checked = options.AlwaysSage;
             checkBox2.Checked = !options.AlwaysNonAnonymous;
-            this.Text = "『" + topic.Title + "』にばらまく";
+            this.Text = "『" + mTopic.Title + "』にばらまく";
+        }
+
+        public async void UpdateTopic(ResponseList responseList)
+        {
+            if (mIsScattering)
+                return;
+
+            mTopic = responseList.Topic;
+            mResponseList = responseList;
+            var result = await mApi.FetchResponseListAsync(mTopic.Id, 1, 1000, 1, mTopic.Modified);
+            if (result != null)
+            {
+                if (result.Status == 0)
+                    MessageBox.Show(result.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else if (result.Status != 2)
+                {
+                    mTopic = result.Topic;
+                    mResponseList = result;
+                }
+            }
+
+            checkBox4.Enabled = mTopic.ShowHost != 0;
+            this.Text = "『" + mTopic.Title + "』にばらまく";
         }
 
         private async void ScatterMonaDialog_Load(object sender, EventArgs e)
         {
-            mResponseList = await mApi.FetchResponseListAsync(mTopic.Id);
+            var responseList = await mApi.FetchResponseListAsync(mTopic.Id, 1, 1000, 1, mTopic.Modified);
+            if (responseList != null)
+            {
+                if (responseList.Status == 0)
+                    MessageBox.Show(responseList.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else if (responseList.Status != 2)
+                {
+                    mTopic = responseList.Topic;
+                    mResponseList = responseList;
+                }
+            }
             textBox2.Text = FilterResponseList(mResponseList.Responses).Count().ToString();
             timer1.Enabled = true;
 

@@ -203,12 +203,6 @@ namespace AskMonaWrapper
         [DataMember(Name = "count")]
         public int Count { get; set; }
 
-        public int Increased { get; set; }
-
-        public System.Drawing.Point Scrolled { get; set; }
-
-        public int CachedCount { get; set; }
-
         [DataMember(Name = "receive")]
         public string Receive { get; set; }
 
@@ -221,10 +215,14 @@ namespace AskMonaWrapper
         [DataMember(Name = "sh_host")]
         public int ShowHost { get; set; }
 
-        public Topic()
-        {
-            Scrolled = new System.Drawing.Point(0, 0);
-        }
+        [DataMember]
+        public int Scrolled { get; set; }
+
+        [DataMember]
+        public int Increased { get; set; }
+
+        [DataMember]
+        public int CachedCount { get; set; }
     }
 
     [DataContract]
