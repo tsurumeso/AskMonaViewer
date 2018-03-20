@@ -7,11 +7,6 @@ namespace AskMonaViewer.Dialogs
         public ViewMessagesDialog(string html, string msg, string topicTitle)
         {
             InitializeComponent();
-            UpdateMessage(html, msg, topicTitle);
-        }
-
-        public void UpdateMessage(string html, string msg, string topicTitle)
-        {
             webBrowser1.DocumentText = html;
             textBox1.Text = msg;
             this.Text = "『" + topicTitle + "』へのレス";
