@@ -28,6 +28,12 @@ namespace AskMonaViewer.Dialogs
             button1.Enabled = false;
         }
 
+        public void UpdateTopic(Topic topic)
+        {
+            mTopic = topic;
+            this.Text = "『" + topic.Title + "』にレス";
+        }
+
         private async void button1_Click(object sender, EventArgs e)
         {
             if (mHasCompleted)
@@ -52,12 +58,6 @@ namespace AskMonaViewer.Dialogs
                 MessageBox.Show("レスの投稿に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             this.Close();
-        }
-
-        public void UpdateTopic(Topic topic)
-        {
-            mTopic = topic;
-            this.Text = "『" + topic.Title + "』にレス";
         }
 
         private void button2_Click(object sender, EventArgs e)

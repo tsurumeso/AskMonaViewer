@@ -135,7 +135,7 @@ namespace AskMonaViewer.Dialogs
                     mViewMessagesDialog.Close();
                 mViewMessagesDialog = new ViewMessagesDialog(html, tx.Message, responseList.Topic.Title);
                 mViewMessagesDialog.LoadSettings(mSettings.ViewMessagesDialogSettings);
-                mViewMessagesDialog.FormClosed += OnMessagesViewDialogClosed;
+                mViewMessagesDialog.FormClosed += OnViewMessagesDialogClosed;
                 mViewMessagesDialog.Show(this);
             }
             else if (columnIndex == 3 && tx.User != null)
@@ -144,27 +144,27 @@ namespace AskMonaViewer.Dialogs
                     mViewProfileDialog.Close();
                 mViewProfileDialog = new ViewProfileDialog(mParent, mSettings.Options, mApi, tx.User.UserId);
                 mViewProfileDialog.LoadSettings(mSettings.ViewProfileDialogSettings);
-                mViewProfileDialog.FormClosed += OnProfileViewDialogClosed;
+                mViewProfileDialog.FormClosed += OnViewProfileDialogClosed;
                 mViewProfileDialog.Show(this);
                 mSettings.ViewProfileDialogSettings = mViewProfileDialog.SaveSettings();
             }
         }
 
-        private void OnMessagesViewDialogClosed(object sender, EventArgs e)
+        private void OnViewMessagesDialogClosed(object sender, EventArgs e)
         {
             mSettings.ViewMessagesDialogSettings = mViewMessagesDialog.SaveSettings();
             mViewMessagesDialog.Dispose();
             mViewMessagesDialog = null;
         }
 
-        private void OnProfileViewDialogClosed(object sender, EventArgs e)
+        private void OnViewProfileDialogClosed(object sender, EventArgs e)
         {
             mSettings.ViewProfileDialogSettings = mViewProfileDialog.SaveSettings();
             mViewProfileDialog.Dispose();
             mViewProfileDialog = null;
         }
 
-        private void TransactionViewForm_FormClosed(object sender, FormClosedEventArgs e)
+        private void ViewTransactionsDialog_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (mViewMessagesDialog != null)
                 mViewMessagesDialog.Close();
