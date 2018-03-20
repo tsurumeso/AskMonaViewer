@@ -474,16 +474,6 @@ namespace AskMonaViewer
             toolStripStatusLabel1.Text = label;
         }
 
-        public DialogSettings LoadViewMessageDialogSettings()
-        {
-            return mSettings.ViewMessagesDialogSettings;
-        }
-
-        public void SaveViewMessageDialogSettings(DialogSettings settings)
-        {
-            mSettings.ViewMessagesDialogSettings = settings;
-        }
-
         private async Task<bool> UpdateCurrenciesRate()
         {
             if (mSettings.Options.VisibleMonaJpy)
@@ -959,10 +949,11 @@ namespace AskMonaViewer
 
         private void toolStripButton11_Click(object sender, EventArgs e)
         {
-            var viewTransactionDialog = new ViewTransactionsDialog(this, mAskMonaApi);
-            viewTransactionDialog.LoadSettings(mSettings.ViewTransactionsDialogSettings);
-            viewTransactionDialog.ShowDialog();
-            mSettings.ViewTransactionsDialogSettings = viewTransactionDialog.SaveSettings();
+            var viewTransactionsDialog = new ViewTransactionsDialog(this, mAskMonaApi, mSettings);
+            viewTransactionsDialog.LoadSettings(mSettings.ViewTransactionsDialogSettings);
+            viewTransactionsDialog.ShowDialog();
+            mSettings = viewTransactionsDialog.Settings;
+            mSettings.ViewTransactionsDialogSettings = viewTransactionsDialog.SaveSettings();
         }
 
         private void toolStripButton12_Click(object sender, EventArgs e)
