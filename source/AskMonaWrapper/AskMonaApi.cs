@@ -7,7 +7,7 @@ namespace AskMonaWrapper
 {
     public partial class AskMonaApi
     {
-        private const string mApiBaseUrl = "http://askmona.org/v1/";
+        private const string mApiBaseUrl = "https://askmona.org/v1/";
         private static SHA256CryptoServiceProvider mSHA256Provider;
         private string mApplicationId;
         private string mApplicationSecretKey;
