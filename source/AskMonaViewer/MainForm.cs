@@ -230,7 +230,7 @@ namespace AskMonaViewer
                         continue;
 
                     html.Append(String.Format(
-                        "<a href=\"javascript:void(0);\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a>{3} ",
+                        "<a href=\"#res?r_id={0}\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a>{3} ",
                         response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
                         String.IsNullOrEmpty(response.UserTitle) ? "" : "・" + response.UserTitle));
 
@@ -726,11 +726,24 @@ namespace AskMonaViewer
             else
                 e.ReturnValue = false;
 
+            var matchRes = Regex.Match(link, @"about:blank#res\?r_id=(?<Id>[0-9]+)");
             var matchSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
             var matchUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)|https?://askmona.org/user/(?<Id>[0-9]+)");
             var matchAnchor = Regex.Match(link, @"about:blank#res_.+");
             var matchAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
-            if (matchSend.Success)
+            if (matchRes.Success)
+            {
+                if (mPostResponseDialog != null)
+                    mPostResponseDialog.UpdateTopic(mTopic, matchRes.Groups["Id"].Value);
+                else
+                {
+                    mPostResponseDialog = new PostResponseDialog(this, mSettings.Options, mAskMonaApi, mImgurApi, mTopic, matchRes.Groups["Id"].Value);
+                    mPostResponseDialog.LoadSettings(mSettings.PostResponseDialogSettings);
+                    mPostResponseDialog.FormClosed += OnPostResponseDialogClosed;
+                    mPostResponseDialog.Show(this);
+                }
+            }
+            else if (matchSend.Success)
             {
                 var sendMonaDialog = new SendMonaDialog(this, mSettings.Options, mAskMonaApi, mTopic, int.Parse(matchSend.Groups["Id"].Value));
                 sendMonaDialog.LoadSettings(mSettings.SendMonaDialogSettings);
