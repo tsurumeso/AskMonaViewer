@@ -9,7 +9,7 @@ namespace AskMonaWrapper
 {
     public partial class AskMonaApi
     {
-        internal async Task<T> CallAsync<T>(string url, Dictionary<string, string> prms)
+        private async Task<T> CallAsync<T>(string url, Dictionary<string, string> prms)
         {
             var sb = new StringBuilder();
             foreach (var prm in prms)
@@ -32,7 +32,7 @@ namespace AskMonaWrapper
             return default(T);
         }
 
-        internal async Task<T> CallAuthAsync<T>(string url, Dictionary<string, string> prms)
+        private async Task<T> CallAuthAsync<T>(string url, Dictionary<string, string> prms)
         {
             var authKey = await GenerateAuthorizationKey();
             if (authKey == null)
@@ -47,7 +47,7 @@ namespace AskMonaWrapper
             return await CallAsync<T>(url, prms);
         }
 
-        internal static string GenerateNonce(int length)
+        private static string GenerateNonce(int length)
         {
             var random = new Random();
             var nonceString = new StringBuilder();
@@ -57,7 +57,7 @@ namespace AskMonaWrapper
             return nonceString.ToString();
         }
 
-        internal async Task<AuthorizationKey> GenerateAuthorizationKey()
+        private async Task<AuthorizationKey> GenerateAuthorizationKey()
         {
             if (String.IsNullOrEmpty(mAccount.SecretKey) && 
                 !String.IsNullOrEmpty(mAccount.Address) && !String.IsNullOrEmpty(mAccount.Password))
