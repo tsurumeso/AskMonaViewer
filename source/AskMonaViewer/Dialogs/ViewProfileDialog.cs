@@ -39,7 +39,8 @@ namespace AskMonaViewer.Dialogs
                     MessageBox.Show(profile.Error, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
-                    this.Text = "『" + profile.UserName + profile.UserDan + "』のプロフィール";
+                    var userTitle = String.IsNullOrEmpty(profile.UserTitle) ? "" : "・" + profile.UserTitle;
+                    this.Text = "『" + profile.UserName + profile.UserDan + userTitle + "』のプロフィール";
                     if (!String.IsNullOrEmpty(profile.Text))
                         textBox2.Text = profile.Text.Replace("\n", "\r\n");
                 }

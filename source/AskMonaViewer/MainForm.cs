@@ -230,8 +230,9 @@ namespace AskMonaViewer
                         continue;
 
                     html.Append(String.Format(
-                        "<a href=\"javascript:void(0);\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a> ",
-                        response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan)));
+                        "<a href=\"javascript:void(0);\">{0}</a> 名前：<a href=\"#user?u_id={1}\" class=\"user\">{2}</a>{3} ",
+                        response.Id, response.UserId, System.Security.SecurityElement.Escape(response.UserName + response.UserDan),
+                        String.IsNullOrEmpty(response.UserTitle) ? "" : "・" + response.UserTitle));
 
                     if (mTopic.ShowHost > 0)
                         html.Append(String.Format("({0}) ", response.Host));
