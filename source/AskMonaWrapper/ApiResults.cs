@@ -154,6 +154,9 @@ namespace AskMonaWrapper
         [DataMember(Name = "u_dan")]
         public string UserDan { get; set; }
 
+        [DataMember(Name = "u_title")]
+        public string UserTitle { get; set; }
+
         [DataMember(Name = "profile")]
         public string Text { get; set; }
     }
@@ -266,6 +269,9 @@ namespace AskMonaWrapper
 
         [DataMember(Name = "u_dan")]
         public string UserDan { get; set; }
+
+        [DataMember(Name = "u_title")]
+        public string UserTitle { get; set; }
 
         [DataMember(Name = "u_times")]
         public string UserTimes { get; set; }

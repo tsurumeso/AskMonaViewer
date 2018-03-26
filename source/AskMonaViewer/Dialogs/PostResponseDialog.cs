@@ -85,6 +85,7 @@ namespace AskMonaViewer.Dialogs
             response.UserId = mApi.UserId;
             response.UserName = profile.UserName;
             response.UserDan = profile.UserDan;
+            response.UserTitle = profile.UserTitle;
             response.Created = Common.DateTimeToUnixTimeStamp(DateTime.Now);
             response.UserTimes = "1/1";
             response.Receive = "0";
