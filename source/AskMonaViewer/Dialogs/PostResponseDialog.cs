@@ -16,7 +16,7 @@ namespace AskMonaViewer.Dialogs
         private ImgurApi mImgurApi;
         private bool mHasCompleted = false;
 
-        public PostResponseDialog(MainForm parent, Options options, AskMonaApi api, ImgurApi imgurApi, Topic topic)
+        public PostResponseDialog(MainForm parent, Options options, AskMonaApi api, ImgurApi imgurApi, Topic topic, string text = "")
         {
             InitializeComponent();
             mParent = parent;
@@ -25,13 +25,16 @@ namespace AskMonaViewer.Dialogs
             mImgurApi = imgurApi;
             checkBox1.Checked = options.AlwaysSage;
             this.Text = "『" + topic.Title + "』にレス";
-            button1.Enabled = false;
+            textBox1.Text = String.IsNullOrEmpty(text) ? "" : ">>" + text;
+            button1.Enabled = !String.IsNullOrEmpty(text);
         }
 
-        public void UpdateTopic(Topic topic)
+        public void UpdateTopic(Topic topic, string text = "")
         {
             mTopic = topic;
             this.Text = "『" + topic.Title + "』にレス";
+            textBox1.Text = String.IsNullOrEmpty(text) ? "" : ">>" + text;
+            tabControl1.SelectedIndex = 0;
         }
 
         private async void button1_Click(object sender, EventArgs e)
