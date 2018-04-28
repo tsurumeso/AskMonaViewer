@@ -91,6 +91,9 @@
     <Compile Include="Dialogs\ViewNGUsersDialog.Designer.cs">
       <DependentUpon>ViewNGUsersDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainFormFunctions.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Settings\MainFormSettings.cs" />
     <Compile Include="Settings\Options.cs" />
     <Compile Include="Dialogs\SetOptionDialog.cs">

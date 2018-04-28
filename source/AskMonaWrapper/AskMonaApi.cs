@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
@@ -38,7 +37,7 @@ namespace AskMonaWrapper
             mApplicationSecretKey = appSecretKey;
         }
 
-        internal async Task<SecretKey> FetchSecretKey(string addr, string pass)
+        internal async Task<SecretKey> FetchSecretKeyAsync(string addr, string pass)
         {
             var prms = new Dictionary<string, string>();
             prms.Add("app_id", mApplicationId);

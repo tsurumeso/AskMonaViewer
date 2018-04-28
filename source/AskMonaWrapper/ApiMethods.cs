@@ -62,7 +62,7 @@ namespace AskMonaWrapper
             if (String.IsNullOrEmpty(mAccount.SecretKey) && 
                 !String.IsNullOrEmpty(mAccount.Address) && !String.IsNullOrEmpty(mAccount.Password))
             {
-                var secretKey = await FetchSecretKey(mAccount.Address, mAccount.Password);
+                var secretKey = await FetchSecretKeyAsync(mAccount.Address, mAccount.Password);
                 if (secretKey == null)
                     return null;
 
