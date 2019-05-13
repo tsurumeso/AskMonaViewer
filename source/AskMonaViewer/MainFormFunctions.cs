@@ -250,13 +250,14 @@ namespace AskMonaViewer
             }
         }
 
-        private async Task<bool> MatchingLink(string link)
+        private async Task<bool> ExecuteLink(string link)
         {
             var matchRes = Regex.Match(link, @"about:blank#res\?r_id=(?<Id>[0-9]+)");
             var matchSend = Regex.Match(link, @"about:blank#send\?r_id=(?<Id>[0-9]+)");
             var matchUser = Regex.Match(link, @"about:blank#user\?u_id=(?<Id>[0-9]+)|https?://askmona.org/user/(?<Id>[0-9]+)");
             var matchAnchor = Regex.Match(link, @"about:blank#res_.+");
             var matchAskMona = Regex.Match(link, @"https?://askmona.org/(?<Id>[0-9]+)");
+
             if (matchRes.Success)
             {
                 if (mPostResponseDialog != null)
@@ -505,24 +506,22 @@ namespace AskMonaViewer
             toolStripStatusLabel1.Text = label;
         }
 
-        private async Task<bool> UpdateCurrenciesRate()
+        private async Task<bool> UpdateCurrencyPrice()
         {
             if (mSettings.Options.VisibleMonaJpy)
             {
-                var rate = await mZaifApi.FetchRate("mona_jpy");
-                if (rate == null)
-                    return false;
-                toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
+                var rate = await mZaifApi.FetchPrice("mona_jpy");
+                if (rate != null)
+                    toolStripStatusLabel2.Text = "MONA/JPY " + rate.Last.ToString("F1");
             }
             else
                 toolStripStatusLabel2.Text = "";
 
             if (mSettings.Options.VisibleBtcJpy)
             {
-                var rate = await mZaifApi.FetchRate("btc_jpy");
-                if (rate == null)
-                    return false;
-                toolStripStatusLabel3.Text = "BTC/JPY " + rate.Last.ToString("F0");
+                var rate = await mZaifApi.FetchPrice("btc_jpy");
+                if (rate != null)
+                    toolStripStatusLabel3.Text = "BTC/JPY " + rate.Last.ToString("F0");
             }
             else
                 toolStripStatusLabel3.Text = "";

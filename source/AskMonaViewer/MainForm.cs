@@ -83,7 +83,7 @@ namespace AskMonaViewer
             if (tabControl1.SelectedIndex == 0)
                 tabControl1_SelectedIndexChanged(this, new EventArgs());
 
-            await UpdateCurrenciesRate();
+            await UpdateCurrencyPrice();
             EnableControls();
         }
 
@@ -142,7 +142,7 @@ namespace AskMonaViewer
             else
                 e.ReturnValue = false;
 
-            await MatchingLink(link);
+            await ExecuteLink(link);
         }
 
         private async void listView2_SelectedIndexChanged(object sender, EventArgs e)
@@ -234,7 +234,7 @@ namespace AskMonaViewer
 
         private async void timer1_Tick(object sender, EventArgs e)
         {
-            await UpdateCurrenciesRate();
+            await UpdateCurrencyPrice();
         }
 
         private void toolStripButton6_Click(object sender, EventArgs e)
@@ -435,7 +435,7 @@ namespace AskMonaViewer
             var setOptionDialog = new SetOptionDialog(mSettings.Options);
             setOptionDialog.ShowDialog();
             mSettings.Options = setOptionDialog.Options;
-            await UpdateCurrenciesRate();
+            await UpdateCurrencyPrice();
         }
 
         private async void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
