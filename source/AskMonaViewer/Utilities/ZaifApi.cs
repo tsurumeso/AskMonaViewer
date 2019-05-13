@@ -22,17 +22,23 @@ namespace AskMonaViewer.Utilities
             return null;
         }
 
-        public async Task<Currency> FetchRate(string currency)
+        public async Task<Currency> FetchPrice(string currency)
         {
             var serializer = new DataContractJsonSerializer(typeof(Currency));
             var api = String.Format(mApiBaseUrl + "ticker/{0}", currency);
-            
+
             var jsonStream = await FetchResponseStreamAsync(api);
             if (jsonStream == null)
                 return null;
 
-            var rate = (Currency)serializer.ReadObject(jsonStream);
-            return rate;
+            try
+            {
+                return (Currency)serializer.ReadObject(jsonStream);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 
