@@ -59,6 +59,15 @@ a.send:hover{
     text-decoration: underline
 }
 
+a.thumbnail{
+    display:table;
+    margin:5px 0;
+    padding:0;
+}
+a.thumbnail img{
+    border: 1px #999 solid;
+}
+
 .tooltip {
     position: absolute;
     padding: 10px;
