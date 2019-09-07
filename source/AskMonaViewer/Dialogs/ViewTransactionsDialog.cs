@@ -58,7 +58,11 @@ namespace AskMonaViewer.Dialogs
             var receive = await mApi.FetchTransactionAsync("receive");
             var send = await mApi.FetchTransactionAsync("send");
 
-            if (deposit != null && withdraw != null)
+            if (deposit == null || withdraw == null || receive == null || send == null)
+            {
+                MessageBox.Show("情報の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
             {
                 var txs = new List<Transaction>(deposit.Transactions);
                 txs.AddRange(withdraw.Transactions);
@@ -66,37 +70,30 @@ namespace AskMonaViewer.Dialogs
                 listViewEx1.BeginUpdate();
                 for (int i = 0; i < txs.Count; i++)
                 {
-                    var lvi = new ListViewItem(
-                        new string[] {
-                            Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
-                            txs[i].Item == "deposit" ? "入金" : "出金",
-                            (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
-                        }
-                    );
+                    var lvi = new ListViewItem(new string[] {
+                        Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
+                        txs[i].Item == "deposit" ? "入金" : "出金",
+                        (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
+                    });
                     listViewEx1.Items.Add(lvi);
                 }
                 listViewEx1.ListViewItemSorter = mListViewItemSorterDW;
                 Common.UpdateColumnColors(listViewEx1, Color.White, Color.Lavender);
                 listViewEx1.EndUpdate();
-            }
 
-            if (receive != null && send != null)
-            {
-                var txs = new List<Transaction>(receive.Transactions);
+                txs = new List<Transaction>(receive.Transactions);
                 txs.AddRange(send.Transactions);
                 txs = txs.OrderBy(x => x.Created).ToList();
                 listViewEx2.BeginUpdate();
                 for (int i = 0; i < txs.Count; i++)
                 {
-                    var lvi = new ListViewItem(
-                        new string[] {
-                            Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
-                            txs[i].Item == "receive" ? "受け取り " : "ばらまき ",
-                            txs[i].ResponceId == 0 ? "ユーザー" : "レス",
-                            txs[i].User != null ? txs[i].User.UserName + txs[i].User.UserDan : "匿名",
-                            (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
-                        }
-                    );
+                    var lvi = new ListViewItem(new string[] {
+                        Common.UnixTimeStampToDateTime(txs[i].Created).ToString(),
+                        txs[i].Item == "receive" ? "受け取り " : "ばらまき ",
+                        txs[i].ResponceId == 0 ? "ユーザー" : "レス",
+                        txs[i].User != null ? txs[i].User.UserName + txs[i].User.UserDan : "匿名",
+                        (Double.Parse(txs[i].Amount) / 100000000).ToString("F8")
+                    });
                     lvi.Tag = txs[i];
                     listViewEx2.Items.Add(lvi);
                 }

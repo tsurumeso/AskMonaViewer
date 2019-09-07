@@ -54,8 +54,12 @@ namespace AskMonaViewer
                 mAskMonaApi.Account = signUpDialog.Account;
                 mSettings.Account = signUpDialog.Account;
             }
+            if (await mAskMonaApi.VerifySecretKeyAsync() == null)
+            {
+                MessageBox.Show("ログインに失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-            var topicList = await mAskMonaApi.FetchFavoriteTopicListAsync();
+                var topicList = await mAskMonaApi.FetchFavoriteTopicListAsync();
             if (topicList != null)
                 mFavoriteTopicList = topicList.Topics;
 
@@ -265,7 +269,15 @@ namespace AskMonaViewer
         private async void toolStripButton7_Click(object sender, EventArgs e)
         {
             var deposit = await mAskMonaApi.FetchDepositAddressAsync();
-            Clipboard.SetText(deposit.Address);
+            if (deposit == null)
+            {
+                MessageBox.Show("入金アドレスのコピーに失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else
+            {
+                Clipboard.SetText(deposit.Address);
+            }
         }
 
         private void Copy_ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -294,13 +306,27 @@ namespace AskMonaViewer
             int idx = mFavoriteTopicList.FindIndex(x => x.Id == mTopic.Id);
             if (idx == -1)
             {
-                await mAskMonaApi.AddFavoriteTopicAsync(mTopic.Id);
-                mFavoriteTopicList.Add(mTopic);
+                var result = await mAskMonaApi.AddFavoriteTopicAsync(mTopic.Id);
+                if (result == null)
+                {
+                    MessageBox.Show("お気に入りの登録に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    mFavoriteTopicList.Add(mTopic);
+                }
             }
             else
             {
-                await mAskMonaApi.DeleteFavoriteTopicAsync(mTopic.Id);
-                mFavoriteTopicList.RemoveAt(idx);
+                var result = await mAskMonaApi.DeleteFavoriteTopicAsync(mTopic.Id);
+                if (result == null)
+                {
+                    MessageBox.Show("お気に入りの登録に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    mFavoriteTopicList.RemoveAt(idx);
+                }
             }
 
             mTopicList.Clear();

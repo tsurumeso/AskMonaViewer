@@ -20,7 +20,10 @@ namespace AskMonaViewer.Dialogs
         {
             var profile = await mApi.EditUserProfileAsync();
             if (profile == null)
+            {
+                MessageBox.Show("情報の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
 
             textBox1.Text = profile.UserName;
             if (profile.Text != null)

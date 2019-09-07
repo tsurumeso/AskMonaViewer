@@ -43,7 +43,7 @@ namespace AskMonaViewer.Dialogs
                 }
             }
             else
-                MessageBox.Show("NG ユーザーの一覧の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("情報の取得に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private async void Delete_ToolStripMenuItem_Click(object sender, EventArgs e)
