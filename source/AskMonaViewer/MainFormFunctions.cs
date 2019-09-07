@@ -27,7 +27,7 @@ namespace AskMonaViewer
         private bool mIsDocumentLoading = false;
         private bool mIsTopicListUpdating = false;
         private string mHtmlHeader = "";
-        private const string mVersionString = "2.0.3";
+        private const string mVersionString = "2.0.4";
         private ApplicationSettings mSettings;
         private AskMonaApi mAskMonaApi;
         private ImgurApi mImgurApi;
