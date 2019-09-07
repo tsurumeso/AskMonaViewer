@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
@@ -16,6 +17,9 @@ namespace AskMonaViewer
         public MainForm()
         {
             InitializeComponent();
+            mAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\AskMonaViewer\\";
+            if (!Directory.Exists(mAppDataFolder))
+                Directory.CreateDirectory(mAppDataFolder);
             mListViewItemSorter = new ListViewItemComparer();
             mListViewItemSorter.ColumnModes = new ListViewItemComparer.ComparerMode[]
             {
