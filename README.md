@@ -8,7 +8,7 @@ AskMonaViewer は [AskMona](http://askmona.org/) の Windows 用非公式クラ�
 
 ## 概要
 
-![](https://raw.githubusercontent.com/tsurumeso/AskMonaViewer/images/images/summery.png)
+![](https://raw.githubusercontent.com/tsurumeso/AskMonaViewer/images/images/summary.png)
 
 ## 主な機能
 
