@@ -321,7 +321,7 @@ namespace AskMonaViewer
                 var result = await mAskMonaApi.DeleteFavoriteTopicAsync(mTopic.Id);
                 if (result == null)
                 {
-                    MessageBox.Show("お気に入りの登録に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("お気に入りの削除に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {

@@ -46,7 +46,7 @@ a.user {
     text-decoration: none;
     font-weight: bold;
 }
-a.user:hover{
+a.user:hover {
     text-decoration: underline
 }
 
@@ -55,16 +55,16 @@ a.send {
     text-decoration: none;
     font-weight: bold;
 }
-a.send:hover{
+a.send:hover {
     text-decoration: underline
 }
 
-a.thumbnail{
+a.thumbnail {
     display:table;
     margin:5px 0;
     padding:0;
 }
-a.thumbnail img{
+a.thumbnail img {
     border: 1px #999 solid;
 }
 
