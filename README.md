@@ -1,8 +1,8 @@
-[![Release](https://img.shields.io/github/release/tsurumeso/AskMonaViewer.svg)](https://github.com/tsurumeso/AskMonaViewer/releases/latest)
-[![License](https://img.shields.io/github/license/tsurumeso/AskMonaViewer.svg)](https://github.com/tsurumeso/AskMonaViewer/blob/master/LICENSE.txt)
-[![Build status](https://ci.appveyor.com/api/projects/status/xtrck82qpxsm0vnr/branch/master?svg=true)](https://ci.appveyor.com/project/tsurumeso/askmonaviewer/branch/master)
-
 # AskMonaViewer
+
+[![Release](https://img.shields.io/github/release/tsurumeso/AskMonaViewer.svg)](https://github.com/tsurumeso/AskMonaViewer/releases/latest)
+[![Release](https://img.shields.io/github/downloads/tsurumeso/AskMonaViewer/total.svg)](https://github.com/tsurumeso/AskMonaViewer/releases)
+[![Build status](https://ci.appveyor.com/api/projects/status/xtrck82qpxsm0vnr/branch/master?svg=true)](https://ci.appveyor.com/project/tsurumeso/askmonaviewer/branch/master)
 
 AskMonaViewer は [AskMona](http://askmona.org/) の Windows 用非公式クライアントです．
 
