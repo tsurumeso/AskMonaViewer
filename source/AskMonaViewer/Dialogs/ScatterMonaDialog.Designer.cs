@@ -600,7 +600,7 @@
             this.MinimumSize = new System.Drawing.Size(465, 517);
             this.Name = "ScatterMonaDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "一括ばらまき";
+            this.Text = "ばらまき";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MonaScatterForm_FormClosed);
             this.Load += new System.EventHandler(this.ScatterMonaDialog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

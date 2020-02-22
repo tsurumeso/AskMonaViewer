@@ -264,6 +264,7 @@
             this.columnHeader5});
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(0, 29);
             this.listView1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.listView1.MultiSelect = false;
@@ -468,6 +469,7 @@
             this.columnHeader8});
             this.listView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView2.Enabled = false;
+            this.listView2.HideSelection = false;
             listViewItem1.Tag = "-1";
             listViewItem2.Tag = "0";
             listViewItem3.Tag = "1";
@@ -733,7 +735,8 @@
             this.toolStripButton14.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton14.Name = "toolStripButton14";
             this.toolStripButton14.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton14.Text = "一括ばらまき...";
+            this.toolStripButton14.Text = "ばらまき...";
+            this.toolStripButton14.ToolTipText = "ばらまき...";
             this.toolStripButton14.Click += new System.EventHandler(this.toolStripButton14_Click);
             // 
             // toolStripSeparator6
